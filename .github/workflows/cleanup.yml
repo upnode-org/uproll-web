@@ -1,0 +1,21 @@
+name: Trigger Server Cleanup
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_ACTION_SECRET: ${{ secrets.GITHUB_ACTION_SECRET }}
+      SERVER_URL: ${{ secrets.SERVER_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Trigger cleanup endpoint
+        run: |
+          curl -H "x-github-token: $GITHUB_ACTION_SECRET" "$SERVER_URL/api/cleanup"
