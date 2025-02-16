@@ -8,31 +8,31 @@ datasource db {
 }
 
 model User {
-  id             String          @id @default(uuid())
-  email          String          @unique
-  password       String
-  accounts      Account[]
-  sessions      Session[]
-  
+  id       String    @id @default(uuid())
+  email    String    @unique
+  password String
+  accounts Account[]
+  sessions Session[]
+
   configurations Configuration[]
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
 }
 
 model Account {
-  id                 Int      @id @default(autoincrement())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
-  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                Int     @id @default(autoincrement())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
@@ -61,14 +61,11 @@ model Configuration {
   altdaDeployConfig   AltdaDeployConfig?
   chains              Chain[]
   opContractDeployer  OpContractDeployer?
-  globalLogLevel      String
-  globalNodeSelectors Json?
-  globalTolerations   Json?
-  persistent          Boolean             @default(false)
-  userId              String
-  user                User                @relation(fields: [userId], references: [id])
+  userId              String?
+  user                User?               @relation(fields: [userId], references: [id])
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
+  expiresAt           DateTime?
 }
 
 model Observability {

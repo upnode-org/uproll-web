@@ -1,34 +1,80 @@
 import prisma from "@/lib/prisma";
-import { Configuration } from "@prisma/client";
-import { InputJsonValue } from "@prisma/client/runtime/library";
+import {
+  AltdaDeployConfig,
+  Chain,
+  Interop,
+  Observability,
+  OpContractDeployer,
+} from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// Needs to be authenticated to link to a user
+const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
+
+type CreateConfigurationDTO = {
+  name: string;
+  observability?: Observability;
+  interop?: Interop;
+  altdaDeployConfig?: AltdaDeployConfig;
+  chains: Chain[];
+  opContractDeployer?: OpContractDeployer;
+};
+
 export async function POST(req: Request) {
   try {
-
     const session = await getServerSession(authOptions);
+    const newConfig = (await req.json()) as CreateConfigurationDTO;
 
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!newConfig) {
+      return NextResponse.json(
+        { error: "Configuration is required" },
+        { status: 400 }
+      );
     }
 
-    const newConfig = await req.json() as Configuration;
+    // Build the common configuration data
+    const configurationData: {
+      name: string;
+      observability?: any;
+      interop?: any;
+      altdaDeployConfig?: any;
+      chains: { create: Chain[] };
+      opContractDeployer?: any;
+      userId?: string;
+      expiresAt?: Date;
+    } = {
+      name: newConfig.name,
+      observability: newConfig.observability
+        ? { create: newConfig.observability }
+        : undefined,
+      interop: newConfig.interop ? { create: newConfig.interop } : undefined,
+      altdaDeployConfig: newConfig.altdaDeployConfig
+        ? { create: newConfig.altdaDeployConfig }
+        : undefined,
+      chains: { create: newConfig.chains },
+      opContractDeployer: newConfig.opContractDeployer
+        ? { create: newConfig.opContractDeployer }
+        : undefined,
+    };
+
+    // Append authentication or expiration-specific data
+    if (session) {
+      configurationData.userId = session.user.id;
+    } else {
+      configurationData.expiresAt = new Date(Date.now() + EXPIRATION_TIME);
+    }
 
     const config = await prisma.configuration.create({
-        data: {
-            ...newConfig,
-            userId: newConfig.userId as string,
-            globalNodeSelectors: newConfig.globalNodeSelectors as InputJsonValue,
-            globalTolerations: newConfig.globalTolerations as InputJsonValue,
-        }
+      data: configurationData,
     });
 
     return NextResponse.json(config);
   } catch (error) {
-    console.error('Error creating configuration:', error);
-    return NextResponse.json({ error: 'Failed to create configuration' }, { status: 500 });
+    console.error("Error creating configuration:", error);
+    return NextResponse.json(
+      { error: "Failed to create configuration" },
+      { status: 500 }
+    );
   }
 }
