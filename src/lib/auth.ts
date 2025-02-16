@@ -10,6 +10,7 @@ import bcrypt from "bcrypt";
 // }
 
 const authOptions: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID || "",
