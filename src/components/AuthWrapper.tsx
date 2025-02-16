@@ -4,7 +4,7 @@ import type { Session } from "next-auth"
 
 export default function AuthWrapper({ session, children }: { session: Session | null, children: React.ReactNode }) {
     return (
-        <SessionProvider>
+        <SessionProvider session={session}>
             {children}
         </SessionProvider>
     );

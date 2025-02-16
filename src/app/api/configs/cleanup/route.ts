@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function DELETE(req: Request) {
+export async function DELETE() {
   try {
 
     const configs = await prisma.configuration.deleteMany({
