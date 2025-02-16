@@ -1,17 +1,18 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+    const id = (await params).id
   try {
-    if (!params?.id) {
+    if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
     const config = await prisma.configuration.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!config) {
@@ -31,17 +32,20 @@ export async function GET(
   }
 }
 
+
+
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const id = (await params).id
   try {
-    if (!params?.id) {
+    if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
     const config = await prisma.configuration.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!config) {
@@ -49,7 +53,7 @@ export async function PUT(
     }
 
     const updatedConfig = await prisma.configuration.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(await req.json())
       }
@@ -63,16 +67,17 @@ export async function PUT(
 }
 
 export async function DELETE(
-  req: Request,
-  { params }: { params: { id: string } }
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const id = (await params).id
   try {
-    if (!params?.id) {
+    if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
     const config = await prisma.configuration.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!config) {
@@ -80,7 +85,7 @@ export async function DELETE(
     }
 
     await prisma.configuration.delete({
-      where: { id: params.id },
+      where: { id },
     });
 
     return NextResponse.json({ message: "Configuration deleted successfully" }, { status: 200 });

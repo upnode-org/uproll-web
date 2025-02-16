@@ -1,18 +1,19 @@
 import prisma from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import yaml from "js-yaml";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  _: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    if (!params?.id) {
+    const id = (await params).id
+    if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
 
     const config = await prisma.configuration.findUnique({
-      where: { id: params.id },
+      where: { id },
     });
 
     if (!config) {
@@ -29,7 +30,7 @@ export async function GET(
     return new NextResponse(yamlString, {
       headers: {
         "Content-Type": "text/yaml",
-        "Content-Disposition": `attachment; filename=configuration-${params.id}.yaml`,
+        "Content-Disposition": `attachment; filename=configuration-${id}.yaml`,
       },
     });
   } catch (error) {
