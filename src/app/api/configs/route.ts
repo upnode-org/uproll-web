@@ -5,6 +5,7 @@ import {
   Interop,
   Observability,
   OpContractDeployer,
+  Prisma,
 } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
@@ -34,16 +35,7 @@ export async function POST(req: Request) {
     }
 
     // Build the common configuration data
-    const configurationData: {
-      name: string;
-      observability?: any;
-      interop?: any;
-      altdaDeployConfig?: any;
-      chains: { create: Chain[] };
-      opContractDeployer?: any;
-      userId?: string;
-      expiresAt?: Date;
-    } = {
+    const configurationData: Prisma.ConfigurationCreateInput = {
       name: newConfig.name,
       observability: newConfig.observability
         ? { create: newConfig.observability }
@@ -56,14 +48,13 @@ export async function POST(req: Request) {
       opContractDeployer: newConfig.opContractDeployer
         ? { create: newConfig.opContractDeployer }
         : undefined,
+      user: {
+        connect: {
+          id: session?.user.id,
+        },
+      },
+      expiresAt: session ? undefined : new Date(Date.now() + EXPIRATION_TIME),
     };
-
-    // Append authentication or expiration-specific data
-    if (session) {
-      configurationData.userId = session.user.id;
-    } else {
-      configurationData.expiresAt = new Date(Date.now() + EXPIRATION_TIME);
-    }
 
     const config = await prisma.configuration.create({
       data: configurationData,
