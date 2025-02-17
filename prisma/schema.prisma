@@ -54,19 +54,60 @@ model VerificationToken {
 }
 
 model Configuration {
-  id                  String              @id @default(uuid())
-  name                String
-  observability       Observability?
-  interop             Interop?
-  altdaDeployConfig   AltdaDeployConfig?
-  chains              Chain[]
-  opContractDeployer  OpContractDeployer?
-  userId              String?
-  user                User?               @relation(fields: [userId], references: [id])
-  createdAt           DateTime            @default(now())
-  updatedAt           DateTime            @updatedAt
-  expiresAt           DateTime?
+  id                 String              @id @default(uuid())
+  name               String
+  observability      Observability?
+  interop            Interop?
+  altdaDeployConfig  AltdaDeployConfig?
+  chains             Chain[]
+  opContractDeployer OpContractDeployer?
+  userId             String?
+  user               User?               @relation(fields: [userId], references: [id])
+
+  globalLogLevel      LogLevel @default(INFO)
+  globalNodeSelectors Json?
+  globalTolerations   Toleration[] @relation("globalTolerations")
+  persistent          Boolean  @default(false)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  expiresAt DateTime?
 }
+
+enum LogLevel {
+  ERROR
+  WARN
+  INFO
+  DEBUG
+  TRACE
+}
+
+model Toleration {
+  id String @id @default(uuid())
+  key String
+  operator TolerationOperator
+  value String
+  effect TolerationEffect
+  toleration_seconds Int?
+
+  Configuration Configuration[] @relation("globalTolerations")
+
+  elParticipant Participant[] @relation("elTolerations")
+  clParticipant Participant[] @relation("clTolerations")
+  participant Participant[] @relation("participantTolerations")
+}
+
+enum TolerationOperator {
+  EQUAL
+  EXISTS
+}
+
+enum TolerationEffect {
+  NO_SCHEDULE
+  NO_EXECUTE
+  PREFER_NO_SCHEDULE
+}
+
 
 model Observability {
   id               String            @id @default(uuid())
@@ -110,6 +151,7 @@ model Interop {
   Configuration    Configuration     @relation(fields: [ConfigurationId], references: [id])
 }
 
+// TODO: This should probably be in the interop model
 model SupervisorParams {
   id            String  @id @default(uuid())
   image         String?
@@ -139,42 +181,90 @@ model Chain {
   challengerParams   ChallengerParams?
   proposerParams     ProposerParams?
   mevParams          MevParams?
-  additionalServices Json?
+  additionalServices AdditionalService[]
   daServerParams     DaServerParams?
   ConfigurationId    String
   Configuration      Configuration     @relation(fields: [ConfigurationId], references: [id])
 }
 
+enum AdditionalService {
+  BLOCKSCOUT
+  ROLLUP_BOOST
+  DA_SERVER
+}
+
 model Participant {
-  id             String  @id @default(uuid())
-  elType         String
+  id             String    @id @default(uuid())
+  elType         ElType
   elImage        String?
-  elLogLevel     String?
+  elLogLevel     LogLevel?
   elExtraEnvVars Json?
   elExtraLabels  Json?
   elExtraParams  Json?
-  elTolerations  Json?
+  elTolerations  Toleration[] @relation("elTolerations")
+  //   VOLUME_SIZE defaults if volume size is zero
+  //   "op_geth_volume_size": 5000,  # 5GB
+  //   "op_erigon_volume_size": 3000,  # 3GB
+  //   "op_nethermind_volume_size": 3000,  # 3GB
+  //   "op_besu_volume_size": 3000,  # 3GB
+  //   "op_reth_volume_size": 3000,  # 3GB
+  //   "op_node_volume_size": 1000,  # 1GB
+  //   "hildr_volume_size": 1000,  # 1GB
   elVolumeSize   Int
+  // CPU is in millicores, 0 means no limit
   elMinCpu       Int
   elMaxCpu       Int
+  // Ram is in MB, 0 means no limit
   elMinMem       Int
   elMaxMem       Int
-  clType         String
+  elBuilderType  String?
+  elBuilderImage String?
+
+  clType         ClType
   clImage        String?
-  clLogLevel     String?
+  clLogLevel     LogLevel?
   clExtraEnvVars Json?
   clExtraLabels  Json?
   clExtraParams  Json?
-  clTolerations  Json?
+  clTolerations  Toleration[] @relation("clTolerations")
   clVolumeSize   Int
   clMinCpu       Int
   clMaxCpu       Int
   clMinMem       Int
   clMaxMem       Int
-  count          Int
-  chainId        String
-  chain          Chain   @relation(fields: [chainId], references: [id])
+  clBuilderType  String?
+  clBuilderImage String?
+
+  nodeSelectors Json?
+  tolerations   Toleration[] @relation("participantTolerations")
+  count         Int    @default(1)
+  chainId       String
+  chain         Chain  @relation(fields: [chainId], references: [id])
 }
+
+enum ElType {
+  OP_GETH
+  OP_RETH
+  OP_ERIGON
+  OP_NETHERMIND
+  OP_BESU
+}
+
+enum ClType {
+  OP_NODE
+  HILD
+}
+
+enum ElBuilderType {
+  OP_GETH
+  OP_RETH
+}
+
+enum ClBuilderType {
+  OP_NODE
+  HILD
+}
+
 
 model NetworkParams {
   id                 String  @id @default(uuid())
