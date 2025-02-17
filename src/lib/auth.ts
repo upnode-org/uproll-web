@@ -37,7 +37,7 @@ const authOptions: AuthOptions = {
         });
 
         if (!user || !user.password) {
-          throw new Error("No user found with this email");
+          throw new Error("No user found with this email or password is incorrect");
         }
 
         // Compare password with hashed password
@@ -46,7 +46,7 @@ const authOptions: AuthOptions = {
           user.password
         );
         if (!isValidPassword) {
-          throw new Error("Invalid password");
+          throw new Error("No user found with this email or password is incorrect");
         }
 
         return user;
@@ -59,6 +59,10 @@ const authOptions: AuthOptions = {
   session: {
     strategy: "jwt",
   },
+  jwt: {
+    maxAge: 1 * 24 * 60 * 60, // 1 day
+  },
+  
 
   callbacks: {
     async redirect({ url, baseUrl }) {
@@ -90,7 +94,8 @@ const authOptions: AuthOptions = {
 
   pages: {
     signIn: "/auth/signin",
-    newUser: "/auth/signup",
+    error: '/auth/signin',
+    newUser: "/config/view",
   },
 };
 
