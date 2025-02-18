@@ -39,8 +39,8 @@ export function ConfigList({ configs }: { configs: Awaited<ReturnType<typeof get
 
   return (
     <div className="">
-      <div className="flex justify-between items-center mb-4 px-4">
-        <div className="relative flex-grow mr-2">
+      <div className="flex justify-between items-center mb-4 px-4 gap-2">
+        <div className="relative flex-grow">
           <Search className="absolute left-2 top-1/2 transform -translate-y-1/2  size-4" />
           <Input
             type="text"
@@ -50,11 +50,12 @@ export function ConfigList({ configs }: { configs: Awaited<ReturnType<typeof get
             className="pl-8 pr-4 py-2 w-full"
           />
         </div>
+        <CreateConfigButton />
         <Button
           onClick={handleDelete}
           variant="destructive"
           disabled={selectedConfigs.length === 0}
-          className={"size-8" + (selectedConfigs.length === 0 ? " opacity-50 cursor-not-allowed" : "")}
+          className={"p-2" + (selectedConfigs.length === 0 ? " opacity-50 cursor-not-allowed" : "")}
         >
           <Trash2 className="h-4 w-4" />
         </Button>
@@ -85,12 +86,17 @@ export function ConfigList({ configs }: { configs: Awaited<ReturnType<typeof get
       {filteredConfigs.length === 0 &&
         <div className="text-center h-40 flex flex-row justify-center items-center border-y border-stone-900 gap-4">
           <p className="text-xl uppercase ">ERR: No configs found</p>
-          <Link href="/config">
-          <Button>Create config <Plus className="ml-1 h-4 w-4" /></Button>
-          </Link>
+          <CreateConfigButton />
         </div>
       }
     </div>
   )
 }
 
+const CreateConfigButton = () => {
+  return (
+    <Link href="/config">
+      <Button>Create config <Plus className="ml-1 h-4 w-4" /></Button>
+    </Link>
+  )
+}

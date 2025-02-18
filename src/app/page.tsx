@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import HeroWrapper from "@/components/HeroWrapper";

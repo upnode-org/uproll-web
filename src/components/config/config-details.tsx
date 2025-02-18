@@ -103,7 +103,7 @@ export function ConfigDetails({ id, initialConfig }: { id?: string, initialConfi
 
   async function handleSave() {
     const saveConfig = async () => {
-      if(!config) {
+      if (!config) {
         throw new Error("No config provided")
       }
       try {
@@ -189,29 +189,19 @@ export function ConfigDetails({ id, initialConfig }: { id?: string, initialConfi
     }
   }
 
-  if(!config) {
+  if (!config) {
     return <div>No config found</div>
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">
-          {config.id ? "Edit Config" : "New Config"}
-        </h2>
+    <div className="space-y-6 pt-4">
+      <div className="flex justify-between gap-2 w-full">
         <div className="flex items-center gap-2">
-          {config.id && (
-            <>
-              <Button variant="destructive" onClick={handleDelete}>
-                <Trash2 className="w-4 h-4" /> Delete
-              </Button>
-            </>
-          )}
-          <Button onClick={handleDownload}>
-            <Download className="w-4 h-4" /> Download
-          </Button>
           <Button onClick={handleSave}>
             <Save className="w-4 h-4" /> {config.id ? "Save" : "Create"}
+          </Button>
+          <Button onClick={handleDownload}>
+            <Download className="w-4 h-4" /> Download
           </Button>
           <CommandCopy
             command={
@@ -222,6 +212,11 @@ export function ConfigDetails({ id, initialConfig }: { id?: string, initialConfi
             disabled={!config.id}
           />
         </div>
+        {config.id && (
+          <Button variant="destructive" onClick={handleDelete}>
+            <Trash2 className="w-4 h-4" /> Delete
+          </Button>
+        )}
       </div>
       <form className="space-y-6">
         <div className="grid grid-cols-2 gap-4">

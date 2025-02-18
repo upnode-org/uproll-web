@@ -26,7 +26,7 @@ export default function NavBar() {
                         <div className="flex items-center gap-3">
                             {/* Probably delete this, dont think i like it */}
                             <h2 className="text-white text-xs hidden sm:block">
-                                Welcome, {session.user.email}
+                                Welcome, {session.user.email}: {session.user.id}
                             </h2>
                             <div className="flex items-center rounded-full bg-stone-900 border border-white">
                                 <button 
