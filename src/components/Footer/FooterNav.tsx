@@ -13,11 +13,6 @@ export default function FooterNav() {
       title: 'Learn',
       links: [
         {
-          href: '/learn',
-          label: 'What is Uproll?',
-          // "bullet" adds that sliding bullet effect on hover:
-        },
-        {
           href: 'https://blog.uproll.org/',
           label: 'Blog',
           target: '_blank',
@@ -61,10 +56,6 @@ export default function FooterNav() {
           target: '_blank',
           rel: 'nofollow noreferrer',
         },
-        {
-          href: '/newsletter',
-          label: 'Newsletter',
-        },
       ],
     },
     {
@@ -79,10 +70,6 @@ export default function FooterNav() {
         {
           href: '/newsletter',
           label: 'Newsletter',
-        },
-        {
-          href: '/brand-kits',
-          label: 'Brand Assets',
         },
       ],
     },

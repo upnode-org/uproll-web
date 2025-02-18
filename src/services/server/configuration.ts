@@ -33,10 +33,11 @@ export async function getConfigurationDetail(userId: string, configId: string) {
     const configuration = await prisma.configuration.findFirst({
       where: {
         id: configId,
-        userId, // ensures that the configuration belongs to the user
+        userId,
       },
-      // Optionally include related fields if you need full details:
       include: {
+        // Dont need to include user
+        globalTolerations: true,
         observability: {
           include: {
             prometheusParams: true,
@@ -51,7 +52,13 @@ export async function getConfigurationDetail(userId: string, configId: string) {
         altdaDeployConfig: true,
         chains: {
           include: {
-            participants: true,
+            participants: {
+              include: {
+                elTolerations: true,
+                clTolerations: true,
+                tolerations: true,
+              },
+            },
             networkParams: true,
             batcherParams: true,
             challengerParams: true,
@@ -69,3 +76,5 @@ export async function getConfigurationDetail(userId: string, configId: string) {
     throw error;
   }
 }
+
+export type ConfigurationDetail = Awaited<ReturnType<typeof getConfigurationDetail>>

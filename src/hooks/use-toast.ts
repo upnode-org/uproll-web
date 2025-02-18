@@ -9,9 +9,12 @@ import type {
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 1000000 // removal delay after closing
 
-type ToasterToast = ToastProps & {
+// Duration for which success/error toasts remain visible.
+const DEFAULT_TOAST_DISPLAY_DURATION = 3000
+
+export type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
@@ -26,7 +29,6 @@ const actionTypes = {
 } as const
 
 let count = 0
-
 function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER
   return count.toString()
@@ -41,7 +43,7 @@ type Action =
     }
   | {
       type: ActionType["UPDATE_TOAST"]
-      toast: Partial<ToasterToast>
+      toast: Partial<ToasterToast> & { id: string }
     }
   | {
       type: ActionType["DISMISS_TOAST"]
@@ -93,8 +95,6 @@ export const reducer = (state: State, action: Action): State => {
     case "DISMISS_TOAST": {
       const { toastId } = action
 
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
       if (toastId) {
         addToRemoveQueue(toastId)
       } else {
@@ -126,6 +126,8 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         toasts: state.toasts.filter((t) => t.id !== action.toastId),
       }
+    default:
+      return state
   }
 }
 
@@ -145,7 +147,7 @@ type Toast = Omit<ToasterToast, "id">
 function toast({ ...props }: Toast) {
   const id = genId()
 
-  const update = (props: ToasterToast) =>
+  const update = (props: Partial<ToasterToast> & { id?: string }) =>
     dispatch({
       type: "UPDATE_TOAST",
       toast: { ...props, id },
@@ -171,6 +173,43 @@ function toast({ ...props }: Toast) {
   }
 }
 
+/**
+ * Extend the toast function with a promise helper.
+ * It shows a loading toast while the promise is pending,
+ * then updates it with a success or error message.
+ */
+type ToastPromiseOptions = {
+  loading: Partial<ToasterToast>
+  success: Partial<ToasterToast>
+  error: Partial<ToasterToast>
+}
+
+toast.promise = async function <T>(
+  promise: Promise<T>,
+  { loading, success, error }: ToastPromiseOptions
+): Promise<T> {
+  // Create the loading toast.
+  const { update } = toast({ ...loading, open: true })
+
+  try {
+    const result = await promise
+    // Update to show the success message and keep it visible.
+    update({ ...success, open: true })
+    // Wait so the user can read the success message.
+    setTimeout(() => {
+      update({ open: false })
+    }, DEFAULT_TOAST_DISPLAY_DURATION)
+    return result
+  } catch (err) {
+    update({ ...error, open: true })
+    // Wait so the user can read the error message.
+    setTimeout(() => {
+      update({ open: false })
+    }, DEFAULT_TOAST_DISPLAY_DURATION)
+    throw err
+  }
+}
+
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
@@ -182,12 +221,13 @@ function useToast() {
         listeners.splice(index, 1)
       }
     }
-  }, [state])
+  }, [])
 
   return {
     ...state,
     toast,
-    dismiss: (toastId?: string) => dispatch({ type: "DISMISS_TOAST", toastId }),
+    dismiss: (toastId?: string) =>
+      dispatch({ type: "DISMISS_TOAST", toastId }),
   }
 }
 

@@ -96,6 +96,7 @@ const authOptions: AuthOptions = {
     signIn: "/auth/signin",
     error: '/auth/signin',
     newUser: "/config/view",
+    signOut: "/",
   },
 };
 

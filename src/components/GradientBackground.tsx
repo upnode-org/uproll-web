@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useRef } from 'react';
 
 const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => {
@@ -115,11 +116,8 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
 
         /* Main container */
         .gradient-bg {
-          position: relative;
           overflow: hidden;
           background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
-          top: 0;
-          left: 0;
         }
 
         .gradient-bg svg {

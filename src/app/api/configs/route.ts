@@ -13,7 +13,7 @@ import { authOptions } from "@/lib/auth";
 
 const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
 
-type CreateConfigurationDTO = {
+export type CreateConfigurationDTO = {
   name: string;
   observability?: Observability;
   interop?: Interop;

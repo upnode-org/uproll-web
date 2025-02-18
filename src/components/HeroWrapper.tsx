@@ -1,14 +1,20 @@
-import GradientBackground from "./GradientBackground";
-
-export default function HeroWrapper({ children, className }: { children: React.ReactNode, className?: string }) {
-    return (
-        <section className={`${className} overflow-hidden`}>
-            <div className="pt-24 w-screen z-10 bg-transparent">
-                {children}
-            </div>
-            <div>
-            <GradientBackground className="h-[100%]" />
-            </div>
-        </section>
-    );
+export default function HeroWrapper({
+  children,
+  className,
+  backgroundElement
+}: {
+  children: React.ReactNode;
+  className?: string;
+  backgroundElement?: React.ReactNode;
+}) {
+  return (
+    <section className={`${className} relative overflow-hidden`}>
+      {backgroundElement}
+      
+      {/* Content is placed on top */}
+      <div className="relative pt-24">
+        {children}
+      </div>
+    </section>
+  );
 }

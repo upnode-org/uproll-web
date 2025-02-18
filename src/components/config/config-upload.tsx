@@ -5,16 +5,27 @@ import { useDropzone } from "react-dropzone"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Upload } from "lucide-react"
+import { postConfig } from "@/services/client/config"
+import { CreateConfigurationDTO } from "@/app/api/configs/route"
 
 export function ConfigUpload() {
   const [open, setOpen] = useState(false)
   const [file, setFile] = useState<File | null>(null)
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
     setFile(acceptedFiles[0])
     // TODO: Implement file upload logic
     console.log("File uploaded:", acceptedFiles[0])
-    setOpen(false)
+    if(file) {
+      const config = JSON.parse(await file.text())
+      const response = await postConfig(config as CreateConfigurationDTO)
+      if(response.success) {
+        console.log("Config uploaded:", response)
+        setOpen(false)
+      } else {
+        console.error("Config upload failed:", response)
+      }
+    }
   }, [])
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
