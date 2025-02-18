@@ -56,6 +56,7 @@ model VerificationToken {
 model Configuration {
   id                 String              @id @default(uuid())
   name               String
+  description        String?
   observability      Observability?
   interop            Interop?
   altdaDeployConfig  AltdaDeployConfig?
@@ -66,12 +67,13 @@ model Configuration {
 
   globalLogLevel      LogLevel @default(INFO)
   globalNodeSelectors Json?
-  globalTolerations   Toleration[] @relation("globalTolerations")
   persistent          Boolean  @default(false)
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   expiresAt DateTime?
+
+  globalTolerations Toleration[]
 }
 
 enum LogLevel {
@@ -84,17 +86,26 @@ enum LogLevel {
 
 model Toleration {
   id String @id @default(uuid())
-  key String
-  operator TolerationOperator
-  value String
-  effect TolerationEffect
-  toleration_seconds Int?
 
-  Configuration Configuration[] @relation("globalTolerations")
+  // Optional references, only one set at a time
+  configurationId String?
+  configuration   Configuration? @relation(fields: [configurationId], references: [id])
 
-  elParticipant Participant[] @relation("elTolerations")
-  clParticipant Participant[] @relation("clTolerations")
-  participant Participant[] @relation("participantTolerations")
+  elParticipantId String?
+  elParticipant   Participant?   @relation("elTolerations", fields: [elParticipantId], references: [id])
+
+  clParticipantId String?
+  clParticipant   Participant?   @relation("clTolerations", fields: [clParticipantId], references: [id])
+
+  participantId   String?
+  participant     Participant?   @relation("participantTolerations", fields: [participantId], references: [id])
+
+  // Toleration fields
+  key               String
+  operator          TolerationOperator
+  value             String
+  effect            TolerationEffect
+  tolerationSeconds Int?
 }
 
 enum TolerationOperator {
