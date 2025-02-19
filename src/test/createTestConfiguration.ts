@@ -1,3 +1,4 @@
+"use server"
 import { LogLevel } from '@prisma/client';
 import prisma from '@/lib/prisma';
 

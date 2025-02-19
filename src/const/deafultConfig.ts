@@ -1,8 +1,18 @@
-import { ConfigurationDetail } from "@/services/server/configuration";
+import { ConfigurationDetailResponse } from "@/services/server/configuration";
 
-export const defaultConfig = {
+export const defaultConfig: ConfigurationDetailResponse = {
+  // Server generated fields
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  expiresAt: null,
+  userId: null,
+  id: "",
+
+  // User generated fields
   name: "Sample Config",
+  description: "Sample Config Description",
   globalLogLevel: "INFO",
+  globalNodeSelectors: {},
   persistent: false,
   globalTolerations: [],
   observability: {

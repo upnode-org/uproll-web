@@ -24,8 +24,8 @@ import { v4 } from "uuid"
 import CommandCopy from "../CommandCopy"
 import { toast } from "@/hooks/use-toast"
 import { updateConfig, postConfig, deleteConfig } from "@/services/client/config"
-import { ConfigurationDetail, getConfigurationDetail } from "@/services/server/configuration"
-import { defaultConfig } from "next/dist/server/config-shared"
+import { ConfigurationDetailResponse } from "@/services/server/configuration"
+import { defaultConfig } from "@/const/deafultConfig"
 import { CreateConfigurationDTO } from "@/app/api/configs/route"
 
 // ----------------------------------------------------------------------
@@ -88,8 +88,8 @@ function useHandleInputChange(
   }
 }
 
-export function ConfigDetails({ id, initialConfig }: { id?: string, initialConfig?: ConfigurationDetail }) {
-  const [config, setConfig] = useState<ConfigurationDetail>(initialConfig ? initialConfig : defaultConfig)
+export function ConfigDetails({ id, initialConfig }: { id?: string, initialConfig?: ConfigurationDetailResponse }) {
+  const [config, setConfig] = useState<ConfigurationDetailResponse>(initialConfig || defaultConfig)
   const handleInputChange = useHandleInputChange(config, setConfig)
 
   const handleDownload = () => {

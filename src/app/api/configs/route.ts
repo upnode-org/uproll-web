@@ -11,8 +11,6 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
-
 export type CreateConfigurationDTO = {
   name: string;
   observability?: Observability;
@@ -53,7 +51,7 @@ export async function POST(req: Request) {
           id: session?.user.id,
         },
       },
-      expiresAt: session ? undefined : new Date(Date.now() + EXPIRATION_TIME),
+      expiresAt: session ? undefined : new Date(Date.now()),
     };
 
     const config = await prisma.configuration.create({
