@@ -6,10 +6,9 @@ import { Button } from "@/components/ui/button";
 import { createTestConfiguration } from "@/test/createTestConfiguration";
 import { useSession } from "next-auth/react";
 
-export default async function ConfigurePage() {
+export default function ConfigurePage() {
   // const session = await getSession();
-  const { data: session, status } = useSession()
-
+  const { data: session } = useSession()
 
   return (
     <>

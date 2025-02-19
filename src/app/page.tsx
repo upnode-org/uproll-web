@@ -1,16 +1,11 @@
-"use client";
-
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import HeroWrapper from "@/components/HeroWrapper";
 import Footer from "@/components/Footer";
-import { ChevronRight, Copy } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import CommandCopy from "@/components/CommandCopy";
 import GradientBackground from "@/components/GradientBackground";
 import { Button } from "@/components/ui/button";
 export default function HomePage() {
-  const router = useRouter();
-
   return (
     <>
       <HeroWrapper className="" backgroundElement={<GradientBackground className="absolute inset-0 h-full w-full" />
@@ -67,7 +62,7 @@ export default function HomePage() {
           </h2>
           <p className="mt-4 text-lg text-gray-700">
             Choose from a variety of pre-configured OP stack rollups tailored for different applications.
-            Whether it's a quick prototype, a secure production environment, or a scalable testnet, we've got you covered.
+            Whether it&apos;s a quick prototype, a secure production environment, or a scalable testnet, we&apos;ve got you covered.
           </p>
           <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center">
             <Link

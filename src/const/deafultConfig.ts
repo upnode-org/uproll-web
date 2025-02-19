@@ -1,75 +1,59 @@
-import { ConfigurationDetailResponse } from "@/services/server/configuration";
+import { Config } from "@/lib/configSchema";
 
-export const defaultConfig: ConfigurationDetailResponse = {
-  // Server generated fields
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  expiresAt: null,
-  userId: null,
-  id: "",
-
-  // User generated fields
-  name: "Sample Config",
-  description: "Sample Config Description",
-  globalLogLevel: "INFO",
-  globalNodeSelectors: {},
-  persistent: false,
-  globalTolerations: [],
-  observability: {
-    enabled: true,
-    id: "",
-    ConfigurationId: "",
-    prometheusParams: {
-      storageTsdbRetentionTime: "1d",
-      storageTsdbRetentionSize: "512MB",
-      minCpu: 100,
-      maxCpu: 200,
-      minMem: 256,
-      maxMem: 512,
-      image: "prom-image:latest",
-      id: "",
-      observabilityId: "",
+export const defaultConfig: Config = {
+  optimism_package: {
+    global_log_level: "INFO",
+    global_node_selectors: {},
+    persistent: false,
+    global_tolerations: [],
+    observability: {
+      enabled: true,
+      prometheus_params: {
+        storage_tsdb_retention_time: "1d",
+        storage_tsdb_retention_size: "512MB",
+        min_cpu: 100,
+        max_cpu: 200,
+        min_mem: 256,
+        max_mem: 512,
+        image: "prom-image:latest",
+      },
+      grafana_params: {
+        dashboard_sources: [],
+        min_cpu: 50,
+        max_cpu: 100,
+        min_mem: 128,
+        max_mem: 256,
+        image: "grafana-image:latest",
+      },
     },
-    grafanaParams: {
-      dashboardSources: [],
-      minCpu: 50,
-      maxCpu: 100,
-      minMem: 128,
-      maxMem: 256,
-      image: "grafana-image:latest",
-      id: "",
-      observabilityId: "",
+    interop: {
+      enabled: false,
+      supervisor_params: {
+        image: "",
+        dependency_set: "",
+        extra_params: [],
+      },
     },
-  },
-  interop: {
-    id: "",
-    enabled: false,
-    ConfigurationId: "",
-    supervisorParams: {
-      image: "",
-      dependencySet: "",
-      extraParams: {},
-      id: "",
-      interopId: "",
+    altda_deploy_config: {
+      use_altda: false,
+      da_commitment_type: "",
+      da_challenge_window: 0,
+      da_resolve_window: 0,
+      da_bond_size: 0,
+      da_resolver_refund_percentage: 0,
+    },
+    chains: [],
+    op_contract_deployer_params: {
+      image: "example-image:latest",
+      l1_artifacts_locator: "",
+      l2_artifacts_locator: "",
     },
   },
-  altdaDeployConfig: {
-    useAltda: false,
-    daCommitmentType: "",
-    daChallengeWindow: 0,
-    daResolveWindow: 0,
-    daBondSize: 0,
-    daResolverRefundPercentage: 0,
-    id: "",
-    ConfigurationId: "",
-  },
-  chains: [
-  ],
-  opContractDeployer: {
-    image: "example-image:latest",
-    l1ArtifactsLocator: "",
-    l2ArtifactsLocator: "",
-    id: "",
-    ConfigurationId: "",
+  ethereum_package: {
+    network_params: {
+      preset: "",
+      genesis_delay: 0,
+      additional_preloaded_contracts: "",
+    },
   },
 };
