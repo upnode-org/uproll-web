@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { ChevronRight, Copy } from "lucide-react";
 import CommandCopy from "@/components/CommandCopy";
 import GradientBackground from "@/components/GradientBackground";
+import { Button } from "@/components/ui/button";
 export default function HomePage() {
   const router = useRouter();
 
@@ -20,6 +21,11 @@ export default function HomePage() {
             <div className="basis-1/2 p-4 md:border-r md:border-r-stone-900 md:p-10 uppercase">
               <p className="text-white text-sm">The easiest way to spin up your OP stack rollups</p>
               <h1 className="text-white text-8xl font-bold">Uproll CLI</h1>
+              <Link href="/config">
+                <Button className="mt-4">
+                  Get Started
+                </Button>
+              </Link>
             </div>
             <div className="basis-1/2 bg-gray-50 ">
               <div className="flex flex-col border-b border-stone-900 p-4 md:p-10 h-[50%] gap-4 ">
