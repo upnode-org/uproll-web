@@ -9,38 +9,6 @@ import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-// Not really needed handled by SSR
-// export async function GET(
-//   _: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//     const id = (await params).id
-//   try {
-//     if (!id) {
-//       return NextResponse.json({ error: "ID is required" }, { status: 400 });
-//     }
-
-//     const config = await prisma.configuration.findUnique({
-//       where: { id },
-//     });
-
-//     if (!config) {
-//       return NextResponse.json(
-//         { error: "Configuration not found" },
-//         { status: 404 }
-//       );
-//     }
-
-//     return NextResponse.json(config);
-//   } catch (error) {
-//     console.error("Error getting configuration:", error);
-//     return NextResponse.json(
-//       { error: "Internal Server Error" },
-//       { status: 500 }
-//     );
-//   }
-// }
-
 // Update a configuration
 export async function PUT(
   req: NextRequest,
@@ -49,12 +17,14 @@ export async function PUT(
   const id = (await params).id;
   try {
     if (!id) {
+      console.error("Id is required");
       return NextResponse.json({ error: "Id is required" }, { status: 400 });
     }
 
     const dto = (await req.json()) as UpdateConfigDto;
 
     if (!dto.config) {
+      console.error("Configuration is required");
       return NextResponse.json(
         { error: "Configuration is required" },
         { status: 400 }
@@ -63,6 +33,7 @@ export async function PUT(
 
     const parsedResult = parseConfig(dto.config);
     if (!parsedResult.success) {
+      console.error("Invalid configuration", parsedResult.error);
       return NextResponse.json(
         { error: "Invalid configuration", details: parsedResult.error },
         { status: 400 }
@@ -77,6 +48,7 @@ export async function PUT(
     });
 
     if (!config) {
+      console.error("Configuration not found");
       return NextResponse.json(
         { error: "Configuration not found" },
         { status: 404 }
@@ -84,6 +56,7 @@ export async function PUT(
     }
 
     if (config?.userId && config.userId !== session?.user.id) {
+      console.error("Unauthorized");
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -94,6 +67,13 @@ export async function PUT(
       dto.description
     );
 
+    if (!updatedConfig) {
+      console.error("Failed to update configuration");
+      return NextResponse.json(
+        { error: "Failed to update configuration" },
+        { status: 500 }
+      );
+    }
     return NextResponse.json({
       message: "Configuration updated successfully",
       status: 200,
@@ -145,3 +125,36 @@ export async function DELETE(
     );
   }
 }
+
+
+// Not needed, handled by SSR
+// export async function GET(
+//   _: NextRequest,
+//   { params }: { params: Promise<{ id: string }> }
+// ) {
+//     const id = (await params).id
+//   try {
+//     if (!id) {
+//       return NextResponse.json({ error: "ID is required" }, { status: 400 });
+//     }
+
+//     const config = await prisma.configuration.findUnique({
+//       where: { id },
+//     });
+
+//     if (!config) {
+//       return NextResponse.json(
+//         { error: "Configuration not found" },
+//         { status: 404 }
+//       );
+//     }
+
+//     return NextResponse.json(config);
+//   } catch (error) {
+//     console.error("Error getting configuration:", error);
+//     return NextResponse.json(
+//       { error: "Internal Server Error" },
+//       { status: 500 }
+//     );
+//   }
+// }
