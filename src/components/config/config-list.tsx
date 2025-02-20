@@ -25,16 +25,6 @@ export function ConfigList({ configs }: { configs: Awaited<ReturnType<typeof get
     setSelectedConfigs([])
   }
 
-  const handleCopyCommand = (id: string) => {
-    const command = `uproll deploy --config-id ${id}`
-    navigator.clipboard.writeText(command).then(() => {
-      toast({
-        title: "Command copied",
-        description: "The deployment command has been copied to your clipboard.",
-      })
-    })
-  }
-
   const filteredConfigs = configs.filter((config) => config.name.toLowerCase().includes(filterText.toLowerCase()))
 
   return (
