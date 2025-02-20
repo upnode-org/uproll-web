@@ -13,6 +13,8 @@ import { updateConfig, postConfig, deleteConfig, downloadConfigFile } from "@/se
 import defaultConfig from "@/const/defaultConfig";
 import { useRouter } from "next/navigation";
 
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+
 import ObservabilityForm from "./ObservabilityForm";
 import InteropForm from "./InteropForm";
 import AltDAForm from "./AltDAForm";
@@ -211,11 +213,38 @@ export default function ConfigForm({
           <GlobalForm />
 
           {/* Additional Form Components */}
-          <ObservabilityForm />
-          <InteropForm />
-          <AltDAForm />
-          <ChainsForm />
-          <OpContractDeployerForm />
+          <Accordion type="single" collapsible className="w-full">
+            <AccordionItem value="observability">
+              <AccordionTrigger>Observability</AccordionTrigger>
+              <AccordionContent>
+                <ObservabilityForm />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="interop">
+              <AccordionTrigger>Interop</AccordionTrigger>
+              <AccordionContent>
+                <InteropForm />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="altda">
+              <AccordionTrigger>AltDA</AccordionTrigger>
+              <AccordionContent>
+                <AltDAForm />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="chains">
+              <AccordionTrigger>Chains</AccordionTrigger>
+              <AccordionContent>
+                <ChainsForm />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="opcontractdeployer">
+              <AccordionTrigger>OpContractDeployer</AccordionTrigger>
+              <AccordionContent>
+                <OpContractDeployerForm />
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </form>
       </div>
     </FormProvider>

@@ -13,8 +13,8 @@ export default function ObservabilityForm() {
   const useObservability = watch("optimism_package.observability.enabled", defaultConfig.optimism_package.observability.enabled);
 
   return (
-    <div className="space-y-4 border p-4 rounded">
-      <h3 className="text-xl font-bold">Observability</h3>
+    <div className="space-y-4 p-4">
+      
 
       <div className="flex items-center space-x-2">
         <Checkbox

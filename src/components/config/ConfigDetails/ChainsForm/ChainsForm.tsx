@@ -15,8 +15,8 @@ export default function ChainsForm() {
   });
 
   return (
-    <div className="space-y-4 border p-4 rounded">
-      <h3 className="text-xl font-bold">Chains</h3>
+    <div className="space-y-4 p-4">
+      
 
       {fields.map((chain, index) => (
         <ChainItemForm

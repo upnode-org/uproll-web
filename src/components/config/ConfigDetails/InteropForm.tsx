@@ -12,8 +12,8 @@ export default function InteropForm() {
   const useInterop = watch("optimism_package.interop.enabled", defaultConfig.optimism_package.interop.enabled);
 
   return (
-    <div className="space-y-4 border p-4 rounded">
-      <h3 className="text-xl font-bold">Interop</h3>
+    <div className="space-y-4 p-4">
+      
 
       <div className="flex items-center space-x-2">
         <Checkbox

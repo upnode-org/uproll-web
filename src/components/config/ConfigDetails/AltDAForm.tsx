@@ -11,8 +11,8 @@ export default function AltDAForm() {
   const useAltDa = watch("optimism_package.altda_deploy_config.use_altda", defaultConfig.optimism_package.altda_deploy_config.use_altda);
 
   return (
-    <div className="space-y-4 border p-4 rounded">
-      <h3 className="text-xl font-bold">AltDA Deploy Config</h3>
+    <div className="space-y-4 p-4">
+      
 
       <div className="flex items-center space-x-2">
         <Checkbox
