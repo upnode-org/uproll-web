@@ -6,14 +6,14 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Trash2, Search, ChevronRight, Plus } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast"
 import { getUserConfigurations } from "@/services/server/configuration"
 import CommandCopy from "@/components/CommandCopy"
 
 export function ConfigList({ configs }: { configs: Awaited<ReturnType<typeof getUserConfigurations>> }) {
   const [selectedConfigs, setSelectedConfigs] = useState<string[]>([])
   const [filterText, setFilterText] = useState("")
-  const { toast } = useToast()
+  // const { toast } = useToast()
 
   const handleSelect = (id: string) => {
     setSelectedConfigs((prev) => (prev.includes(id) ? prev.filter((configId) => configId !== id) : [...prev, id]))

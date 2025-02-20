@@ -159,8 +159,6 @@ export default function ConfigForm({
     }
   };
 
-  const usePersistent = watch("optimism_package.persistent", defaultConfig.optimism_package.persistent);
-
   return (
     <FormProvider {...methods}>
       <div className="space-y-6 pt-4">

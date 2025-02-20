@@ -1,5 +1,5 @@
 import { useFormContext } from "react-hook-form";
-import { Config, EL_TYPES, ELType, LOG_LEVELS, LogLevel } from "@/lib/configSchema";
+import { Config, LOG_LEVELS, LogLevel } from "@/lib/configSchema";
 import defaultConfig from "@/const/defaultConfig";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Select } from "@/components/ui/select";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 
 export default function GlobalForm() {
-    const { register, watch, setValue } = useFormContext<Config>();
+    const { watch, setValue } = useFormContext<Config>();
     const usePersistent = watch("optimism_package.persistent", defaultConfig.optimism_package.persistent);
     const globalLogLevel = watch("optimism_package.global_log_level", defaultConfig.optimism_package.global_log_level);
 

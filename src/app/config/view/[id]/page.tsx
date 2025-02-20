@@ -1,4 +1,4 @@
-import { ConfigDetails } from "@/components/config/config-details";
+import ConfigDetails from "@/components/config/ConfigDetails";
 import Container from "@/components/Container";
 import HeroWrapper from "@/components/HeroWrapper";
 import { getSession } from "@/lib/auth";
