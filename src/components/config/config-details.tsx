@@ -159,7 +159,84 @@ export function ConfigDetails({
     }
   }
 
-  // (Your save, download, and delete handlers would go here.)
+  async function handleSave() {
+    // Let errors bubble up to toast.promise to handle them
+    const saveConfig = async () => {
+      const config = state;
+      if (!config) {
+        throw new Error("No config provided");
+      }
+            let response = null;
+      if (id) {
+        response = await updateConfig(id, config, name, description);
+      } else {
+        console.log("Creating new config");
+        response = await postConfig(config, name, description);
+      }
+  
+      if (response.status === 200) {
+        return "Configuration saved!";
+      } else {
+        throw new Error("Failed to save configuration");
+      }
+    };
+  
+    try {
+      const result = await toast.promise(saveConfig(), {
+        loading: {
+          title: id ? "Saving config..." : "Creating config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Success!",
+          description: id
+            ? "Your configuration has been saved."
+            : "Your configuration has been created.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to save configuration.",
+        },
+      });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const handleDelete = async () => {
+    const removeConfig = async () => {
+      if (!id) {
+        throw new Error("No config id provided");
+      }
+      const response = await deleteConfig(id);
+      if (response) {
+        return "Configuration deleted!";
+      } else {
+        throw new Error("Failed to delete configuration");
+      }
+    };
+  
+    try {
+      const result = await toast.promise(removeConfig(), {
+        loading: {
+          title: "Deleting config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Deleted!",
+          description: "Your configuration has been deleted.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to delete configuration.",
+        },
+      });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="space-y-6 pt-4">
