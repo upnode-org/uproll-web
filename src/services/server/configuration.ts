@@ -1,5 +1,5 @@
 "use server";
-import { Config } from "@/lib/configSchema";
+import { Config, parseConfig } from "@/lib/configSchema";
 import { PrismaClient, Prisma } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -35,11 +35,13 @@ export async function getConfigurationDetail(userId: string, configId: string) {
       where: { id: configId, userId },
     });
 
-    if (!configuration || !configuration.config) {
+    const parsedConfig = parseConfig(configuration?.config);
+
+    if (!parsedConfig.success) {
       throw new Error("Configuration not found");
     }
 
-    return configuration.config;
+    return parsedConfig.data;
   } catch (error) {
     console.error("Error fetching configuration detail for user:", error);
     throw new Error("Configuration not found");

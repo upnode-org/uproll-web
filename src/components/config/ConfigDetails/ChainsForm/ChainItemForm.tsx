@@ -34,6 +34,31 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
       name: `optimism_package.chains.${chainIndex}.additional_services`,
     });
 
+  // New field arrays for comma-separated fields converted into arrays
+  const { fields: batcherExtraParamsFields, append: appendBatcherExtraParam, remove: removeBatcherExtraParam } =
+    useFieldArray({
+      control,
+      name: `optimism_package.chains.${chainIndex}.batcher_params.extra_params`,
+    });
+
+  const { fields: challengerExtraParamsFields, append: appendChallengerExtraParam, remove: removeChallengerExtraParam } =
+    useFieldArray({
+      control,
+      name: `optimism_package.chains.${chainIndex}.challenger_params.extra_params`,
+    });
+
+  const { fields: proposerExtraParamsFields, append: appendProposerExtraParam, remove: removeProposerExtraParam } =
+    useFieldArray({
+      control,
+      name: `optimism_package.chains.${chainIndex}.proposer_params.extra_params`,
+    });
+
+  const { fields: daServerCmdFields, append: appendDaServerCmd, remove: removeDaServerCmd } =
+    useFieldArray({
+      control,
+      name: `optimism_package.chains.${chainIndex}.da_server_params.cmd`,
+    });
+
   return (
     <div className="border p-4 rounded mb-4">
       <div className="flex justify-between items-center mb-4">
@@ -98,7 +123,7 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Interop Time Offset</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.interop_time_offset`)} />
-            </div>x
+            </div>
             <div>
               <Label>Fund Dev Accounts</Label>
               <input
@@ -118,11 +143,21 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               <Input {...register(`optimism_package.chains.${chainIndex}.batcher_params.image`)} />
             </div>
             <div>
-              <Label>Extra Params (comma-separated)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.batcher_params.extra_params`)}
-                placeholder="param1, param2"
-              />
+              <Label>Extra Params</Label>
+              {batcherExtraParamsFields.map((field, index) => (
+                <div key={field.id} className="flex items-center space-x-2 mb-2">
+                  <Input
+                    {...register(`optimism_package.chains.${chainIndex}.batcher_params.extra_params.${index}`)}
+                    placeholder="param"
+                  />
+                  <Button variant="outline" size="icon" onClick={() => removeBatcherExtraParam(index)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" onClick={() => appendBatcherExtraParam('')}>
+                Add Extra Param
+              </Button>
             </div>
           </div>
         </section>
@@ -143,11 +178,21 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.image`)} />
             </div>
             <div>
-              <Label>Extra Params (comma-separated)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.challenger_params.extra_params`)}
-                placeholder="param1, param2"
-              />
+              <Label>Extra Params</Label>
+              {challengerExtraParamsFields.map((field, index) => (
+                <div key={field.id} className="flex items-center space-x-2 mb-2">
+                  <Input
+                    {...register(`optimism_package.chains.${chainIndex}.challenger_params.extra_params.${index}`)}
+                    placeholder="param"
+                  />
+                  <Button variant="outline" size="icon" onClick={() => removeChallengerExtraParam(index)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" onClick={() => appendChallengerExtraParam('')}>
+                Add Extra Param
+              </Button>
             </div>
             <div>
               <Label>Cannon Prestates Path</Label>
@@ -169,11 +214,21 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               <Input {...register(`optimism_package.chains.${chainIndex}.proposer_params.image`)} />
             </div>
             <div>
-              <Label>Extra Params (comma-separated)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.proposer_params.extra_params`)}
-                placeholder="param1, param2"
-              />
+              <Label>Extra Params</Label>
+              {proposerExtraParamsFields.map((field, index) => (
+                <div key={field.id} className="flex items-center space-x-2 mb-2">
+                  <Input
+                    {...register(`optimism_package.chains.${chainIndex}.proposer_params.extra_params.${index}`)}
+                    placeholder="param"
+                  />
+                  <Button variant="outline" size="icon" onClick={() => removeProposerExtraParam(index)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" onClick={() => appendProposerExtraParam('')}>
+                Add Extra Param
+              </Button>
             </div>
             <div>
               <Label>Game Type</Label>
@@ -219,11 +274,21 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               <Input {...register(`optimism_package.chains.${chainIndex}.da_server_params.image`)} />
             </div>
             <div>
-              <Label>Command (comma-separated)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.da_server_params.cmd`)}
-                placeholder="cmd1, cmd2"
-              />
+              <Label>Command</Label>
+              {daServerCmdFields.map((field, index) => (
+                <div key={field.id} className="flex items-center space-x-2 mb-2">
+                  <Input
+                    {...register(`optimism_package.chains.${chainIndex}.da_server_params.cmd.${index}`)}
+                    placeholder="command"
+                  />
+                  <Button variant="outline" size="icon" onClick={() => removeDaServerCmd(index)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              ))}
+              <Button type="button" onClick={() => appendDaServerCmd('')}>
+                Add Command
+              </Button>
             </div>
           </div>
         </section>
@@ -265,22 +330,22 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               </div>
 
               <div>
-                  <Label>Node Selectors</Label>
-                  <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.node_selectors`)} />
-                </div>
-                <div>
-                  <Label>Tolerations</Label>
-                  <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations`)} />
-                </div>
-                <div>
-                  <Label>Count</Label>
-                  <Input
-                    type="number"
-                    {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.count`, {
-                      valueAsNumber: true,
-                    })}
-                  />
-                </div>
+                <Label>Node Selectors</Label>
+                <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.node_selectors`)} />
+              </div>
+              <div>
+                <Label>Tolerations</Label>
+                <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations`)} />
+              </div>
+              <div>
+                <Label>Count</Label>
+                <Input
+                  type="number"
+                  {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.count`, {
+                    valueAsNumber: true,
+                  })}
+                />
+              </div>
 
               <h6>Consensus Layer</h6>
               <div className="grid grid-cols-2 gap-4">
@@ -391,7 +456,6 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                   <Label>Builder Image</Label>
                   <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_builder_image`)} />
                 </div>
-                
               </div>
             </div>
           ))}
