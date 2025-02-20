@@ -10,11 +10,17 @@
 
 import { z, ZodError } from "zod";
 
+export const OPERATOR_TYPES = ["EQUAL", "EXISTS"] as const;
+export type OperatorType = typeof OPERATOR_TYPES[number];
+
+export const EFFECT_TYPES = ["NO_SCHEDULE", "NO_EXECUTE", "PREFER_NO_SCHEDULE"] as const;
+export type EffectType = typeof EFFECT_TYPES[number];
+
 const TolerationSchema = z.object({
     key: z.string(),
-    operator: z.enum(["EQUAL", "EXISTS"]),
+    operator: z.enum(OPERATOR_TYPES),
     value: z.string(),
-    effect: z.enum(["NO_SCHEDULE", "NO_EXECUTE", "PREFER_NO_SCHEDULE"]),
+    effect: z.enum(EFFECT_TYPES),
     toleration_seconds: z.number().optional(),
   });
   
@@ -64,6 +70,7 @@ const TolerationSchema = z.object({
   });
   
   // AltDA deploy configuration
+  // TODO: Repo says some of this may be removed/not needed
   const AltdaDeployConfigSchema = z.object({
     use_altda: z.boolean(),
     da_commitment_type: z.string(), // e.g. "KeccakCommitment"
@@ -76,13 +83,22 @@ const TolerationSchema = z.object({
   /* -------------------------------------------------------------------------
      Participant & Chain Schemas
      -------------------------------------------------------------------------*/
+
+  export const LOG_LEVELS = ["ERROR", "WARN", "INFO", "DEBUG", "TRACE"] as const;
+  export type LogLevel = typeof LOG_LEVELS[number];
+
+  export const EL_TYPES = ["op-geth", "op-reth", "op-erigon", "op-nethermind", "op-besu"] as const;
+  export type ELType = typeof EL_TYPES[number];
+
+  export const CL_TYPES = ["op-node", "hildr"] as const;
+  export type CLType = typeof CL_TYPES[number];
   
   // Schema for a single participant within a chain.
   const ParticipantSchema = z.object({
     // EL (Execution Layer) specific parameters
-    el_type: z.enum(["op-geth", "op-reth", "op-erigon", "op-nethermind", "op-besu"]),
+    el_type: z.enum(EL_TYPES),
     el_image: z.string(),
-    el_log_level: z.string(),
+    el_log_level: z.enum(LOG_LEVELS), 
     el_extra_env_vars: z.record(z.string()),
     el_extra_labels: z.record(z.string()),
     el_extra_params: z.array(z.string()),
@@ -94,9 +110,9 @@ const TolerationSchema = z.object({
     el_max_mem: z.number(),
   
     // CL (Consensus Layer) specific parameters
-    cl_type: z.enum(["op-node", "hildr"]),
+    cl_type: z.enum(CL_TYPES),
     cl_image: z.string(),
-    cl_log_level: z.string(),
+    cl_log_level: z.enum(LOG_LEVELS),
     cl_extra_env_vars: z.record(z.string()),
     cl_extra_labels: z.record(z.string()),
     cl_extra_params: z.array(z.string()),
@@ -197,7 +213,7 @@ const TolerationSchema = z.object({
     altda_deploy_config: AltdaDeployConfigSchema,
     chains: z.array(ChainSchema),
     op_contract_deployer_params: OpContractDeployerParamsSchema,
-    global_log_level: z.string(),
+    global_log_level: z.enum(LOG_LEVELS),
     global_node_selectors: z.record(z.string()),
     global_tolerations: z.array(TolerationSchema),
     persistent: z.boolean(),
@@ -225,8 +241,27 @@ const TolerationSchema = z.object({
     ethereum_package: EthereumPackageSchema,
   });
   
-  // Inferred TypeScript type for the configuration.
+  // Inferred TypeScript type from schemas
+  export type Toleration = z.infer<typeof TolerationSchema>;
+  export type PrometheusParams = z.infer<typeof PrometheusParamsSchema>;
+  export type GrafanaParams = z.infer<typeof GrafanaParamsSchema>;
+  export type Observability = z.infer<typeof ObservabilitySchema>;
+  export type SupervisorParams = z.infer<typeof SupervisorParamsSchema>;
+  export type Interop = z.infer<typeof InteropSchema>;
+  export type AltdaDeployConfig = z.infer<typeof AltdaDeployConfigSchema>;
+  export type Participant = z.infer<typeof ParticipantSchema>;
+  export type NetworkParams = z.infer<typeof NetworkParamsSchema>;
+  export type BatcherParams = z.infer<typeof BatcherParamsSchema>;
+  export type ChallengerParams = z.infer<typeof ChallengerParamsSchema>;
+  export type ProposerParams = z.infer<typeof ProposerParamsSchema>;
+  export type MevParams = z.infer<typeof MevParamsSchema>;
+  export type DaServerParams = z.infer<typeof DaServerParamsSchema>;
+  export type Chain = z.infer<typeof ChainSchema>;
+  export type OpContractDeployerParams = z.infer<typeof OpContractDeployerParamsSchema>;
+  export type OptimismPackage = z.infer<typeof OptimismPackageSchema>;
+  export type EthereumPackage = z.infer<typeof EthereumPackageSchema>;
   export type Config = z.infer<typeof ConfigSchema>;
+  
   
   /* -------------------------------------------------------------------------
      Utility Functions
