@@ -1,3 +1,4 @@
+"use client"
 import { Config } from "@/lib/configSchema";
 import api from "./apiClient"
 
@@ -28,5 +29,9 @@ export const deleteConfig = async (id: string) => {
   return response
 }
 
+export const downloadConfigFile = async (id: string) => {
+  const response = await api.get(`/configs/${id}/yaml`)
+  return response
+}
 
 

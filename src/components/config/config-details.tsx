@@ -23,7 +23,7 @@ import { Download, Save, Trash2 } from "lucide-react";
 import { v4 } from "uuid";
 import CommandCopy from "../CommandCopy";
 import { toast } from "@/hooks/use-toast";
-import { updateConfig, postConfig, deleteConfig } from "@/services/client/config";
+import { updateConfig, postConfig, deleteConfig, downloadConfigFile } from "@/services/client/config";
 import { defaultConfig } from "@/const/deafultConfig";
 import { Config, ConfigSchema } from "@/lib/configSchema";
 import { useRouter } from "next/navigation";
@@ -75,12 +75,12 @@ function parsePath(basePath: string, field: string): (string | number)[] {
 // Recursively extract the type of a nested property.
 type PathValue<T, P extends (keyof any)[]> =
   P extends [infer K, ...infer Rest]
-    ? K extends keyof T
-      ? Rest extends (keyof any)[]
-        ? PathValue<T[K], Rest>
-        : never
-      : never
-    : T;
+  ? K extends keyof T
+  ? Rest extends (keyof any)[]
+  ? PathValue<T[K], Rest>
+  : never
+  : never
+  : T;
 
 // Generic action for updating nested config fields.
 // A default generic parameter is provided so that if you’re not supplying a
@@ -196,6 +196,7 @@ export function ConfigDetails({
         error: {
           title: "Error",
           description: "Failed to save configuration.",
+          variant: "destructive",
         },
       });
       console.log(result);
@@ -230,6 +231,7 @@ export function ConfigDetails({
         error: {
           title: "Error",
           description: "Failed to delete configuration.",
+          variant: "destructive",
         },
       });
       console.log(result);
@@ -238,15 +240,52 @@ export function ConfigDetails({
     }
   };
 
+  const handleDownload = async () => {
+    const downloadConfig = async () => {
+      if (!id) {
+        throw new Error("No config id provided");
+      }
+      // const yamlString = yaml.dump(state);
+      // const blob = new Blob([yamlString], { type: "text/yaml" });
+      // const url = URL.createObjectURL(blob);
+      // const a = document.createElement("a");
+      // a.href = url;
+      const response = await downloadConfigFile(id);
+      if (response) {
+        return "Configuration downloaded!";
+      }
+    }
+    try {
+      const result = await toast.promise(downloadConfig(), {
+        loading: {
+          title: "Downloading config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Downloaded!",
+          description: "Your configuration has been downloaded.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to download configuration.",
+          variant: "destructive",
+        },
+      });
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="space-y-6 pt-4">
       {/* Action buttons */}
       <div className="flex justify-between gap-2 w-full">
         <div className="flex items-center gap-2">
-          <Button onClick={() => {/* handleSave implementation */}}>
+          <Button onClick={() => {handleSave()}}>
             <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
           </Button>
-          <Button onClick={() => {/* handleDownload implementation */}}>
+          <Button onClick={() => {handleDownload()}}>
             <Download className="w-4 h-4" /> Download
           </Button>
           <CommandCopy
@@ -259,7 +298,7 @@ export function ConfigDetails({
           />
         </div>
         {id && (
-          <Button variant="destructive" onClick={() => {/* handleDelete implementation */}}>
+          <Button variant="destructive" onClick={() => {handleDelete()}}>
             <Trash2 className="w-4 h-4" /> Delete
           </Button>
         )}
@@ -285,6 +324,8 @@ export function ConfigDetails({
               onChange={(e) => setDescription(e.target.value)}
             />
           </div>
+
+          {/* Optimism Package */}
           <div>
             <Label htmlFor="global_log_level">Global Log Level</Label>
             <Select
@@ -950,7 +991,7 @@ export function ConfigDetails({
                               <Button
                                 onClick={() => {
                                   const newParticipant = {
-                                    id: v4(),
+                                    // id: v4(),
                                     el_type: "op-geth",
                                     el_image: "",
                                     el_log_level: "",
