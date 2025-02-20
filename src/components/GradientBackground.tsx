@@ -1,5 +1,5 @@
-"use client"
-import { useEffect, useRef } from 'react';
+"use client";
+import { useEffect, useRef } from "react";
 
 const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => {
   const interBubbleRef = useRef<HTMLDivElement>(null);
@@ -12,24 +12,50 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
     let curY = 0;
     let tgX = 0;
     let tgY = 0;
+    let rafId: number | null = null;
 
-    const move = () => {
-      curX += (tgX - curX) / 20;
-      curY += (tgY - curY) / 20;
-      interBubble.style.transform = `translate(${Math.round(curX)}px, ${Math.round(curY)}px)`;
-      requestAnimationFrame(move);
+    // Smoothly move current position towards target position
+    const animate = () => {
+      const dx = tgX - curX;
+      const dy = tgY - curY;
+      // Distance to target
+      const dist = Math.sqrt(dx * dx + dy * dy);
+
+      // If close enough, no further animation needed
+      if (dist < 0.5) {
+        curX = tgX;
+        curY = tgY;
+        rafId = null;
+        return;
+      }
+
+      // Move a fraction of the distance each frame
+      curX += dx / 20;
+      curY += dy / 20;
+
+      // Use GPU-accelerated transforms
+      interBubble.style.transform = `translate3d(${Math.round(curX)}px, ${Math.round(curY)}px, 0)`;
+
+      rafId = requestAnimationFrame(animate);
     };
 
+    // Update target positions on mouse move
     const handleMouseMove = (event: MouseEvent) => {
       tgX = event.clientX;
       tgY = event.clientY;
+
+      // Only start animating if we aren't already
+      if (!rafId) {
+        rafId = requestAnimationFrame(animate);
+      }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    move();
+    // Add mousemove listener with passive for potential performance benefits
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener("mousemove", handleMouseMove);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -44,9 +70,9 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
               in="blur"
               mode="matrix"
               values="
-                1 0 0 0 0  
-                0 1 0 0 0  
-                0 0 1 0 0  
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
                 0 0 0 18 -7"
               result="goo"
             />
@@ -136,14 +162,21 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         }
 
         /* Individual animated bubbles */
-        .g1 {
+        .g1,
+        .g2,
+        .g3,
+        .g4,
+        .g5 {
           position: absolute;
+          background: radial-gradient(circle at center, rgba(0, 0, 0, 0) 50%, transparent 50%) no-repeat;
+          mix-blend-mode: var(--blending);
+        }
+        .g1 {
           background: radial-gradient(
             circle at center,
             rgba(var(--color1), 0.8) 0,
             rgba(var(--color1), 0) 50%
-          ) no-repeat;
-          mix-blend-mode: var(--blending);
+          );
           width: var(--circle-size);
           height: var(--circle-size);
           top: calc(50% - var(--circle-size) / 2);
@@ -152,15 +185,12 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           animation: moveVertical 30s ease infinite;
           opacity: 1;
         }
-
         .g2 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color2), 0.8) 0,
             rgba(var(--color2), 0) 50%
-          ) no-repeat;
-          mix-blend-mode: var(--blending);
+          );
           width: var(--circle-size);
           height: var(--circle-size);
           top: calc(50% - var(--circle-size) / 2);
@@ -169,15 +199,12 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           animation: moveInCircle 20s reverse infinite;
           opacity: 1;
         }
-
         .g3 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color3), 0.8) 0,
             rgba(var(--color3), 0) 50%
-          ) no-repeat;
-          mix-blend-mode: var(--blending);
+          );
           width: var(--circle-size);
           height: var(--circle-size);
           top: calc(50% - var(--circle-size) / 2 + 200px);
@@ -186,15 +213,12 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           animation: moveInCircle 40s linear infinite;
           opacity: 1;
         }
-
         .g4 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color4), 0.8) 0,
             rgba(var(--color4), 0) 50%
-          ) no-repeat;
-          mix-blend-mode: var(--blending);
+          );
           width: var(--circle-size);
           height: var(--circle-size);
           top: calc(50% - var(--circle-size) / 2);
@@ -203,15 +227,12 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           animation: moveHorizontal 40s ease infinite;
           opacity: 0.7;
         }
-
         .g5 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color5), 0.8) 0,
             rgba(var(--color5), 0) 50%
-          ) no-repeat;
-          mix-blend-mode: var(--blending);
+          );
           width: calc(var(--circle-size) * 2);
           height: calc(var(--circle-size) * 2);
           top: calc(50% - var(--circle-size));
@@ -235,6 +256,7 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           top: -50%;
           left: -50%;
           opacity: 0.7;
+          will-change: transform; /* Hint the browser to optimize transforms */
         }
       `}</style>
     </div>
