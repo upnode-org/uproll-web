@@ -1,5 +1,5 @@
 "use client"
-import { ConfigDetails } from "@/components/config/config-details";
+import ConfigDetails from "@/components/config/ConfigDetails/ConfigDetails";
 import Container from "@/components/Container";
 import HeroWrapper from "@/components/HeroWrapper";
 import { Button } from "@/components/ui/button";

@@ -1,6 +1,6 @@
 import { Config } from "@/lib/configSchema";
 
-export const defaultConfig: Config = {
+const defaultConfig: Required<Config> = {
   optimism_package: {
     global_log_level: "INFO",
     global_node_selectors: {},
@@ -57,3 +57,5 @@ export const defaultConfig: Config = {
     },
   },
 };
+
+export default defaultConfig;
