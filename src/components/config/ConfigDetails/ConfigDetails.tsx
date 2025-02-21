@@ -138,6 +138,8 @@ export default function ConfigForm({
         if (!id) {
           throw new Error("No config id provided");
         }
+        
+        // Fetch the configuration file as a blob.
         const response = await downloadConfigFile(id);
         if (response) {
           return "Configuration downloaded!";
