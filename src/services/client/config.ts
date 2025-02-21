@@ -3,13 +3,20 @@ import { Config } from "@/lib/configSchema";
 import api from "./apiClient"
 
 export const postConfig = async (config: Config, name?: string, description?: string) => {
+  console.log("Config", config);
   const response = await api.post("/configs", {
     data: {
       name,
       description,
       config,
     },
-  });
+  },
+  {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  } 
+);
   return response;
 }
 
@@ -20,7 +27,13 @@ export const updateConfig = async (id: string, config: Config, name?: string, de
         name,
         description
       }
-    })
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    } 
+  );
   return response
 }
 

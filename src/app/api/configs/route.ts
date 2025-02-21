@@ -9,35 +9,39 @@ import { parseConfig } from "@/lib/configSchema";
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
-    const dto = (await req.json()) as CreateConfigDto;
-
-    if (!dto || !dto.config) {
+    const dto = (await req.json()).data;
+    const { name, description, config } = dto;
+    
+    if (!dto || !config) {
+      console.error("Configuration is required");
       return NextResponse.json(
         { error: "Configuration is required" },
         { status: 400 }
       );
     }
 
-    const parsedResult = parseConfig(dto.config);
-    if (!parsedResult.success) {
+    const parsedResult = parseConfig(config);
+    if (!parsedResult.success || !parsedResult.data) {
+      console.error("Invalid configuration:", parsedResult.error);
       return NextResponse.json(
         { error: "Invalid configuration", details: parsedResult.error },
         { status: 400 }
       );
     }
     const parsedConfig = parsedResult.data;
-
-    const config = await createConfiguration(
+    
+    const newConfig = await createConfiguration(
       parsedConfig,
       session?.user.id,
-      dto.name,
-      dto.description
+      name,
+      description
     );
 
+    console.log("Configuration created successfully", newConfig.id);
     return NextResponse.json({
       message: "Configuration created successfully",
       status: 201,
-      data: config.id,
+      data: newConfig.id,
     });
   } catch (error) {
     console.error("Error creating configuration:", error);

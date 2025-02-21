@@ -1,7 +1,6 @@
 "use server";
 import { Config, parseConfig } from "@/lib/configSchema";
 import { PrismaClient, Prisma } from "@prisma/client";
-
 const prisma = new PrismaClient();
 
 /**
@@ -63,16 +62,18 @@ export async function createConfiguration(
   description?: string
 ) {
   try {
-    const data: Prisma.ConfigurationCreateInput = {
-      config: config,
-      user: userId ? { connect: { id: userId } } : undefined,
-      name: name || "Untitled Configuration",
-      description: description || "",
-      expiresAt: userId ? undefined : new Date(Date.now() + EXPIRATION_TIME),
-    };
+    const expiresAt = userId ? undefined : new Date(new Date().getTime() + EXPIRATION_TIME);    
 
+    console.dir(config, { depth: null, colors: true });
     const newConfig = await prisma.configuration.create({
-      data,
+      data: {
+        config: config,
+        name: name || "Untitled Configuration",
+        description: description || "",
+        ...(userId
+          ? { user: { connect: { id: userId } } }
+          : { expiresAt }),
+      },
     });
     return newConfig;
   } catch (error) {
