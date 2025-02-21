@@ -22,12 +22,14 @@ import ChainsForm from "./ChainsForm";
 import OpContractDeployerForm from "./OpContractDeployerForm";
 import CommandCopy from "@/components/CommandCopy";
 import GlobalForm from "./GlobalForm";
+import { Checkbox } from "@/components/ui/checkbox";
+import FormCheckbox from "./Components/FormCheckbox";
 
 interface ConfigFormProps {
   id?: string;
   initialConfig?: Config;
-  initialName?: string;
-  initialDescription?: string;
+  initialName?: string | null;
+  initialDescription?: string | null;
 }
 
 export default function ConfigForm({
@@ -43,8 +45,8 @@ export default function ConfigForm({
   });
 
   const router = useRouter();
-  const [name, setName] = useState<string>(initialName);
-  const [description, setDescription] = useState<string>(initialDescription);
+  const [name, setName] = useState<string>(initialName || "Unamed Configuration");
+  const [description, setDescription] = useState<string>(initialDescription || "");
 
   const { watch } = methods;
 
@@ -138,12 +140,38 @@ export default function ConfigForm({
         if (!id) {
           throw new Error("No config id provided");
         }
-        
+
         // Fetch the configuration file as a blob.
         const response = await downloadConfigFile(id);
-        if (response) {
-          return "Configuration downloaded!";
+
+        // Retrieve the filename from the content-disposition header if available.
+        const contentDisposition = response.headers["content-disposition"];
+        let fileName = `configuration-${id}.yaml`;
+        if (contentDisposition) {
+          const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (fileNameMatch && fileNameMatch[1]) {
+            fileName = fileNameMatch[1];
+          }
         }
+
+        // Create a Blob from the response data.
+        const blob = new Blob([response.data], { type: "text/yaml" });
+
+        // Create an object URL for the blob.
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a temporary anchor element to trigger the download.
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up: remove the link and revoke the object URL.
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        return "Configuration downloaded!";
       };
 
       await toast.promise(downloadConfig(), {
@@ -220,31 +248,47 @@ export default function ConfigForm({
           {/* Additional Form Components */}
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="observability">
-              <AccordionTrigger>Observability</AccordionTrigger>
+              <div className="flex items-center [&>h3]:flex-grow gap-2 w-full">
+                <FormCheckbox watchName="optimism_package.observability.enabled" />
+                <AccordionTrigger>Observability</AccordionTrigger>
+              </div>
               <AccordionContent>
                 <ObservabilityForm />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="interop">
-              <AccordionTrigger>Interop</AccordionTrigger>
+              <div className="flex items-center [&>h3]:flex-grow gap-2 w-full">
+                <FormCheckbox watchName="optimism_package.interop.enabled" />
+                <AccordionTrigger>Interop</AccordionTrigger>
+              </div>
               <AccordionContent>
                 <InteropForm />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="altda">
-              <AccordionTrigger>AltDA</AccordionTrigger>
+              <div className="flex items-center [&>h3]:flex-grow gap-2 w-full">
+                <FormCheckbox watchName="optimism_package.altda_deploy_config.use_altda" />
+                <AccordionTrigger>Alternate Data Availability</AccordionTrigger>
+              </div>
               <AccordionContent>
                 <AltDAForm />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="chains">
-              <AccordionTrigger>Chains</AccordionTrigger>
+              <div className="flex items-center [&>h3]:flex-grow gap-2 w-full">
+                {/* Doesnt need a checkbox here because it's a list of chains, but need a gap to keep in line with other accordion items */}
+                <div className="w-4" />
+                <AccordionTrigger>Chains</AccordionTrigger>
+              </div>
               <AccordionContent>
                 <ChainsForm />
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="opcontractdeployer">
-              <AccordionTrigger>OpContractDeployer</AccordionTrigger>
+              <div className="flex items-center [&>h3]:flex-grow gap-2 w-full">
+                <div className="w-4" />
+                <AccordionTrigger>OpContractDeployer</AccordionTrigger>
+              </div>
               <AccordionContent>
                 <OpContractDeployerForm />
               </AccordionContent>

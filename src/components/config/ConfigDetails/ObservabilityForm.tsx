@@ -7,30 +7,21 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import defaultConfig from "@/const/defaultConfig";
+import FormCheckbox from "./Components/FormCheckbox";
+import FormInputField from "./Components/FormInput";
 
 export default function ObservabilityForm() {
-  const { register, watch, setValue } = useFormContext<Config>();
+  const { register, watch, setValue,  } = useFormContext<Config>();
   const useObservability = watch("optimism_package.observability.enabled", defaultConfig.optimism_package.observability.enabled);
 
   return (
     <div className="space-y-4 p-4">
-      
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          checked={useObservability}
-          onCheckedChange={(checked) => {
-            if (typeof checked === "boolean") {
-              setValue("optimism_package.observability.enabled", checked);
-            }
-          }}
-        />
-        <Label>Enabled</Label>
-      </div>
-
       <div className="space-y-4">
         <h4 className="text-lg font-semibold">Prometheus Params</h4>
         <div className="grid grid-cols-2 gap-4">
+          <FormInputField 
+          name={"optimism_package.observability.prometheus_params.storage_tsdb_retention_time"} 
+          label="Retention Time" />
           <div>
             <Label>Retention Time</Label>
             <Input

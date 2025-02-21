@@ -14,6 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import defaultParticipant from "@/const/defaultParticipant";
+import ErrorMessage from "../Components/ErrorMessage";
+import { Checkbox } from "@/components/ui/checkbox";
+import defaultChain from "@/const/defaultChain";
+import FormCheckbox from "../Components/FormCheckbox";
+import FormSelect from "../Components/FormSelect";
 
 type ChainItemFormProps = {
   chainIndex: number;
@@ -21,7 +26,7 @@ type ChainItemFormProps = {
 };
 
 export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormProps) {
-  const { register, control, setValue } = useFormContext<Config>();
+  const { register, watch, control, setValue, formState: { errors } } = useFormContext<Config>();
 
   const { fields: participantFields, append: appendParticipant, remove: removeParticipant } =
     useFieldArray({
@@ -54,10 +59,14 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
     });
 
   const { fields: daServerCmdFields, append: appendDaServerCmd, remove: removeDaServerCmd } =
-    useFieldArray({
+    useFieldArray<Config>({
       control,
       name: `optimism_package.chains.${chainIndex}.da_server_params.cmd`,
     });
+
+  const fundDevAccounts = watch(`optimism_package.chains.${chainIndex}.network_params.fund_dev_accounts`, defaultChain.network_params.fund_dev_accounts);
+
+  const enabled = watch(`optimism_package.chains.${chainIndex}.challenger_params.enabled`, defaultChain.challenger_params.enabled);
 
   return (
     <div className="border p-4 rounded mb-4">
@@ -76,10 +85,12 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Network</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.network`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.network} />
             </div>
             <div>
               <Label>Network ID</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.network_id`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.network_id} />
             </div>
             <div>
               <Label>Seconds Per Slot</Label>
@@ -89,10 +100,12 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                   valueAsNumber: true,
                 })}
               />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.seconds_per_slot} />
             </div>
             <div>
               <Label>Name</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.name`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.name} />
             </div>
             <div>
               <Label>Fjord Time Offset</Label>
@@ -102,6 +115,7 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                   valueAsNumber: true,
                 })}
               />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.fjord_time_offset} />
             </div>
             <div>
               <Label>Granite Time Offset</Label>
@@ -111,26 +125,27 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                   valueAsNumber: true,
                 })}
               />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.granite_time_offset} />
             </div>
             <div>
               <Label>Holocene Time Offset</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.holocene_time_offset`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.holocene_time_offset} />
             </div>
             <div>
               <Label>Isthmus Time Offset</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.isthmus_time_offset`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.isthmus_time_offset} />
             </div>
             <div>
               <Label>Interop Time Offset</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.network_params.interop_time_offset`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.interop_time_offset} />
             </div>
-            <div>
-              <Label>Fund Dev Accounts</Label>
-              <input
-                type="checkbox"
-                {...register(`optimism_package.chains.${chainIndex}.network_params.fund_dev_accounts`)}
-              />
-            </div>
+            <FormCheckbox
+              label="Fund Dev Accounts"
+              watchName={`optimism_package.chains.${chainIndex}.network_params.fund_dev_accounts`}
+            />
           </div>
         </section>
 
@@ -141,21 +156,25 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Image</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.batcher_params.image`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.batcher_params?.image} />
             </div>
             <div>
               <Label>Extra Params</Label>
               {batcherExtraParamsFields.map((field, index) => (
-                <div key={field.id} className="flex items-center space-x-2 mb-2">
-                  <Input
-                    {...register(`optimism_package.chains.${chainIndex}.batcher_params.extra_params.${index}`)}
-                    placeholder="param"
-                  />
-                  <Button variant="outline" size="icon" onClick={() => removeBatcherExtraParam(index)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
+                <>
+                  <div key={field.id} className="flex items-center space-x-2 mb-2">
+                    <Input
+                      {...register(`optimism_package.chains.${chainIndex}.batcher_params.extra_params.${index}`)}
+                      placeholder="param"
+                    />
+                    <Button variant="outline" size="icon" onClick={() => removeBatcherExtraParam(index)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.batcher_params?.extra_params?.[index]} />
+                </>
               ))}
-              <Button type="button" onClick={() => appendBatcherExtraParam('')}>
+              <Button type="button" onClick={() => appendBatcherExtraParam([''])}>
                 Add Extra Param
               </Button>
             </div>
@@ -166,29 +185,31 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         <section>
           <h5 className="font-semibold">Challenger Params</h5>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Enabled</Label>
-              <input
-                type="checkbox"
-                {...register(`optimism_package.chains.${chainIndex}.challenger_params.enabled`)}
-              />
-            </div>
+            <FormCheckbox
+              label="Enabled"
+              watchName={`optimism_package.chains.${chainIndex}.challenger_params.enabled`}
+            />
+          
             <div>
               <Label>Image</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.image`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.image} />
             </div>
             <div>
               <Label>Extra Params</Label>
               {challengerExtraParamsFields.map((field, index) => (
-                <div key={field.id} className="flex items-center space-x-2 mb-2">
-                  <Input
-                    {...register(`optimism_package.chains.${chainIndex}.challenger_params.extra_params.${index}`)}
-                    placeholder="param"
-                  />
-                  <Button variant="outline" size="icon" onClick={() => removeChallengerExtraParam(index)}>
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
+                <>
+                  <div key={field.id} className="flex items-center space-x-2 mb-2">
+                    <Input
+                      {...register(`optimism_package.chains.${chainIndex}.challenger_params.extra_params.${index}`)}
+                      placeholder="param"
+                    />
+                    <Button variant="outline" size="icon" onClick={() => removeChallengerExtraParam(index)}>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.extra_params?.[index]} />
+                </>
               ))}
               <Button type="button" onClick={() => appendChallengerExtraParam('')}>
                 Add Extra Param
@@ -197,10 +218,12 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Cannon Prestates Path</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.cannon_prestates_path`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.cannon_prestates_path} />
             </div>
             <div>
               <Label>Cannon Prestates URL</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.cannon_prestates_url`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.cannon_prestates_url} />
             </div>
           </div>
         </section>
@@ -212,19 +235,23 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Image</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.proposer_params.image`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.image} />
             </div>
             <div>
               <Label>Extra Params</Label>
               {proposerExtraParamsFields.map((field, index) => (
-                <div key={field.id} className="flex items-center space-x-2 mb-2">
-                  <Input
-                    {...register(`optimism_package.chains.${chainIndex}.proposer_params.extra_params.${index}`)}
-                    placeholder="param"
+                <>
+                  <div key={field.id} className="flex items-center space-x-2 mb-2">
+                    <Input
+                      {...register(`optimism_package.chains.${chainIndex}.proposer_params.extra_params.${index}`)}
+                      placeholder="param"
                   />
                   <Button variant="outline" size="icon" onClick={() => removeProposerExtraParam(index)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
-                </div>
+                  </div>
+                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.extra_params?.[index]} />
+                </>
               ))}
               <Button type="button" onClick={() => appendProposerExtraParam('')}>
                 Add Extra Param
@@ -238,10 +265,12 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                   valueAsNumber: true,
                 })}
               />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.game_type} />
             </div>
             <div>
               <Label>Proposal Internal</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.proposer_params.proposal_internal`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.proposal_internal} />
             </div>
           </div>
         </section>
@@ -253,14 +282,17 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Rollup Boost Image</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.mev_params.rollup_boost_image`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.mev_params?.rollup_boost_image} />
             </div>
             <div>
               <Label>Builder Host</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.mev_params.builder_host`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.mev_params?.builder_host} />
             </div>
             <div>
               <Label>Builder Port</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.mev_params.builder_port`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.mev_params?.builder_port} />
             </div>
           </div>
         </section>
@@ -272,19 +304,23 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
             <div>
               <Label>Image</Label>
               <Input {...register(`optimism_package.chains.${chainIndex}.da_server_params.image`)} />
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.da_server_params?.image} />
             </div>
             <div>
               <Label>Command</Label>
               {daServerCmdFields.map((field, index) => (
-                <div key={field.id} className="flex items-center space-x-2 mb-2">
-                  <Input
-                    {...register(`optimism_package.chains.${chainIndex}.da_server_params.cmd.${index}`)}
+                <>
+                  <div key={field.id} className="flex items-center space-x-2 mb-2">
+                    <Input
+                      {...register(`optimism_package.chains.${chainIndex}.da_server_params.cmd.${index}`)}
                     placeholder="command"
                   />
                   <Button variant="outline" size="icon" onClick={() => removeDaServerCmd(index)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
+                <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.da_server_params?.cmd?.[index]} />
+                </>
               ))}
               <Button type="button" onClick={() => appendDaServerCmd('')}>
                 Add Command
@@ -297,22 +333,20 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         <section>
           <h5 className="font-semibold">Additional Services</h5>
           {additionalServiceFields.map((service, sIndex) => (
-            <div key={service.id} className="flex items-center space-x-2">
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.additional_services.${sIndex}`)}
+            <>
+              <div key={service.id} className="flex items-center space-x-2">
+                <Input
+                  {...register(`optimism_package.chains.${chainIndex}.additional_services.${sIndex}`)}
                 placeholder="Service name"
               />
               <Button variant="outline" size="icon" onClick={() => removeService(sIndex)}>
                 <Trash2 className="h-4 w-4" />
               </Button>
-            </div>
+              </div>
+              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.additional_services?.[sIndex]} />
+            </>
           ))}
-          <Button type="button" onClick={() => appendService({
-            key: "",
-            operator: "EQUAL",
-            value: "",
-            effect: "NO_SCHEDULE"
-          })}>
+          <Button type="button" onClick={() => appendService('')}>
             Add Service
           </Button>
         </section>
@@ -332,10 +366,12 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               <div>
                 <Label>Node Selectors</Label>
                 <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.node_selectors`)} />
+                {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.node_selectors} /> */}
               </div>
               <div>
                 <Label>Tolerations</Label>
                 <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations`)} />
+                <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.tolerations} />
               </div>
               <div>
                 <Label>Count</Label>
@@ -345,54 +381,26 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                     valueAsNumber: true,
                   })}
                 />
+                <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.count} />
               </div>
 
               <h6>Consensus Layer</h6>
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Type</Label>
-                  <Select
-                    value={participant.cl_type}
-                    onValueChange={(value: CLType) =>
-                      setValue(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_type`, value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {CL_TYPES.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <FormSelect
+                  label="Type"
+                  watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_type`}
+                  options={CL_TYPES}
+                />
                 <div>
                   <Label>Image</Label>
                   <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_image`)} />
+                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.cl_image} />
                 </div>
-                <div>
-                  <Label>Log Level</Label>
-                  <Select
-                    value={participant.cl_log_level}
-                    onValueChange={(value: LogLevel) =>
-                      setValue(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_log_level`, value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select log level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {LOG_LEVELS.map((level) => (
-                        <SelectItem key={level} value={level}>
-                          {level}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <FormSelect
+                  label="Log Level"
+                  watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_log_level`}
+                  options={LOG_LEVELS}
+                />
                 <div>
                   <Label>Builder Type</Label>
                   <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_builder_type`)} />
@@ -404,50 +412,20 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               </div>
               <h6>Execution Layer</h6>
               <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Type</Label>
-                  <Select
-                    value={participant.el_type}
-                    onValueChange={(value: ELType) =>
-                      setValue(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_type`, value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {EL_TYPES.map((type) => (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <FormSelect
+                  label="Type"
+                  watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_type`}
+                  options={EL_TYPES}
+                />
                 <div>
                   <Label>Image</Label>
                   <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_image`)} />
                 </div>
-                <div>
-                  <Label>Log Level</Label>
-                  <Select
-                    value={participant.el_log_level}
-                    onValueChange={(value: LogLevel) =>
-                      setValue(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_log_level`, value)
-                    }
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select log level" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {LOG_LEVELS.map((level) => (
-                        <SelectItem key={level} value={level}>
-                          {level}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                <FormSelect
+                  label="Log Level"
+                  watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_log_level`}
+                  options={LOG_LEVELS}
+                />
                 <div>
                   <Label>Builder Type</Label>
                   <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_builder_type`)} />

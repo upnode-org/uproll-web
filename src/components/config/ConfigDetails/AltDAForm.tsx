@@ -6,35 +6,22 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import defaultConfig from "@/const/defaultConfig";
+import ErrorMessage from "./Components/ErrorMessage";
+
 export default function AltDAForm() {
-  const { register, watch, setValue } = useFormContext<Config>();
-  const useAltDa = watch("optimism_package.altda_deploy_config.use_altda", defaultConfig.optimism_package.altda_deploy_config.use_altda);
+  const { register, formState: { errors } } = useFormContext<Config>();
 
   return (
     <div className="space-y-4 p-4">
-      
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          checked={useAltDa}
-          onCheckedChange={(checked) => {
-            if (typeof checked === "boolean") {
-              setValue("optimism_package.altda_deploy_config.use_altda", checked);
-            }
-          }}
-        />
-        <Label>Use AltDA</Label>
-      </div>
-
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label>DA Commitment Type</Label>
+          <Label>Commitment Type</Label>
           <Input
             {...register("optimism_package.altda_deploy_config.da_commitment_type")}
           />
         </div>
         <div>
-          <Label>DA Challenge Window</Label>
+          <Label>Challenge Window</Label>
           <Input
             type="number"
             {...register("optimism_package.altda_deploy_config.da_challenge_window", {
@@ -43,7 +30,7 @@ export default function AltDAForm() {
           />
         </div>
         <div>
-          <Label>DA Resolve Window</Label>
+          <Label>Resolve Window</Label>
           <Input
             type="number"
             {...register("optimism_package.altda_deploy_config.da_resolve_window", {
@@ -52,7 +39,7 @@ export default function AltDAForm() {
           />
         </div>
         <div>
-          <Label>DA Bond Size</Label>
+          <Label>Bond Size</Label>
           <Input
             type="number"
             {...register("optimism_package.altda_deploy_config.da_bond_size", {
@@ -61,7 +48,7 @@ export default function AltDAForm() {
           />
         </div>
         <div>
-          <Label>DA Resolver Refund Percentage</Label>
+          <Label>Resolver Refund Percentage</Label>
           <Input
             type="number"
             {...register("optimism_package.altda_deploy_config.da_resolver_refund_percentage", {

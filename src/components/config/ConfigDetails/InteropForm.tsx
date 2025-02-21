@@ -13,20 +13,6 @@ export default function InteropForm() {
 
   return (
     <div className="space-y-4 p-4">
-      
-
-      <div className="flex items-center space-x-2">
-        <Checkbox
-          checked={useInterop}
-          onCheckedChange={(checked) => {
-            if (typeof checked === "boolean") {
-              setValue("optimism_package.interop.enabled", checked);
-            }
-          }}
-        />
-        <Label>Enabled</Label>
-      </div>
-
       <div className="space-y-4">
         <h4 className="text-lg font-semibold">Supervisor Params</h4>
         <div className="grid grid-cols-2 gap-4">
