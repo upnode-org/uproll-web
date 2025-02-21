@@ -22,7 +22,7 @@ const defaultChain: Required<Chain> = {
         image: "",
         extra_params: [],
         enabled: false,
-        cannon_prestates_path: "",
+        cannon_prestates_path: "static_files/prestates",
         cannon_prestates_url: "",
     },
     proposer_params: {

@@ -41,7 +41,7 @@ const TolerationSchema = z.object({
   
   // Grafana configuration for observability
   const GrafanaParamsSchema = z.object({
-    dashboard_sources: z.array(z.string()), // Can be refined if the dashboard source structure is known
+    dashboard_sources: z.array(z.string()),
     min_cpu: z.number(),
     max_cpu: z.number(),
     min_mem: z.number(),

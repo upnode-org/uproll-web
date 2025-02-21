@@ -39,7 +39,7 @@ export default function ConfigForm({
   const methods = useForm<Config>({
     resolver: zodResolver(ConfigSchema),
     defaultValues: initialConfig || defaultConfig,
-    mode: "onChange",
+    mode: "all",
   });
 
   const router = useRouter();
@@ -49,8 +49,9 @@ export default function ConfigForm({
   const { watch } = methods;
 
   useEffect(() => {
-    const subscription = watch((formValues, { name, type }) => {
-      console.log("Form state changed:", formValues, name, type);
+    const subscription = watch((formValues, { name }) => {
+      console.log(`Form ${name} state changed:`);
+      console.log(formValues);
     });
     return () => subscription.unsubscribe();
   }, [watch]);
