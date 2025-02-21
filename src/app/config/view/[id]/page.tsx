@@ -13,8 +13,7 @@ export default async function ViewConfigDetailsPage({ params }: { params: Promis
 
     // If config has user set, then we can view it only if matches 
     // session user, if not set then any user can view it.
-    const config = await getConfigurationDetail(session!.user.id, id)
-
+    const {config, name, description} = await getConfigurationDetail(session!.user.id, id)
     if (!config) {
       if(session!.user.id) {
         redirect("/config/view")
@@ -31,7 +30,7 @@ export default async function ViewConfigDetailsPage({ params }: { params: Promis
           </Container>
         </HeroWrapper>
         <Container className="border-t">
-          <ConfigDetails id={id} initialConfig={config} />
+          <ConfigDetails id={id} initialConfig={config} initialName={name} initialDescription={description} />
         </Container>
       </>
     );

@@ -21,7 +21,15 @@ export async function PUT(
       return NextResponse.json({ error: "Id is required" }, { status: 400 });
     }
 
-    const dto = (await req.json()) as UpdateConfigDto;
+    const dto = (await req.json()).data;
+    const { name, description, config } = dto;
+    if (!dto || !config) {
+      console.error("Configuration is required");
+      return NextResponse.json(
+        { error: "Configuration is required" },
+        { status: 400 }
+      );
+    }
 
     if (!dto.config) {
       console.error("Configuration is required");
@@ -31,7 +39,7 @@ export async function PUT(
       );
     }
 
-    const parsedResult = parseConfig(dto.config);
+    const parsedResult = parseConfig(config);
     if (!parsedResult.success) {
       console.error("Invalid configuration", parsedResult.error);
       return NextResponse.json(
@@ -43,28 +51,12 @@ export async function PUT(
 
     const session = await getServerSession(authOptions);
 
-    const config = await prisma.configuration.findUnique({
-      where: { id: id },
-    });
-
-    if (!config) {
-      console.error("Configuration not found");
-      return NextResponse.json(
-        { error: "Configuration not found" },
-        { status: 404 }
-      );
-    }
-
-    if (config?.userId && config.userId !== session?.user.id) {
-      console.error("Unauthorized");
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     const updatedConfig = await updateConfiguration(
       parsedConfig,
       id,
-      dto.name,
-      dto.description
+      name,
+      description,
+      session?.user.id
     );
 
     if (!updatedConfig) {
@@ -74,10 +66,11 @@ export async function PUT(
         { status: 500 }
       );
     }
+
     return NextResponse.json({
       message: "Configuration updated successfully",
       status: 200,
-      data: updatedConfig.id,
+      data: updatedConfig,
     });
   } catch (error) {
     console.error("Error updating configuration:", error);

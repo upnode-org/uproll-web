@@ -44,7 +44,11 @@ export async function getConfigurationDetail(userId: string, configId: string) {
       throw new Error("Not authorized to view this configuration");
     }
 
-    return parsedConfig.data;
+    return {
+      config: parsedConfig.data,
+      name: configuration?.name,
+      description: configuration?.description,
+    };
   } catch (error) {
     console.error("Error fetching configuration detail for user:", error);
     throw new Error("Configuration not found");
@@ -90,11 +94,12 @@ export async function updateConfiguration(
   config: Config,
   configId: string,
   name?: string,
-  description?: string
+  description?: string,
+  userId?: string
 ) {
   try {
     const updatedConfig = await prisma.configuration.update({
-      where: { id: configId },
+      where: { id: configId, ...(userId ? { userId: userId } : {}) },
       data: {
         config: config,
         name: name || undefined,
