@@ -66,7 +66,8 @@ export default function ConfigForm({
         } else {
           response = await postConfig(config, name, description);
           if (response.status >= 200 && response.status < 300) {
-            router.push(`/config/view/${response.data.id}`);
+            console.log("response.data", response.data);
+            router.push(`/config/view/${response.data.data}`);
           }
         }
         if (response.status >= 200 && response.status < 300) {
@@ -103,7 +104,8 @@ export default function ConfigForm({
           throw new Error("No config id provided");
         }
         const response = await deleteConfig(id);
-        if (response) {
+        if (response.status >= 200 && response.status < 300) {
+          router.push("/config/view");
           return "Configuration deleted!";
         } else {
           throw new Error("Failed to delete configuration");
