@@ -11,10 +11,16 @@ export default async function ViewConfigDetailsPage({ params }: { params: Promis
 
     const session = await getSession()
 
+    // If config has user set, then we can view it only if matches 
+    // session user, if not set then any user can view it.
     const config = await getConfigurationDetail(session!.user.id, id)
 
     if (!config) {
+      if(session!.user.id) {
         redirect("/config/view")
+      } else {
+        redirect("/auth/signin")
+      }
     }
 
     return (
