@@ -45,6 +45,7 @@ function NetworkParamsSection({ chainIndex }: { chainIndex: number }) {
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.granite_time_offset`}
           label="Granite Time Offset"
+          type="number"
         />
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.holocene_time_offset`}
