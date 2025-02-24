@@ -24,6 +24,7 @@ import CommandCopy from "@/components/CommandCopy";
 import GlobalForm from "./GlobalForm";
 import { Checkbox } from "@/components/ui/checkbox";
 import FormCheckbox from "./Components/FormCheckbox";
+import ModalAlert from "@/components/delete/Alert";
 
 interface ConfigFormProps {
   id?: string;
@@ -216,9 +217,13 @@ export default function ConfigForm({
             />
           </div>
           {id && (
-            <Button variant="destructive" onClick={handleDelete}>
-              <Trash2 className="w-4 h-4" /> Delete
-            </Button>
+            <>
+              <ModalAlert
+                title="Delete Configuration?"
+                description="Are you sure you want to delete this configuration? This action cannot be undone."
+                onContinue={handleDelete}
+              />
+            </>
           )}
         </div>
 

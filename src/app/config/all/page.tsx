@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { ConfigList } from "@/components/config/config-list";
+import { ConfigList } from "@/components/config/ConfigList";
 async function getUserConfigurations() {
     try {
         const configurations = await prisma.configuration.findMany();
