@@ -1,7 +1,6 @@
 "use server";
 import { Config, parseConfig } from "@/lib/configSchema";
-import { PrismaClient, Prisma } from "@prisma/client";
-const prisma = new PrismaClient();
+import prisma from "@/lib/prisma";
 
 /**
  * Retrieves all configurations for a specific user.
