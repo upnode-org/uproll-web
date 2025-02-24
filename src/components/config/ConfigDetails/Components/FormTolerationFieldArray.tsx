@@ -1,4 +1,4 @@
-import { useFormContext, useFieldArray, FieldArrayPath, FieldPathByValue, FieldArrayPathValue } from "react-hook-form";
+import { useFormContext, useFieldArray, FieldArrayPath, FieldPathByValue } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import { Config, EFFECT_TYPES, OPERATOR_TYPES } from "@/lib/configSchema";

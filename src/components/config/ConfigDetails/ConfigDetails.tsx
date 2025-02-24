@@ -7,7 +7,7 @@ import { Config, ConfigSchema } from "@/lib/configSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Download, Save, Trash2 } from "lucide-react";
+import { Download, Save } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import { updateConfig, postConfig, deleteConfig, downloadConfigFile } from "@/services/client/config";
 import defaultConfig from "@/const/defaultConfig";
@@ -22,10 +22,9 @@ import ChainsForm from "./ChainsForm";
 import OpContractDeployerForm from "./OpContractDeployerForm";
 import CommandCopy from "@/components/CommandCopy";
 import GlobalForm from "./GlobalForm";
-import { Checkbox } from "@/components/ui/checkbox";
-import FormCheckbox from "./Components/FormCheckbox";
 import ModalAlert from "@/components/delete/Alert";
-
+// import DockerImageSearch from "./Components/DockerImageSearch";
+import FormCheckbox from "./Components/FormCheckbox";
 interface ConfigFormProps {
   id?: string;
   initialConfig?: Config;
@@ -226,7 +225,7 @@ export default function ConfigForm({
             </>
           )}
         </div>
-
+        {/* <DockerImageSearch /> */}
         <form className="space-y-6">
           {/* Top-Level Form Inputs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

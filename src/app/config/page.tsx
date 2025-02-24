@@ -2,8 +2,6 @@
 import ConfigDetails from "@/components/config/ConfigDetails/ConfigDetails";
 import Container from "@/components/Container";
 import HeroWrapper from "@/components/HeroWrapper";
-import { Button } from "@/components/ui/button";
-import { createTestConfiguration } from "@/test/createTestConfiguration";
 import { useSession } from "next-auth/react";
 
 export default function ConfigurePage() {
@@ -18,12 +16,9 @@ export default function ConfigurePage() {
         </Container>
       </HeroWrapper>
       {/* CTA to sign in to save configs */}
-      {!session ? <div className="bg-red-500 py-2 text-center border-b border-stone-900">
+      {!session && <div className="bg-red-500 py-2 text-center border-b border-stone-900">
         <h1 className="text-sm text-white">Sign in to save your configurations permanently</h1>
-      </div> :
-        <div className="bg-red-500 py-2 text-center border-b border-stone-900">
-          <Button onClick={() => createTestConfiguration(session?.user?.id)}>Create Test Configuration</Button>
-        </div>
+      </div>
       }
       <Container className="border-stone-900 pt-5">
         <ConfigDetails />

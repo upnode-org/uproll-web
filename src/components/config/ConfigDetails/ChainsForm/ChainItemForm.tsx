@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { CL_TYPES, Config, EL_TYPES, LOG_LEVELS } from "@/lib/configSchema";
 import defaultParticipant from "@/const/defaultParticipant";
-import defaultChain from "@/const/defaultChain";
 import FormCheckbox from "../Components/FormCheckbox";
 import FormSelect from "../Components/FormSelect";
 import FormInputField from "../Components/FormInput";

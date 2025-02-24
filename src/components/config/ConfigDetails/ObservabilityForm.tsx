@@ -3,7 +3,6 @@
 import { useFormContext } from "react-hook-form";
 import { Config } from "@/lib/configSchema"; // Our top-level form type
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import FormInputField from "./Components/FormInput";
 

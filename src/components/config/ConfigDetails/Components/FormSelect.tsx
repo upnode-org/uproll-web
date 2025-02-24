@@ -31,7 +31,7 @@ export default function FormSelect<T extends string>({
         value={watchedValue as string}
         onValueChange={(value) => {
           // ignore the type error, it's fine. Works as expected.
-          // @ts-ignore
+          // @ts-expect-error - this is fine
           setValue(watchName, value as T);
         }}
       >

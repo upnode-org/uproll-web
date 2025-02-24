@@ -1,25 +1,30 @@
 "use client";
 import React from "react";
-import { FieldError, FieldPath, FieldPathByValue, useFormContext } from "react-hook-form";
+import {
+  FieldError,
+  FieldPathByValue,
+  RegisterOptions,
+  useFormContext,
+} from "react-hook-form";
 import get from "lodash.get";
 import ErrorMessage from "./ErrorMessage";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Config } from "@/lib/configSchema";
 
-interface FormInputProps {
+interface FormInputProps<T extends string | number> {
   label?: string;
   type?: string;
-  name: FieldPathByValue<Config, number | string>;
-  registerOptions?: Record<string, any>;
+  name: FieldPathByValue<Config, T>;
+  registerOptions?: RegisterOptions<Config, FieldPathByValue<Config, T>>;
 }
 
-const FormInput: React.FC<FormInputProps> = ({
+const FormInput = <T extends string | number>({
   label,
   type = "text",
   name,
   registerOptions = {},
-}) => {
+}: FormInputProps<T>) => {
   const {
     register,
     formState: { errors },
@@ -36,7 +41,13 @@ const FormInput: React.FC<FormInputProps> = ({
   return (
     <div className="w-full">
       {label && <Label htmlFor={name}>{label}</Label>}
-      <Input id={name} type={type} {...register(name, finalRegisterOptions)} />
+      <Input
+        id={name}
+        type={type}
+        // Explicitly cast to satisfy TypeScript. This cast is safe if your Config schema matches the input value type.
+        {...register(name, finalRegisterOptions as RegisterOptions<Config, FieldPathByValue<Config, T>>)}
+        className="w-full bg-white"
+      />
       {fieldError && <ErrorMessage error={fieldError as FieldError} />}
     </div>
   );

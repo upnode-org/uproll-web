@@ -1,12 +1,7 @@
 "use client";
-
-import { useFormContext } from "react-hook-form";
-import { Config } from "@/lib/configSchema";
 import FormInputField from "./Components/FormInput";
 
 export default function AltDAForm() {
-  const { register, formState: { errors } } = useFormContext<Config>();
-
   return (
     <div className="space-y-4 p-4">
       <div className="grid grid-cols-2 gap-4">

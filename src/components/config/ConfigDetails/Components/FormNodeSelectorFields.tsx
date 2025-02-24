@@ -1,9 +1,8 @@
-import { useFormContext, useFieldArray, FieldArrayPath, FieldPathByValue, FieldArrayPathValue } from "react-hook-form";
+import { useFormContext, useFieldArray, FieldPathByValue } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
-import { Config, EFFECT_TYPES, OPERATOR_TYPES } from "@/lib/configSchema";
+import { Config } from "@/lib/configSchema";
 import { Label } from "@/components/ui/label";
-import FormSelect from "./FormSelect";
 import FormInput from "./FormInput";
 
 type FieldArrayName =

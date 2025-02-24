@@ -4,7 +4,6 @@ import {
   deleteConfiguration,
   updateConfiguration,
 } from "@/services/server/configuration";
-import { UpdateConfigDto } from "@/types/configDTO";
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
