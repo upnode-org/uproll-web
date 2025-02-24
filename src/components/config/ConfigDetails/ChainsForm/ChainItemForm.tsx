@@ -11,7 +11,7 @@ import ErrorMessage from "../Components/ErrorMessage";
 import defaultChain from "@/const/defaultChain";
 import FormCheckbox from "../Components/FormCheckbox";
 import FormSelect from "../Components/FormSelect";
-
+import FormInputField from "../Components/FormInput";
 type ChainItemFormProps = {
   chainIndex: number;
   onRemove: () => void;
@@ -74,66 +74,49 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         <section>
           <h5 className="font-semibold">Network Params</h5>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Network</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.network_params.network`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.network} />
-            </div>
-            <div>
-              <Label>Network ID</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.network_params.network_id`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.network_id} />
-            </div>
-            <div>
-              <Label>Seconds Per Slot</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.network_params.seconds_per_slot`, {
-                  valueAsNumber: true,
-                })}
+              <FormInputField 
+              name={`optimism_package.chains.${chainIndex}.network_params.network`} 
+              label="Network"
               />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.seconds_per_slot} />
-            </div>
-            <div>
-              <Label>Name</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.network_params.name`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.name} />
-            </div>
-            <div>
-              <Label>Fjord Time Offset</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.network_params.fjord_time_offset`, {
-                  valueAsNumber: true,
-                })}
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.network_id`} 
+            label="Network ID"
+              type="number"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.seconds_per_slot`} 
+            label="Seconds Per Slot"
+            type="number"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.name`} 
+            label="Name"
+            />
+              <FormInputField 
+              name={`optimism_package.chains.${chainIndex}.network_params.fjord_time_offset`} 
+              label="Fjord Time Offset"
+              type="number"
               />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.fjord_time_offset} />
-            </div>
-            <div>
-              <Label>Granite Time Offset</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.network_params.granite_time_offset`, {
-                  valueAsNumber: true,
-                })}
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.granite_time_offset`} 
+            label="Granite Time Offset"
+            type="number"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.holocene_time_offset`} 
+            label="Holocene Time Offset"
+            type="number"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.isthmus_time_offset`} 
+            label="Isthmus Time Offset"
+            type="number"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.network_params.interop_time_offset`} 
+            label="Interop Time Offset"
+            type="number"
               />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.granite_time_offset} />
-            </div>
-            <div>
-              <Label>Holocene Time Offset</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.network_params.holocene_time_offset`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.holocene_time_offset} />
-            </div>
-            <div>
-              <Label>Isthmus Time Offset</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.network_params.isthmus_time_offset`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.isthmus_time_offset} />
-            </div>
-            <div>
-              <Label>Interop Time Offset</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.network_params.interop_time_offset`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.network_params?.interop_time_offset} />
-            </div>
             <FormCheckbox
               label="Fund Dev Accounts"
               watchName={`optimism_package.chains.${chainIndex}.network_params.fund_dev_accounts`}
@@ -144,12 +127,11 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         {/* Batcher Params */}
         <section>
           <h5 className="font-semibold">Batcher Params</h5>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Image</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.batcher_params.image`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.batcher_params?.image} />
-            </div>
+          <div className="grid gap-4">
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.batcher_params.image`} 
+            label="Image"
+            />
             <div>
               <Label>Extra Params</Label>
               {batcherExtraParamsFields.map((field, index) => (
@@ -181,12 +163,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               label="Enabled"
               watchName={`optimism_package.chains.${chainIndex}.challenger_params.enabled`}
             />
-          
-            <div>
-              <Label>Image</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.image`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.image} />
-            </div>
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.challenger_params.image`} 
+            label="Image"
+            />
             <div>
               <Label>Extra Params</Label>
               {challengerExtraParamsFields.map((field, index) => (
@@ -207,16 +187,14 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                 Add Extra Param
               </Button>
             </div>
-            <div>
-              <Label>Cannon Prestates Path</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.cannon_prestates_path`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.cannon_prestates_path} />
-            </div>
-            <div>
-              <Label>Cannon Prestates URL</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.challenger_params.cannon_prestates_url`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.cannon_prestates_url} />
-            </div>
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.challenger_params.cannon_prestates_path`} 
+            label="Cannon Prestates Path"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.challenger_params.cannon_prestates_url`} 
+            label="Cannon Prestates URL"
+            />
           </div>
         </section>
 
@@ -224,11 +202,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         <section>
           <h5 className="font-semibold">Proposer Params</h5>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Image</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.proposer_params.image`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.image} />
-            </div>
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.proposer_params.image`} 
+            label="Image"
+            />
             <div>
               <Label>Extra Params</Label>
               {proposerExtraParamsFields.map((field, index) => (
@@ -249,21 +226,16 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                 Add Extra Param
               </Button>
             </div>
-            <div>
-              <Label>Game Type</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.proposer_params.game_type`, {
-                  valueAsNumber: true,
-                })}
-              />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.game_type} />
-            </div>
-            <div>
-              <Label>Proposal Internal</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.proposer_params.proposal_internal`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.proposal_internal} />
-            </div>
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.proposer_params.game_type`} 
+            label="Game Type"
+            type="number"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.proposer_params.proposal_internal`} 
+            label="Proposal Internal"
+            type="number"
+            />
           </div>
         </section>
 
@@ -271,21 +243,19 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         <section>
           <h5 className="font-semibold">MEV Params</h5>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Rollup Boost Image</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.mev_params.rollup_boost_image`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.mev_params?.rollup_boost_image} />
-            </div>
-            <div>
-              <Label>Builder Host</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.mev_params.builder_host`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.mev_params?.builder_host} />
-            </div>
-            <div>
-              <Label>Builder Port</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.mev_params.builder_port`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.mev_params?.builder_port} />
-            </div>
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.mev_params.rollup_boost_image`} 
+            label="Rollup Boost Image"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.mev_params.builder_host`} 
+            label="Builder Host"
+            />
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.mev_params.builder_port`} 
+            label="Builder Port"
+            type="number"
+            />
           </div>
         </section>
 
@@ -293,11 +263,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
         <section>
           <h5 className="font-semibold">DA Server Params</h5>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label>Image</Label>
-              <Input {...register(`optimism_package.chains.${chainIndex}.da_server_params.image`)} />
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.da_server_params?.image} />
-            </div>
+            <FormInputField 
+            name={`optimism_package.chains.${chainIndex}.da_server_params.image`} 
+            label="Image"
+            />
             <div>
               <Label>Command</Label>
               {daServerCmdFields.map((field, index) => (

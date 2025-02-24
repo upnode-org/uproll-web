@@ -10,13 +10,6 @@ import { Config } from "@/lib/configSchema";
 interface FormInputProps {
   label: string;
   type?: string;
-  /**
-   * Name can be a string or an array of path segments.
-   * For example, for a field with an index, you can pass:
-   *   "optimism_package.chains.0.network_params.network"
-   * or
-   *   ["optimism_package", "chains", chainIndex, "network_params", "network"]
-   */
   name: FieldPathByValue<Config, number | string>;
   registerOptions?: Record<string, any>;
 }
