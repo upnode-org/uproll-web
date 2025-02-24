@@ -24,7 +24,7 @@ export async function GET(
     }
 
     // Convert the configuration object to a YAML string.
-    const yamlString = yaml.dump(config);
+    const yamlString = yaml.dump(config.config);
 
     // Return the YAML string as a file download.
     return new NextResponse(yamlString, {

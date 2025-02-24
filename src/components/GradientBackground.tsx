@@ -235,6 +235,7 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           top: -50%;
           left: -50%;
           opacity: 0.7;
+          will-change: transform;
         }
       `}</style>
     </div>

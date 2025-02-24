@@ -1,15 +1,14 @@
 "use client"
-import { ConfigDetails } from "@/components/config/config-details";
+import ConfigDetails from "@/components/config/ConfigDetails/ConfigDetails";
 import Container from "@/components/Container";
 import HeroWrapper from "@/components/HeroWrapper";
 import { Button } from "@/components/ui/button";
 import { createTestConfiguration } from "@/test/createTestConfiguration";
 import { useSession } from "next-auth/react";
 
-export default async function ConfigurePage() {
+export default function ConfigurePage() {
   // const session = await getSession();
-  const { data: session, status } = useSession()
-
+  const { data: session } = useSession()
 
   return (
     <>

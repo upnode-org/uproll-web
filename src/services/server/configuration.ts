@@ -1,7 +1,6 @@
 "use server";
-import { PrismaClient, Prisma } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Config, parseConfig } from "@/lib/configSchema";
+import prisma from "@/lib/prisma";
 
 /**
  * Retrieves all configurations for a specific user.
@@ -30,83 +29,30 @@ export async function getUserConfigurations(userId: string) {
  */
 export async function getConfigurationDetail(userId: string, configId: string) {
   try {
-
-    const tolerationRelationIdOmit = {
-      configurationId: true,
-      elParticipantId: true,
-      clParticipantId: true,
-      participantId: true,
-    }
-
     const configuration = await prisma.configuration.findFirst({
-      where: {
-        id: configId,
-        userId,
-      },
-      include: {
-        // Dont need to include user
-        globalTolerations: {
-          omit: tolerationRelationIdOmit,
-        },
-        observability: {
-          omit: {
-            ConfigurationId: true,
-          },
-          include: {
-            prometheusParams: true,
-            grafanaParams: true,
-          },
-        },
-        interop: {
-          omit: {
-            ConfigurationId: true,
-          },
-          include: {
-            supervisorParams: true,
-          },
-        },
-        altdaDeployConfig: {
-          omit: {
-          ConfigurationId: true,
-        }},
-        chains: {
-          include: {
-            participants: {
-              include: {
-                tolerations: {
-                  omit: tolerationRelationIdOmit,
-                },
-                elTolerations: {
-                  omit: tolerationRelationIdOmit,
-                },
-                clTolerations: {
-                  omit: tolerationRelationIdOmit,
-                },
-              },
-            },
-            networkParams: true,
-            batcherParams: true,
-            challengerParams: true,
-            proposerParams: true,
-            mevParams: true,
-            daServerParams: true,
-          },
-        },
-        opContractDeployer: true,
-      },
+      where: { id: configId },
     });
 
-    configuration?.globalTolerations[0].clParticipantId
-    return configuration;
+    const parsedConfig = parseConfig(configuration?.config);
+
+    if (!parsedConfig.success) {
+      throw new Error("Configuration not found");
+    }
+
+    if (configuration?.userId !== userId) {
+      throw new Error("Not authorized to view this configuration");
+    }
+
+    return {
+      config: parsedConfig.data,
+      name: configuration?.name,
+      description: configuration?.description,
+    };
   } catch (error) {
     console.error("Error fetching configuration detail for user:", error);
-    throw error;
+    throw new Error("Configuration not found");
   }
 }
-
-export type ConfigurationDetailResponse = Awaited<
-  ReturnType<typeof getConfigurationDetail>
->;
 
 const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
 /**
@@ -117,80 +63,24 @@ const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
  * @returns A promise that resolves to the new configuration details or null if error.
  */
 export async function createConfiguration(
-  config: ConfigurationDetailResponse,
-  userId?: string
+  config: Config,
+  userId?: string,
+  name?: string,
+  description?: string
 ) {
   try {
-    if (!config) {
-      throw new Error("Configuration is required");
-    }
+    const expiresAt = userId ? undefined : new Date(new Date().getTime() + EXPIRATION_TIME);    
 
-    const configurationData: Prisma.ConfigurationCreateInput = {
-      // Configuration
-      name: config.name,
-      description: config.description,
-      globalLogLevel: config.globalLogLevel,
-      persistent: config.persistent,
-      expiresAt: userId ? undefined : new Date(Date.now() + EXPIRATION_TIME),
-      user: userId
-        ? {
-            connect: {
-              id: userId,
-            },
-          }
-        : undefined,
-      globalNodeSelectors: {
-        create: config.globalNodeSelectors,
-      },
-      globalTolerations: {
-        create: config.globalTolerations.map((toleration) => ({
-          ...toleration
-        })),
-      },
-      
-      // Observability
-      observability: config.observability
-        ? {
-            create: {
-              ...config.observability,
-              prometheusParams: config.observability.prometheusParams
-                ? { connect: { id: config.observability.prometheusParams.id } }
-                : undefined,
-              grafanaParams: config.observability.grafanaParams
-                ? { connect: { id: config.observability.grafanaParams.id } }
-                : undefined,
-            },
-          }
-        : undefined,
-
-      // Interop
-      interop: config.interop
-        ? {
-            create: {
-              ...config.interop,
-              supervisorParams: config.interop.supervisorParams
-                ? { connect: { id: config.interop.supervisorParams.id } }
-                : undefined,
-            },
-          }
-        : undefined,
-
-      // Altda Deploy Config
-      altdaDeployConfig: config.altdaDeployConfig
-        ? { create: config.altdaDeployConfig }
-        : undefined,
-
-      // Chains
-      chains: { create: config.chains },
-
-      // Op Contract Deployer
-      opContractDeployer: config.opContractDeployer
-        ? { create: config.opContractDeployer }
-        : undefined,
-    };
-
+    console.dir(config, { depth: null, colors: true });
     const newConfig = await prisma.configuration.create({
-      data: configurationData,
+      data: {
+        config: config,
+        name: name || "Untitled Configuration",
+        description: description || "",
+        ...(userId
+          ? { user: { connect: { id: userId } } }
+          : { expiresAt }),
+      },
     });
     return newConfig;
   } catch (error) {
@@ -199,92 +89,47 @@ export async function createConfiguration(
   }
 }
 
-export type ConfigurationDetailUpdate = Partial<ConfigurationDetailResponse>;
-
 export async function updateConfiguration(
-  config: ConfigurationDetailUpdate,
-  configId: string
+  config: Config,
+  configId: string,
+  name?: string,
+  description?: string,
+  userId?: string
 ) {
-  if (!config) {
-    throw new Error("Configuration is required");
-  }
-
   try {
     const updatedConfig = await prisma.configuration.update({
-      where: { id: configId },
+      where: { id: configId, ...(userId ? { userId: userId } : {}) },
       data: {
-        observability: config.observability
-          ? {
-              update: {
-                ...config.observability,
-                prometheusParams: config.observability.prometheusParams
-                  ? { connect: { id: config.observability.prometheusParams.id } }
-                  : undefined,
-                grafanaParams: config.observability.grafanaParams
-                  ? { connect: { id: config.observability.grafanaParams.id } }
-                  : undefined,
-              },
-            }
-          : undefined,
-        interop: config.interop
-          ? {
-              update: {
-                ...config.interop,
-                supervisorParams: config.interop.supervisorParams
-                  ? { connect: { id: config.interop.supervisorParams.id } }
-                  : undefined,
-              },
-            }
-          : undefined,
-        altdaDeployConfig: config.altdaDeployConfig
-          ? { update: config.altdaDeployConfig }
-          : undefined,
-        chains: config.chains && config.chains.length > 0
-          ? { update: config.chains.map((chain) => ({
-              where: { id: chain.id },
-              data: {
-                ...chain,
-                networkParams: chain.networkParams
-                  ? { update: chain.networkParams }
-                  : undefined,
-                participants: {
-                  update: chain.participants.map((participant) => ({
-                    where: { id: participant.id },
-                    data: {
-                      ...participant,
-                      tolerations: {
-                        update: participant.tolerations.map((tolerance) => ({
-                          where: { id: tolerance.id },
-                          data: tolerance,
-                        })),
-                      },
-                      elTolerations: {
-                        update: participant.elTolerations.map((tolerance) => ({
-                          where: { id: tolerance.id },
-                          data: tolerance,
-                        })),
-                      },
-                      clTolerations: {
-                        update: participant.clTolerations.map((tolerance) => ({
-                          where: { id: tolerance.id },
-                          data: tolerance,
-                        })),
-                      },                      
-                    },
-                  })),
-                },
-              },
-            })),
-            }
-          : undefined,
-        opContractDeployer: config.opContractDeployer
-          ? { update: config.opContractDeployer }
-          : undefined,
+        config: config,
+        name: name || undefined,
+        description: description || undefined,
       },
     });
     return updatedConfig;
   } catch (error) {
     console.error("Error updating configuration:", error);
+    throw error;
+  }
+}
+
+export async function deleteConfiguration(configId: string) {
+  try {
+    await prisma.configuration.delete({
+      where: { id: configId },
+    });
+  } catch (error) {
+    console.error("Error deleting configuration:", error);
+    throw error;
+  }
+}
+
+export async function batchDeleteConfigurations(userId: string, configIds: string[]) {
+  try {
+    await prisma.configuration.deleteMany({
+      where: { userId, id: { in: configIds } },
+    });
+  } catch (error) {
+    console.error("Error deleting configurations:", error);
     throw error;
   }
 }

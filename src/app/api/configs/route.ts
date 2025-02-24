@@ -1,68 +1,93 @@
-import prisma from "@/lib/prisma";
-import {
-  AltdaDeployConfig,
-  Chain,
-  Interop,
-  Observability,
-  OpContractDeployer,
-  Prisma,
-} from "@prisma/client";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import {
+  createConfiguration,
+  batchDeleteConfigurations,
+} from "@/services/server/configuration";
+import { parseConfig } from "@/lib/configSchema";
 
-export type CreateConfigurationDTO = {
-  name: string;
-  observability?: Observability;
-  interop?: Interop;
-  altdaDeployConfig?: AltdaDeployConfig;
-  chains: Chain[];
-  opContractDeployer?: OpContractDeployer;
-};
-
-export async function POST(req: Request) {
+// Create a new configuration
+export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    const newConfig = (await req.json()) as CreateConfigurationDTO;
+    const dto = (await req.json()).data;
+    const { name, description, config } = dto;
 
-    if (!newConfig) {
+    if (!dto || !config) {
+      console.error("Configuration is required");
       return NextResponse.json(
         { error: "Configuration is required" },
         { status: 400 }
       );
     }
 
-    // Build the common configuration data
-    const configurationData: Prisma.ConfigurationCreateInput = {
-      name: newConfig.name,
-      observability: newConfig.observability
-        ? { create: newConfig.observability }
-        : undefined,
-      interop: newConfig.interop ? { create: newConfig.interop } : undefined,
-      altdaDeployConfig: newConfig.altdaDeployConfig
-        ? { create: newConfig.altdaDeployConfig }
-        : undefined,
-      chains: { create: newConfig.chains },
-      opContractDeployer: newConfig.opContractDeployer
-        ? { create: newConfig.opContractDeployer }
-        : undefined,
-      user: {
-        connect: {
-          id: session?.user.id,
-        },
-      },
-      expiresAt: session ? undefined : new Date(Date.now()),
-    };
+    const parsedResult = parseConfig(config);
+    if (!parsedResult.success || !parsedResult.data) {
+      console.error("Invalid configuration:", parsedResult.error);
+      return NextResponse.json(
+        { error: "Invalid configuration", details: parsedResult.error },
+        { status: 400 }
+      );
+    }
+    const parsedConfig = parsedResult.data;
 
-    const config = await prisma.configuration.create({
-      data: configurationData,
+    const newConfig = await createConfiguration(
+      parsedConfig,
+      session?.user.id,
+      name,
+      description
+    );
+
+    console.log("Configuration created successfully", newConfig.id);
+    return NextResponse.json({
+      message: "Configuration created successfully",
+      status: 201,
+      data: newConfig.id,
     });
-
-    return NextResponse.json(config);
   } catch (error) {
     console.error("Error creating configuration:", error);
     return NextResponse.json(
       { error: "Failed to create configuration" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    const dto = (await req.json());
+    const ids = dto.ids;
+    if (!ids) {
+      console.error("Configuration ID is required");
+      return NextResponse.json(
+        { error: "Configuration ID is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!session?.user.id) {
+      console.error("User ID is required");
+      return NextResponse.json(
+        { error: "User ID is required" },
+        { status: 400 }
+      );
+    }
+    console.log("Deleting configurations:", ids);
+    const deletedConfig = await batchDeleteConfigurations(
+      session?.user.id,
+      ids as string[]
+    );
+    return NextResponse.json({
+      message: "Configurations deleted successfully",
+      status: 200,
+      data: deletedConfig,
+    });
+  } catch (error) {
+    console.error("Error deleting configuration:", error);
+    return NextResponse.json(
+      { error: "Failed to delete configuration" },
       { status: 500 }
     );
   }
