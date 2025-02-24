@@ -4,9 +4,6 @@ import { useFormContext } from "react-hook-form";
 import { Config } from "@/lib/configSchema";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import defaultConfig from "@/const/defaultConfig";
-import ErrorMessage from "./Components/ErrorMessage";
 
 export default function AltDAForm() {
   const { register, formState: { errors } } = useFormContext<Config>();

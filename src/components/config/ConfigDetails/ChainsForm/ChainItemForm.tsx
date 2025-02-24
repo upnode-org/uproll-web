@@ -1,21 +1,13 @@
 "use client";
 
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { EL_TYPES, ELType, CL_TYPES, CLType, LOG_LEVELS, LogLevel, Config } from "@/lib/configSchema";
+import { EL_TYPES, CL_TYPES, LOG_LEVELS, Config } from "@/lib/configSchema";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import defaultParticipant from "@/const/defaultParticipant";
 import ErrorMessage from "../Components/ErrorMessage";
-import { Checkbox } from "@/components/ui/checkbox";
 import defaultChain from "@/const/defaultChain";
 import FormCheckbox from "../Components/FormCheckbox";
 import FormSelect from "../Components/FormSelect";

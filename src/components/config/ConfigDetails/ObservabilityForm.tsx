@@ -11,8 +11,7 @@ import FormCheckbox from "./Components/FormCheckbox";
 import FormInputField from "./Components/FormInput";
 
 export default function ObservabilityForm() {
-  const { register, watch, setValue,  } = useFormContext<Config>();
-  const useObservability = watch("optimism_package.observability.enabled", defaultConfig.optimism_package.observability.enabled);
+  const { register } = useFormContext<Config>();
 
   return (
     <div className="space-y-4 p-4">

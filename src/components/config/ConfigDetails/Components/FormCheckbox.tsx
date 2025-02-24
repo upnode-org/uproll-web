@@ -13,7 +13,7 @@ export default function FormCheckbox({watchName, label}: CheckboxProps) {
     const useValue = watch(watchName);
 
     return (
-        <div className="flex items-center space-x-2">
+        <div className={`flex items-center space-x-2 ${label ? "pt-5" : ""}`}>
             <Checkbox
                 checked={useValue}
                 onCheckedChange={(checked) => {
