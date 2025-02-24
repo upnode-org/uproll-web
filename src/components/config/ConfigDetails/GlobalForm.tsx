@@ -1,7 +1,7 @@
 import { LOG_LEVELS, LogLevel } from "@/lib/configSchema";
 import FormSelect from "./Components/FormSelect";
 import FormCheckbox from "./Components/FormCheckbox";
-import FormNodeSelectorFields from "./Components/FormNodeSelectorFields";
+import FormNodeSelectorFields from "./Components/FormRecordFields";
 export default function GlobalForm() {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">

@@ -5,6 +5,7 @@ import { Config } from "@/lib/configSchema";
 import { Label } from "@/components/ui/label";
 import FormInputField from "./Components/FormInput";
 import { Textarea } from "@/components/ui/textarea";
+import FormFieldArray from "./Components/FormFieldArray";
 export default function InteropForm() {
   const { register } = useFormContext<Config>();
 
@@ -22,14 +23,12 @@ export default function InteropForm() {
           label="Dependency Set"
           />
         </div>
-        {/* TODO: Create a component for extra params */}
-          <div className="col-span-2">
-            <Label>Extra Params</Label>
-            <Textarea
-              {...register("optimism_package.interop.supervisor_params.extra_params")}
-              placeholder="Enter JSON array"
-            />
-          </div>
+        <FormFieldArray
+          label="Extra Params"
+          fieldArrayName="optimism_package.interop.supervisor_params.extra_params"
+          placeholder="Extra param"
+          buttonText="Add Extra Param"
+        />
         </div>
       </div>
   );

@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import DynamicFieldArray from "../Components/FormFieldArray";
 import FormTolerationFieldArray from "../Components/FormTolerationFieldArray";
-import FormNodeSelectorFields from "../Components/FormNodeSelectorFields";
+import FormRecordField from "../Components/FormRecordFields";
 import FormFieldArray from "../Components/FormFieldArray";
 // --- NetworkParamsSection ---
 function NetworkParamsSection({ chainIndex }: { chainIndex: number }) {
@@ -230,7 +230,7 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
           </div>
 
           {/* Participant-Level Settings */}
-          <FormNodeSelectorFields
+          <FormRecordField
             label="Node Selectors"
             fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.node_selectors` as const}
           />
@@ -292,20 +292,14 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
           {/* Consensus Layer - Advanced Settings */}
           <h6 className="font-semibold mt-4">Consensus Layer Advanced Settings</h6>
           <div className="grid grid-cols-2 gap-4 mb-2">
-            <div>
-              <Label>Extra Env Vars (JSON)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_env_vars` as const)}
-                placeholder='{"key": "value"}'
-              />
-            </div>
-            <div>
-              <Label>Extra Labels (JSON)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_labels` as const)}
-                placeholder='{"key": "value"}'
-              />
-            </div>
+            <FormRecordField
+              label="Extra Env Vars"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_env_vars` as const}
+            />
+            <FormRecordField
+              label="Extra Labels"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_labels` as const}
+            />
             <div>
               <Label>Volume Size (MB)</Label>
               <Input
@@ -398,22 +392,19 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
 
           {/* Execution Layer - Advanced Settings */}
           <h6 className="font-semibold mt-4">Execution Layer Advanced Settings</h6>
+          
           <div className="grid grid-cols-2 gap-4 mb-2">
-            
-            <div>
-              <Label>Extra Env Vars (JSON)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_env_vars` as const)}
-                placeholder='{"key": "value"}'
-              />
-            </div>
-            <div>
-              <Label>Extra Labels (JSON)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_labels` as const)}
-                placeholder='{"key": "value"}'
-              />
-            </div>
+          {/* TODO: Add proper fields for these */}
+          <FormRecordField
+              label="Extra Env Vars"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_env_vars` as const}
+            />
+            <FormFieldArray
+              label="Extra Labels"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_labels` as const}
+              placeholder="Extra label"
+              buttonText="Add Extra Label"
+            />
             <div>
               <Label>Volume Size (MB)</Label>
               <Input

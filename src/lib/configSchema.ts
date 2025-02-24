@@ -111,19 +111,24 @@ export type ELType = (typeof EL_TYPES)[number];
 export const CL_TYPES = ["op-node", "hildr"] as const;
 export type CLType = (typeof CL_TYPES)[number];
 
+const record = z.array(z.object({
+  key: z.string(),
+  value: z.string(),
+}))
+
+export type Record = z.infer<typeof record>;
+
 // Schema for a single participant within a chain.
 const ParticipantSchema = z.object({
   // EL (Execution Layer) specific parameters
   el_type: z.enum(EL_TYPES),
   el_image: z.string(),
   el_log_level: z.enum(LOG_LEVELS),
-  el_extra_env_vars: z.record(z.string()),
-  el_extra_labels: z.record(z.string()),
-  el_extra_params: z.array(
-    z.object({
-      value: z.string(),
-    })
-  ),
+  el_extra_env_vars: record,
+  el_extra_labels: record,
+  el_extra_params: z.array(z.object({
+    value: z.string(),
+  })),
   el_tolerations: z.array(TolerationSchema),
   el_volume_size: z.number(),
   el_min_cpu: z.number(),
@@ -135,8 +140,8 @@ const ParticipantSchema = z.object({
   cl_type: z.enum(CL_TYPES),
   cl_image: z.string(),
   cl_log_level: z.enum(LOG_LEVELS),
-  cl_extra_env_vars: z.record(z.string()),
-  cl_extra_labels: z.record(z.string()),
+  cl_extra_env_vars: record,
+  cl_extra_labels: record,
   cl_extra_params: z.array(
     z.object({
       value: z.string(),
@@ -156,10 +161,7 @@ const ParticipantSchema = z.object({
   cl_builder_image: z.string(),
 
   // Participant-level configurations
-  node_selectors: z.array(z.object({
-    key: z.string(),
-    value: z.string(),
-  })),
+  node_selectors: record,
   // Global tolerations for the participant
   tolerations: z.array(TolerationSchema),
   count: z.number(),
@@ -171,6 +173,7 @@ const NetworkParamsSchema = z.object({
   network_id: z.string(),
   seconds_per_slot: z.number(),
   name: z.string(),
+  // These time offsets are provided as numbers, as per the spec.
   fjord_time_offset: z.number(),
   granite_time_offset: z.number(),
   // These time offsets are provided as empty strings when not activated.
@@ -263,10 +266,7 @@ const OptimismPackageSchema = z.object({
   chains: z.array(ChainSchema),
   op_contract_deployer_params: OpContractDeployerParamsSchema,
   global_log_level: z.enum(LOG_LEVELS),
-  global_node_selectors: z.array(z.object({
-    key: z.string(),
-    value: z.string(),
-  })),
+  global_node_selectors: record,
   global_tolerations: z.array(TolerationSchema),
   persistent: z.boolean(),
 });

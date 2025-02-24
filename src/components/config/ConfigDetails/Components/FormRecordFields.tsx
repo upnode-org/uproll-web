@@ -1,25 +1,21 @@
 import { useFormContext, useFieldArray, FieldPathByValue } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
-import { Config } from "@/lib/configSchema";
+import { Config, Record } from "@/lib/configSchema";
 import { Label } from "@/components/ui/label";
 import FormInput from "./FormInput";
 
-type FieldArrayName =
-    | "optimism_package.global_node_selectors"
-    | `optimism_package.chains.${number}.participants.${number}.node_selectors`;
-
-type FormNodeSelectorFieldsProps = {
+type FormRecordFieldProps = {
     label: string;
-    fieldArrayName: FieldArrayName;
+    fieldArrayName: FieldPathByValue<Config, Record>;  
     buttonText?: string;
 };
 
-export default function FormNodeSelectorFields({
+export default function FormRecordField({
     label,
     fieldArrayName,
     buttonText = "Add",
-}: FormNodeSelectorFieldsProps) {
+}: FormRecordFieldProps) {
     const { control } = useFormContext<Config>();
     const { fields, append, remove } = useFieldArray({ control, name: fieldArrayName });
 
