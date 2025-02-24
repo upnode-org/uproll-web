@@ -41,7 +41,9 @@ const TolerationSchema = z.object({
   
   // Grafana configuration for observability
   const GrafanaParamsSchema = z.object({
-    dashboard_sources: z.array(z.string()),
+    dashboard_sources: z.array(z.object({
+      value: z.string(),
+    })),
     min_cpu: z.number(),
     max_cpu: z.number(),
     min_mem: z.number(),
@@ -60,7 +62,9 @@ const TolerationSchema = z.object({
   const SupervisorParamsSchema = z.object({
     image: z.string(),
     dependency_set: z.string(),
-    extra_params: z.array(z.string()),
+    extra_params: z.array(z.object({
+      value: z.string(),
+    })),
   });
   
   // Interop configuration
@@ -101,7 +105,9 @@ const TolerationSchema = z.object({
     el_log_level: z.enum(LOG_LEVELS), 
     el_extra_env_vars: z.record(z.string()),
     el_extra_labels: z.record(z.string()),
-    el_extra_params: z.array(z.string()),
+    el_extra_params: z.array(z.object({
+      value: z.string(),
+    })),
     el_tolerations: z.array(TolerationSchema),
     el_volume_size: z.number(),
     el_min_cpu: z.number(),
@@ -115,7 +121,9 @@ const TolerationSchema = z.object({
     cl_log_level: z.enum(LOG_LEVELS),
     cl_extra_env_vars: z.record(z.string()),
     cl_extra_labels: z.record(z.string()),
-    cl_extra_params: z.array(z.string()),
+    cl_extra_params: z.array(z.object({
+      value: z.string(),
+    })),
     cl_tolerations: z.array(TolerationSchema),
     cl_volume_size: z.number(),
     cl_min_cpu: z.number(),
@@ -154,14 +162,18 @@ const TolerationSchema = z.object({
   // Batcher configuration
   const BatcherParamsSchema = z.object({
     image: z.string(),
-    extra_params: z.array(z.string()),
+    extra_params: z.array(z.object({
+      value: z.string(),
+    })),
   });
   
   // Challenger configuration
   const ChallengerParamsSchema = z.object({
     enabled: z.boolean(),
     image: z.string(),
-    extra_params: z.array(z.string()),
+    extra_params: z.array(z.object({
+      value: z.string(),
+    })),
     cannon_prestates_path: z.string(),
     cannon_prestates_url: z.string(),
   });
@@ -169,7 +181,9 @@ const TolerationSchema = z.object({
   // Proposer configuration
   const ProposerParamsSchema = z.object({
     image: z.string(),
-    extra_params: z.array(z.string()),
+    extra_params: z.array(z.object({
+      value: z.string(),
+    })),
     game_type: z.number(),
     proposal_internal: z.string(),
   });
@@ -184,7 +198,9 @@ const TolerationSchema = z.object({
   // DA Server configuration
   const DaServerParamsSchema = z.object({
     image: z.string(),
-    cmd: z.array(z.string()),
+    cmd: z.array(z.object({
+      value: z.string(),
+    })),
   });
   
   // Chain configuration (L2 network)
@@ -195,7 +211,9 @@ const TolerationSchema = z.object({
     challenger_params: ChallengerParamsSchema,
     proposer_params: ProposerParamsSchema,
     mev_params: MevParamsSchema,
-    additional_services: z.array(z.string()),
+    additional_services: z.array(z.object({
+      value: z.string(),
+    })),
     da_server_params: DaServerParamsSchema,
   });
   

@@ -145,10 +145,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.batcher_params?.extra_params?.[index]} />
+                  {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.batcher_params?.extra_params?.[index]} /> */}
                 </>
               ))}
-              <Button type="button" onClick={() => appendBatcherExtraParam([''])}>
+              <Button type="button" onClick={() => appendBatcherExtraParam({value: ''})}>
                 Add Extra Param
               </Button>
             </div>
@@ -180,10 +180,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.extra_params?.[index]} />
+                  {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.challenger_params?.extra_params?.[index]} /> */}
                 </>
               ))}
-              <Button type="button" onClick={() => appendChallengerExtraParam('')}>
+              <Button type="button" onClick={() => appendChallengerExtraParam({value: ''})}>
                 Add Extra Param
               </Button>
             </div>
@@ -219,10 +219,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                     <Trash2 className="h-4 w-4" />
                   </Button>
                   </div>
-                  <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.extra_params?.[index]} />
+                  {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.proposer_params?.extra_params?.[index]} /> */}
                 </>
               ))}
-              <Button type="button" onClick={() => appendProposerExtraParam('')}>
+              <Button type="button" onClick={() => appendProposerExtraParam({value: ''})}>
                 Add Extra Param
               </Button>
             </div>
@@ -280,10 +280,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                     <Trash2 className="h-4 w-4" />
                   </Button>
                 </div>
-                <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.da_server_params?.cmd?.[index]} />
+                {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.da_server_params?.cmd?.[index]} /> */}
                 </>
               ))}
-              <Button type="button" onClick={() => appendDaServerCmd('')}>
+              <Button type="button" onClick={() => appendDaServerCmd({value: ''})}>
                 Add Command
               </Button>
             </div>
@@ -304,10 +304,10 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
                 <Trash2 className="h-4 w-4" />
               </Button>
               </div>
-              <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.additional_services?.[sIndex]} />
+              {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.additional_services?.[sIndex]} /> */}
             </>
           ))}
-          <Button type="button" onClick={() => appendService('')}>
+          <Button type="button" onClick={() => appendService({value: ''})}>
             Add Service
           </Button>
         </section>
@@ -332,7 +332,7 @@ export default function ChainItemForm({ chainIndex, onRemove }: ChainItemFormPro
               <div>
                 <Label>Tolerations</Label>
                 <Input {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations`)} />
-                <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.tolerations} />
+                {/* <ErrorMessage error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.tolerations} /> */}
               </div>
               <div>
                 <Label>Count</Label>
