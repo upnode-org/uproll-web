@@ -15,6 +15,7 @@ export default function FormCheckbox({watchName, label}: CheckboxProps) {
     return (
         <div className={`flex items-center space-x-2 ${label ? "pt-5" : ""}`}>
             <Checkbox
+                id={watchName}
                 checked={useValue}
                 onCheckedChange={(checked) => {
                     if (typeof checked === "boolean") {

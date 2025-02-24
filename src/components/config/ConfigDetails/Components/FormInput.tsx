@@ -35,8 +35,8 @@ const FormInput: React.FC<FormInputProps> = ({
   const fieldError = get(errors, name);
   return (
     <div>
-      {label && <Label>{label}</Label>}
-      <Input type={type} {...register(name)} />
+      {label && <Label htmlFor={name}>{label}</Label>}
+      <Input id={name} type={type} {...register(name, finalRegisterOptions)} />
       {fieldError && <ErrorMessage error={fieldError as FieldError} />}
     </div>
   );
