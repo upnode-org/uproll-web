@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import DynamicFieldArray from "../Components/FormFieldArray";
 import FormTolerationFieldArray from "../Components/FormTolerationFieldArray";
 import FormNodeSelectorFields from "../Components/FormNodeSelectorFields";
+import FormFieldArray from "../Components/FormFieldArray";
 // --- NetworkParamsSection ---
 function NetworkParamsSection({ chainIndex }: { chainIndex: number }) {
   return (
@@ -350,20 +351,16 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
                 })}
               />
             </div>
-            <div className="col-span-2">
-              <Label>Extra Params (Comma-separated values)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_params` as const)}
-                placeholder="param1,param2"
-              />
-            </div>
-            <div className="col-span-2">
-              <Label>Tolerations (JSON Array)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_tolerations` as const)}
-                placeholder='[{"key": "", "operator": "", "value": "", "effect": ""}]'
-              />
-            </div>
+            <FormFieldArray
+              label="Extra Params"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_params` as const}
+              placeholder="Extra param"
+              buttonText="Add Extra Param"
+            />
+            <FormTolerationFieldArray
+              label="Tolerations"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_tolerations` as const}
+            />
           </div>
 
           {/* Execution Layer */}
@@ -402,6 +399,7 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
           {/* Execution Layer - Advanced Settings */}
           <h6 className="font-semibold mt-4">Execution Layer Advanced Settings</h6>
           <div className="grid grid-cols-2 gap-4 mb-2">
+            
             <div>
               <Label>Extra Env Vars (JSON)</Label>
               <Input
@@ -461,20 +459,16 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
                 })}
               />
             </div>
-            <div className="col-span-2">
-              <Label>Extra Params (Comma-separated values)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_params` as const)}
-                placeholder="param1,param2"
-              />
-            </div>
-            <div className="col-span-2">
-              <Label>Tolerations (JSON Array)</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_tolerations` as const)}
-                placeholder='[{"key": "", "operator": "", "value": "", "effect": ""}]'
-              />
-            </div>
+            <FormFieldArray
+              label="Extra Params"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_params` as const}
+              placeholder="Extra param"
+              buttonText="Add Extra Param"
+            />
+            <FormTolerationFieldArray
+              label="Tolerations"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_tolerations` as const}
+            />
           </div>
         </div>
       ))}
