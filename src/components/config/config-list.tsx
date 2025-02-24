@@ -6,23 +6,53 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Trash2, Search, ChevronRight, Plus } from "lucide-react"
-// import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast"
 import { getUserConfigurations } from "@/services/server/configuration"
 import CommandCopy from "@/components/CommandCopy"
+import { deleteConfigs } from "@/services/client/config"
 
 export function ConfigList({ configs }: { configs: Awaited<ReturnType<typeof getUserConfigurations>> }) {
   const [selectedConfigs, setSelectedConfigs] = useState<string[]>([])
   const [filterText, setFilterText] = useState("")
-  // const { toast } = useToast()
+  const { toast } = useToast()
 
   const handleSelect = (id: string) => {
     setSelectedConfigs((prev) => (prev.includes(id) ? prev.filter((configId) => configId !== id) : [...prev, id]))
   }
 
-  const handleDelete = () => {
-    // TODO: Implement actual deletion logic
-    console.log("Deleting configs:", selectedConfigs)
-    setSelectedConfigs([])
+  const handleDelete = async () => {
+    try {
+      const removeConfig = async () => {
+        if (selectedConfigs.length === 0) {
+          throw new Error("No configs selected")
+        }
+        const response = await deleteConfigs(selectedConfigs)
+        if (response.status >= 200 && response.status < 300) {
+          setSelectedConfigs([])
+          return "Configuration deleted!";
+        } else {
+          throw new Error("Failed to delete configuration");
+        }
+      };
+      
+      await toast.promise(removeConfig(), {
+        loading: {
+          title: "Deleting config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Deleted!",
+          description: "Your configuration has been deleted.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to delete configuration.",
+          variant: "destructive",
+        },
+      });
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const filteredConfigs = configs.filter((config) => config.name.toLowerCase().includes(filterText.toLowerCase()))

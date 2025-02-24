@@ -1,17 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { CreateConfigDto } from "@/types/configDTO";
-import { createConfiguration } from "@/services/server/configuration";
+import {
+  createConfiguration,
+  batchDeleteConfigurations,
+} from "@/services/server/configuration";
 import { parseConfig } from "@/lib/configSchema";
 
 // Create a new configuration
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     const dto = (await req.json()).data;
     const { name, description, config } = dto;
-    
+
     if (!dto || !config) {
       console.error("Configuration is required");
       return NextResponse.json(
@@ -29,7 +31,7 @@ export async function POST(req: Request) {
       );
     }
     const parsedConfig = parsedResult.data;
-    
+
     const newConfig = await createConfiguration(
       parsedConfig,
       session?.user.id,
@@ -47,6 +49,45 @@ export async function POST(req: Request) {
     console.error("Error creating configuration:", error);
     return NextResponse.json(
       { error: "Failed to create configuration" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+    const dto = (await req.json());
+    const ids = dto.ids;
+    if (!ids) {
+      console.error("Configuration ID is required");
+      return NextResponse.json(
+        { error: "Configuration ID is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!session?.user.id) {
+      console.error("User ID is required");
+      return NextResponse.json(
+        { error: "User ID is required" },
+        { status: 400 }
+      );
+    }
+    console.log("Deleting configurations:", ids);
+    const deletedConfig = await batchDeleteConfigurations(
+      session?.user.id,
+      ids as string[]
+    );
+    return NextResponse.json({
+      message: "Configurations deleted successfully",
+      status: 200,
+      data: deletedConfig,
+    });
+  } catch (error) {
+    console.error("Error deleting configuration:", error);
+    return NextResponse.json(
+      { error: "Failed to delete configuration" },
       { status: 500 }
     );
   }

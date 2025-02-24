@@ -3,7 +3,6 @@ import { Config } from "@/lib/configSchema";
 import api from "./apiClient"
 
 export const postConfig = async (config: Config, name?: string, description?: string) => {
-  console.log("Config", config);
   const response = await api.post("/configs", {
     data: {
       name,
@@ -37,14 +36,22 @@ export const updateConfig = async (id: string, config: Config, name?: string, de
   return response
 }
 
-export const deleteConfig = async (id: string) => {
-  const response = await api.delete(`/configs/${id}`)
-  return response
-}
-
 export const downloadConfigFile = async (id: string) => {
   const response = await api.get(`/configs/${id}/yaml`)
   return response
 }
 
+export const deleteConfig = async (id: string) => {
+  const response = await api.delete(`/configs/${id}`)
+  return response
+}
 
+export const deleteConfigs = async (ids: string[]) => {
+  const response = await api.delete("/configs", {
+    data: { ids },
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  return response
+}

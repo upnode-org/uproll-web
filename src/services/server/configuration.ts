@@ -123,3 +123,14 @@ export async function deleteConfiguration(configId: string) {
     throw error;
   }
 }
+
+export async function batchDeleteConfigurations(userId: string, configIds: string[]) {
+  try {
+    await prisma.configuration.deleteMany({
+      where: { userId, id: { in: configIds } },
+    });
+  } catch (error) {
+    console.error("Error deleting configurations:", error);
+    throw error;
+  }
+}
