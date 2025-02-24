@@ -1,4 +1,4 @@
-import { Participant } from "@/lib/configSchema";
+import { Participant, Toleration } from "@/lib/configSchema";
 
 const defaultParticipant: Required<Participant> = {
   // EL (Execution Layer)
@@ -7,8 +7,8 @@ const defaultParticipant: Required<Participant> = {
   el_log_level: "INFO",
   el_extra_env_vars: {},
   el_extra_labels: {},
-  el_extra_params: [],
-  el_tolerations: [], // Toleration array can be empty or contain defaultToleration objects
+  el_extra_params: [] as Array<{ value: string }>,
+  el_tolerations: [] as Toleration[], 
   el_volume_size: 10,
   el_min_cpu: 1,
   el_max_cpu: 2,
@@ -21,8 +21,8 @@ const defaultParticipant: Required<Participant> = {
   cl_log_level: "INFO",
   cl_extra_env_vars: {},
   cl_extra_labels: {},
-  cl_extra_params: [],
-  cl_tolerations: [],
+  cl_extra_params: [] as Array<{ value: string }>,
+  cl_tolerations: [] as Toleration[],
   cl_volume_size: 10,
   cl_min_cpu: 1,
   cl_max_cpu: 2,
@@ -34,10 +34,9 @@ const defaultParticipant: Required<Participant> = {
   el_builder_image: "op-geth:latest",
   cl_builder_type: "op-node",
   cl_builder_image: "op-node:latest",
-
   // Participant-level
-  node_selectors: {},
-  tolerations: [], // Global participant tolerations
+  node_selectors: [] as Array<{ value: string; key: string }>,
+  tolerations: [] as Toleration[], // Global participant tolerations
   count: 1,
 };
 

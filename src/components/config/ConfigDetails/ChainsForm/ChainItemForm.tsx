@@ -13,6 +13,8 @@ import ErrorMessage from "../Components/ErrorMessage";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import DynamicFieldArray from "../Components/FormFieldArray";
+import FormTolerationFieldArray from "../Components/FormTolerationFieldArray";
+import FormNodeSelectorFields from "../Components/FormNodeSelectorFields";
 // --- NetworkParamsSection ---
 function NetworkParamsSection({ chainIndex }: { chainIndex: number }) {
   return (
@@ -26,7 +28,6 @@ function NetworkParamsSection({ chainIndex }: { chainIndex: number }) {
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.network_id`}
           label="Network ID"
-          type="number"
         />
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.seconds_per_slot`}
@@ -45,22 +46,18 @@ function NetworkParamsSection({ chainIndex }: { chainIndex: number }) {
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.granite_time_offset`}
           label="Granite Time Offset"
-          type="number"
         />
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.holocene_time_offset`}
           label="Holocene Time Offset"
-          type="number"
         />
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.isthmus_time_offset`}
           label="Isthmus Time Offset"
-          type="number"
         />
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.network_params.interop_time_offset`}
           label="Interop Time Offset"
-          type="number"
         />
         <FormCheckbox
           label="Fund Dev Accounts"
@@ -149,7 +146,6 @@ function ProposerParamsSection({ chainIndex }: { chainIndex: number }) {
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.proposer_params.proposal_internal`}
           label="Proposal Internal"
-          type="number"
         />
       </div>
     </section>
@@ -173,7 +169,6 @@ function MEVParamsSection({ chainIndex }: { chainIndex: number }) {
         <FormInputField
           name={`optimism_package.chains.${chainIndex}.mev_params.builder_port`}
           label="Builder Port"
-          type="number"
         />
       </div>
     </section>
@@ -183,20 +178,18 @@ function MEVParamsSection({ chainIndex }: { chainIndex: number }) {
 // --- DAServerParamsSection ---
 function DAServerParamsSection({ chainIndex }: { chainIndex: number }) {
   return (
-    <section>
+    <section className="gap-4 flex flex-col">
       <h5 className="font-semibold">DA Server Params</h5>
-      <div className="grid grid-cols-2 gap-4">
-        <FormInputField
-          name={`optimism_package.chains.${chainIndex}.da_server_params.image`}
-          label="Image"
-        />
-        <DynamicFieldArray
-          label="Command"
-          fieldArrayName={`optimism_package.chains.${chainIndex}.da_server_params.cmd`}
-          placeholder="command"
-          buttonText="Add Command"
-        />
-      </div>
+      <FormInputField
+        name={`optimism_package.chains.${chainIndex}.da_server_params.image`}
+        label="Image"
+      />
+      <DynamicFieldArray
+        label="Command"
+        fieldArrayName={`optimism_package.chains.${chainIndex}.da_server_params.cmd`}
+        placeholder="command"
+        buttonText="Add Command"
+      />
     </section>
   );
 }
@@ -235,16 +228,15 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
             </Button>
           </div>
 
+          {/* Participant-Level Settings */}
+          <FormNodeSelectorFields
+            label="Node Selectors"
+            fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.node_selectors` as const}
+          />
           <div className="mb-2">
-            <Label>Node Selectors</Label>
-            <Input
-              {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.node_selectors` as const)}
-            />
-          </div>
-          <div className="mb-2">
-            <Label>Tolerations</Label>
-            <Input
-              {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations` as const)}
+            <FormTolerationFieldArray
+              label="Tolerations"
+              fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations` as const}
             />
           </div>
           <div className="mb-2">
@@ -266,7 +258,7 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
             <FormSelect
               label="Type"
               watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_type`}
-              options={CL_TYPES} 
+              options={CL_TYPES}
             />
             <div>
               <Label>Image</Label>
@@ -296,9 +288,87 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
             </div>
           </div>
 
+          {/* Consensus Layer - Advanced Settings */}
+          <h6 className="font-semibold mt-4">Consensus Layer Advanced Settings</h6>
+          <div className="grid grid-cols-2 gap-4 mb-2">
+            <div>
+              <Label>Extra Env Vars (JSON)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_env_vars` as const)}
+                placeholder='{"key": "value"}'
+              />
+            </div>
+            <div>
+              <Label>Extra Labels (JSON)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_labels` as const)}
+                placeholder='{"key": "value"}'
+              />
+            </div>
+            <div>
+              <Label>Volume Size (MB)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_volume_size` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Min CPU (millicores)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_min_cpu` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Max CPU (millicores)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_max_cpu` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Min Mem (MB)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_min_mem` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Max Mem (MB)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_max_mem` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Extra Params (Comma-separated values)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_params` as const)}
+                placeholder="param1,param2"
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Tolerations (JSON Array)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_tolerations` as const)}
+                placeholder='[{"key": "", "operator": "", "value": "", "effect": ""}]'
+              />
+            </div>
+          </div>
+
           {/* Execution Layer */}
           <h6 className="font-semibold mt-4">Execution Layer</h6>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4 mb-2">
             <FormSelect
               label="Type"
               watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_type`}
@@ -325,6 +395,84 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
               <Label>Builder Image</Label>
               <Input
                 {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_builder_image` as const)}
+              />
+            </div>
+          </div>
+
+          {/* Execution Layer - Advanced Settings */}
+          <h6 className="font-semibold mt-4">Execution Layer Advanced Settings</h6>
+          <div className="grid grid-cols-2 gap-4 mb-2">
+            <div>
+              <Label>Extra Env Vars (JSON)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_env_vars` as const)}
+                placeholder='{"key": "value"}'
+              />
+            </div>
+            <div>
+              <Label>Extra Labels (JSON)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_labels` as const)}
+                placeholder='{"key": "value"}'
+              />
+            </div>
+            <div>
+              <Label>Volume Size (MB)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_volume_size` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Min CPU (millicores)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_min_cpu` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Max CPU (millicores)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_max_cpu` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Min Mem (MB)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_min_mem` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div>
+              <Label>Max Mem (MB)</Label>
+              <Input
+                type="number"
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_max_mem` as const, {
+                  valueAsNumber: true,
+                })}
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Extra Params (Comma-separated values)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_params` as const)}
+                placeholder="param1,param2"
+              />
+            </div>
+            <div className="col-span-2">
+              <Label>Tolerations (JSON Array)</Label>
+              <Input
+                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_tolerations` as const)}
+                placeholder='[{"key": "", "operator": "", "value": "", "effect": ""}]'
               />
             </div>
           </div>
