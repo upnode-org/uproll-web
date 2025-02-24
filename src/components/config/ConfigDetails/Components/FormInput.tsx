@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Config } from "@/lib/configSchema";
 
 interface FormInputProps {
-  label: string;
+  label?: string;
   type?: string;
   name: FieldPathByValue<Config, number | string>;
   registerOptions?: Record<string, any>;
@@ -34,7 +34,7 @@ const FormInput: React.FC<FormInputProps> = ({
   // Extract nested error using lodash.get
   const fieldError = get(errors, name);
   return (
-    <div>
+    <div className="w-full">
       {label && <Label htmlFor={name}>{label}</Label>}
       <Input id={name} type={type} {...register(name, finalRegisterOptions)} />
       {fieldError && <ErrorMessage error={fieldError as FieldError} />}
