@@ -1,13 +1,8 @@
 "use client";
 
-import { useFormContext } from "react-hook-form";
-import { Config } from "@/lib/configSchema";
-import { Label } from "@/components/ui/label";
 import FormInputField from "./Components/FormInput";
-import { Textarea } from "@/components/ui/textarea";
 import FormFieldArray from "./Components/FormFieldArray";
 export default function InteropForm() {
-  const { register } = useFormContext<Config>();
 
   return (
     <div className="space-y-4 p-4">

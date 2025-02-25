@@ -2,13 +2,18 @@ import prisma from "@/lib/prisma";
 import { NextResponse, NextRequest } from "next/server";
 import yaml from "js-yaml";
 
-function transformConfig(obj: any): any {
+interface KeyValue {
+  key: string;
+  value: unknown;
+}
+
+function transformConfig(obj: unknown): unknown {
   if (Array.isArray(obj)) {
     // Check if every item is an object with exactly "key" and "value" properties.
     if (
       obj.every(
-        (item) =>
-          item &&
+        (item): item is KeyValue =>
+          !!item &&
           typeof item === "object" &&
           !Array.isArray(item) &&
           "key" in item &&
@@ -17,8 +22,9 @@ function transformConfig(obj: any): any {
       )
     ) {
       // Convert array of { key, value } objects into a single object.
-      return obj.reduce((acc: Record<string, any>, item) => {
-        acc[item.key] = item.value;
+      return obj.reduce((acc: Record<string, unknown>, item) => {
+        const kv = item as KeyValue;
+        acc[kv.key] = kv.value;
         return acc;
       }, {});
     }
@@ -26,23 +32,23 @@ function transformConfig(obj: any): any {
     if (
       obj.every(
         (item) =>
-          item &&
+          !!item &&
           typeof item === "object" &&
           !Array.isArray(item) &&
-          Object.keys(item).length === 1 &&
-          "value" in item
+          Object.keys(item as object).length === 1 &&
+          "value" in (item as object)
       )
     ) {
       // Convert array of { value } objects into an array of values.
-      return obj.map((item) => item.value);
+      return obj.map((item) => (item as { value: unknown }).value);
     }
     // Otherwise, recursively transform each element.
     return obj.map((item) => transformConfig(item));
   } else if (obj && typeof obj === "object") {
     // Recursively transform each property of the object.
-    const newObj: Record<string, any> = {};
-    for (const key in obj) {
-      newObj[key] = transformConfig(obj[key]);
+    const newObj: Record<string, unknown> = {};
+    for (const key in obj as Record<string, unknown>) {
+      newObj[key] = transformConfig((obj as Record<string, unknown>)[key]);
     }
     return newObj;
   }
@@ -51,11 +57,11 @@ function transformConfig(obj: any): any {
 }
 
 export async function GET(
-  _: NextRequest,
+  req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const id = (await params).id;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
