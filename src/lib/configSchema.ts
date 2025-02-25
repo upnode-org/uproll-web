@@ -21,10 +21,10 @@ export const EFFECT_TYPES = [
 export type EffectType = (typeof EFFECT_TYPES)[number];
 
 const TolerationSchema = z.object({
-  key: z.string(),
-  operator: z.enum(OPERATOR_TYPES),
-  value: z.string(),
-  effect: z.enum(EFFECT_TYPES),
+  key: z.string().optional(),
+  operator: z.enum(OPERATOR_TYPES).optional(),
+  value: z.string().optional(),
+  effect: z.enum(EFFECT_TYPES).optional(),
   toleration_seconds: z.number().optional(),
 });
 
@@ -60,8 +60,8 @@ const GrafanaParamsSchema = z.object({
 // Observability configuration
 const ObservabilitySchema = z.object({
   enabled: z.boolean(),
-  prometheus_params: PrometheusParamsSchema,
-  grafana_params: GrafanaParamsSchema,
+  prometheus_params: PrometheusParamsSchema.optional(),
+  grafana_params: GrafanaParamsSchema.optional(),
 });
 
 // Supervisor configuration for interop mode
@@ -78,7 +78,7 @@ const SupervisorParamsSchema = z.object({
 // Interop configuration
 const InteropSchema = z.object({
   enabled: z.boolean(),
-  supervisor_params: SupervisorParamsSchema,
+  supervisor_params: SupervisorParamsSchema.optional(),
 });
 
 // AltDA deploy configuration
