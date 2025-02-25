@@ -322,7 +322,7 @@ const OptimismPackageSchema = z.object({
       if (!services.includes("da_server")) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: `Chain at index ${idx} must include "da_server" in additional_services because use_altda is true.`,
+          message: `Chain ${idx + 1} must include "da_server" in additional services because use alternative DA is true.`,
           path: ["chains", idx, "additional_services"],
         });
       }
