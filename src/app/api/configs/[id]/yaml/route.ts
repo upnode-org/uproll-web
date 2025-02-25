@@ -80,6 +80,51 @@ export async function GET(
     // Transform the configuration object as specified.
     const transformedConfig = transformConfig(config.config);
 
+    // Additional checks for optimism_package sub-properties.
+    if (
+      transformedConfig &&
+      typeof transformedConfig === "object" &&
+      "optimism_package" in transformedConfig
+    ) {
+      const optimismPackage = (transformedConfig as Record<string, unknown>).optimism_package;
+      if (optimismPackage && typeof optimismPackage === "object") {
+        const opPkg = optimismPackage as Record<string, unknown>;
+        // For "interop": check for a child property "enabled" === true.
+        if (
+          "interop" in opPkg &&
+          opPkg.interop &&
+          typeof opPkg.interop === "object"
+        ) {
+          const interop = opPkg.interop as Record<string, unknown>;
+          if (interop.enabled !== true) {
+            delete opPkg.interop;
+          }
+        }
+        // For "observability": check for a child property "enabled" === true.
+        if (
+          "observability" in opPkg &&
+          opPkg.observability &&
+          typeof opPkg.observability === "object"
+        ) {
+          const observability = opPkg.observability as Record<string, unknown>;
+          if (observability.enabled !== true) {
+            delete opPkg.observability;
+          }
+        }
+        // For "altda_deploy_config": check for a child property "use_altda" === true.
+        if (
+          "altda_deploy_config" in opPkg &&
+          opPkg.altda_deploy_config &&
+          typeof opPkg.altda_deploy_config === "object"
+        ) {
+          const altda = opPkg.altda_deploy_config as Record<string, unknown>;
+          if (altda.use_altda !== true) {
+            delete opPkg.altda_deploy_config;
+          }
+        }
+      }
+    }
+
     // Convert the transformed configuration object to a YAML string.
     const yamlString = yaml.dump(transformedConfig);
 

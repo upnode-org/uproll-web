@@ -3,7 +3,7 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { CL_TYPES, Config, EL_TYPES, LOG_LEVELS } from "@/lib/configSchema";
+import { CL_TYPES, Config, EL_TYPES, LOG_LEVEL_MAY_INHERIT } from "@/lib/configSchema";
 import defaultParticipant from "@/const/defaultParticipant";
 import FormCheckbox from "../Components/FormCheckbox";
 import FormSelect from "../Components/FormSelect";
@@ -273,7 +273,7 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
             <FormSelect
               label="Log Level"
               watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_log_level`}
-              options={LOG_LEVELS}
+              options={LOG_LEVEL_MAY_INHERIT}
             />
             <div>
               <Label>Builder Type</Label>
@@ -374,7 +374,7 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
             <FormSelect
               label="Log Level"
               watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_log_level`}
-              options={LOG_LEVELS}
+              options={LOG_LEVEL_MAY_INHERIT}
             />
             <div>
               <Label>Builder Type</Label>

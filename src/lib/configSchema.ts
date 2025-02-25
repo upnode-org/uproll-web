@@ -99,6 +99,9 @@ const AltdaDeployConfigSchema = z.object({
 export const LOG_LEVELS = ["ERROR", "WARN", "INFO", "DEBUG", "TRACE"] as const;
 export type LogLevel = (typeof LOG_LEVELS)[number];
 
+export const LOG_LEVEL_MAY_INHERIT = [...LOG_LEVELS, "INHERIT"] as const;
+export type LogLevelMayInherit = (typeof LOG_LEVEL_MAY_INHERIT)[number];
+
 export const EL_TYPES = [
   "op-geth",
   "op-reth",
@@ -123,7 +126,7 @@ const ParticipantSchema = z.object({
   // EL (Execution Layer) specific parameters
   el_type: z.enum(EL_TYPES),
   el_image: z.string(),
-  el_log_level: z.enum(LOG_LEVELS),
+  el_log_level: z.enum(LOG_LEVEL_MAY_INHERIT),
   el_extra_env_vars: record,
   el_extra_labels: record,
   el_extra_params: z.array(z.object({
@@ -139,7 +142,7 @@ const ParticipantSchema = z.object({
   // CL (Consensus Layer) specific parameters
   cl_type: z.enum(CL_TYPES),
   cl_image: z.string(),
-  cl_log_level: z.enum(LOG_LEVELS),
+  cl_log_level: z.enum(LOG_LEVEL_MAY_INHERIT),
   cl_extra_env_vars: record,
   cl_extra_labels: record,
   cl_extra_params: z.array(

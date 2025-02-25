@@ -4,7 +4,7 @@ const defaultParticipant: Required<Participant> = {
   // EL (Execution Layer)
   el_type: "op-geth",
   el_image: "op-geth:latest",
-  el_log_level: "INFO",
+  el_log_level: "INHERIT",
   el_extra_env_vars: [] as Record,
   el_extra_labels: [] as Record,
   el_extra_params: [] as Array<{ value: string }>,
@@ -18,7 +18,7 @@ const defaultParticipant: Required<Participant> = {
   // CL (Consensus Layer)
   cl_type: "op-node",
   cl_image: "op-node:latest",
-  cl_log_level: "INFO",
+  cl_log_level: "INHERIT",
   cl_extra_env_vars: [] as Record,
   cl_extra_labels: [] as Record,
   cl_extra_params: [] as Array<{ value: string }>,
