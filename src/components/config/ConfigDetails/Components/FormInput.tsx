@@ -44,8 +44,10 @@ const FormInput = <T extends string | number>({
       <Input
         id={name}
         type={type}
-        // Explicitly cast to satisfy TypeScript. This cast is safe if your Config schema matches the input value type.
-        {...register(name, finalRegisterOptions as RegisterOptions<Config, FieldPathByValue<Config, T>>)}
+        {...register(
+          name,
+          finalRegisterOptions as RegisterOptions<Config, FieldPathByValue<Config, T>>
+        )}
         className="w-full bg-white"
       />
       {fieldError && <ErrorMessage error={fieldError as FieldError} />}
