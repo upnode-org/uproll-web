@@ -399,11 +399,9 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
               label="Extra Env Vars"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_env_vars` as const}
             />
-            <FormFieldArray
+            <FormRecordField
               label="Extra Labels"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_labels` as const}
-              placeholder="Extra label"
-              buttonText="Add Extra Label"
             />
             <div>
               <Label>Volume Size (MB)</Label>
