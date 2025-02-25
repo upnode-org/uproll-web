@@ -246,12 +246,36 @@ const ChainSchema = z.object({
   challenger_params: ChallengerParamsSchema,
   proposer_params: ProposerParamsSchema,
   mev_params: MevParamsSchema,
+  // dora, blockscout
   additional_services: z.array(
     z.object({
       value: z.string(),
     })
   ),
   da_server_params: DaServerParamsSchema,
+}).superRefine((chain, ctx) => {
+  const additionalSvcs = chain.additional_services.map(svc => svc.value);
+    if (additionalSvcs.includes("rollup-boost")) {
+      const rbImage = chain.mev_params.rollup_boost_image;
+      if (!rbImage) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message:
+            'rollup boost image must be specified when "rollup-boost" is in additional services.',
+          path: ["mev_params", "rollup_boost_image"],
+        });
+      }
+    }
+
+    if (chain.challenger_params.enabled) {
+      if (!chain.challenger_params.image) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "A challenger image is required if challenger is enabled.",
+          path: ["challenger_params", "image"],
+        });
+      }
+    }
 });
 
 // L2 contract deployer configuration
@@ -266,12 +290,44 @@ const OptimismPackageSchema = z.object({
   observability: ObservabilitySchema,
   interop: InteropSchema,
   altda_deploy_config: AltdaDeployConfigSchema,
-  chains: z.array(ChainSchema),
+  chains: z.array(ChainSchema)
+  .superRefine((chains, ctx) => {
+    const seenIds = new Set<string>();
+    chains.forEach((chain, idx) => {
+      const networkId = chain.network_params.network_id;
+      if (seenIds.has(networkId)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Duplicate network_id: ${networkId} found in chain at index ${idx}`,
+          path: ['chains', idx, 'network_params', 'network_id'],
+        });
+      } else {
+        seenIds.add(networkId);
+      }
+    });
+  }),
   op_contract_deployer_params: OpContractDeployerParamsSchema,
   global_log_level: z.enum(LOG_LEVELS),
   global_node_selectors: record,
   global_tolerations: z.array(TolerationSchema),
   persistent: z.boolean(),
+})
+.superRefine((optimismPackage, ctx) => {
+  const { use_altda } = optimismPackage.altda_deploy_config;
+
+  // If use_altda is true, ensure each chain has da_server in additional_services
+  if (use_altda) {
+    optimismPackage.chains.forEach((chain, idx) => {
+      const services = chain.additional_services.map(s => s.value);
+      if (!services.includes("da_server")) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `Chain at index ${idx} must include "da_server" in additional_services because use_altda is true.`,
+          path: ["chains", idx, "additional_services"],
+        });
+      }
+    });
+  }
 });
 
 /* -------------------------------------------------------------------------
