@@ -240,18 +240,11 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.tolerations` as const}
             />
           </div>
-          <div className="mb-2">
-            <Label>Count</Label>
-            <Input
-              type="number"
-              {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.count` as const, {
-                valueAsNumber: true,
-              })}
-            />
-            <ErrorMessage
-              error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.count}
-            />
-          </div>
+          <FormInputField
+            label="Count"
+            name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.count` as const}
+            type="number"
+          />
 
           {/* Consensus Layer */}
           <h6 className="font-semibold mt-4">Consensus Layer</h6>
@@ -261,32 +254,23 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
               watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_type`}
               options={CL_TYPES}
             />
-            <div>
-              <Label>Image</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_image` as const)}
-              />
-              <ErrorMessage
-                error={errors.optimism_package?.chains?.[chainIndex]?.participants?.[pIndex]?.cl_image}
-              />
-            </div>
+            <FormInputField
+              label="Image"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_image` as const}
+            />
             <FormSelect
               label="Log Level"
               watchName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_log_level`}
               options={LOG_LEVEL_MAY_INHERIT}
             />
-            <div>
-              <Label>Builder Type</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_builder_type` as const)}
-              />
-            </div>
-            <div>
-              <Label>Builder Image</Label>
-              <Input
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_builder_image` as const)}
-              />
-            </div>
+            <FormInputField
+              label="Builder Type"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_builder_type` as const}
+            />
+            <FormInputField
+              label="Builder Image"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_builder_image` as const}
+            />
           </div>
 
           {/* Consensus Layer - Advanced Settings */}
@@ -300,51 +284,30 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
               label="Extra Labels"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_labels` as const}
             />
-            <div>
-              <Label>Volume Size (MB)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_volume_size` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Min CPU (millicores)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_min_cpu` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Max CPU (millicores)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_max_cpu` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Min Mem (MB)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_min_mem` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Max Mem (MB)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_max_mem` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
+            <FormInputField
+              label="Volume Size (MB)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_volume_size` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Min CPU (millicores)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_min_cpu` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Max CPU (millicores)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_max_cpu` as const}
+            />
+            <FormInputField
+              label="Min Memory (MB)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_min_mem` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Max Memory (MB)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_max_mem` as const}
+              type="number"
+            />
             <FormFieldArray
               label="Extra Params"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.cl_extra_params` as const}
@@ -392,10 +355,10 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
 
           {/* Execution Layer - Advanced Settings */}
           <h6 className="font-semibold mt-4">Execution Layer Advanced Settings</h6>
-          
+
           <div className="grid grid-cols-2 gap-4 mb-2">
-          {/* TODO: Add proper fields for these */}
-          <FormRecordField
+            {/* TODO: Add proper fields for these */}
+            <FormRecordField
               label="Extra Env Vars"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_env_vars` as const}
             />
@@ -403,51 +366,31 @@ function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
               label="Extra Labels"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_labels` as const}
             />
-            <div>
-              <Label>Volume Size (MB)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_volume_size` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Min CPU (millicores)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_min_cpu` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Max CPU (millicores)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_max_cpu` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Min Mem (MB)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_min_mem` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
-            <div>
-              <Label>Max Mem (MB)</Label>
-              <Input
-                type="number"
-                {...register(`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_max_mem` as const, {
-                  valueAsNumber: true,
-                })}
-              />
-            </div>
+            <FormInputField
+              label="Volume Size (MB)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_volume_size` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Min CPU (millicores)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_min_cpu` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Max CPU (millicores)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_max_cpu` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Min Memory (MB)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_min_mem` as const}
+              type="number"
+            />
+            <FormInputField
+              label="Max Memory (MB)"
+              name={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_max_mem` as const}
+              type="number"
+            />
             <FormFieldArray
               label="Extra Params"
               fieldArrayName={`optimism_package.chains.${chainIndex}.participants.${pIndex}.el_extra_params` as const}
