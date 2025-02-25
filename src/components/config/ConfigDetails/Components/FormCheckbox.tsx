@@ -17,7 +17,6 @@ export default function FormCheckbox({ watchName, label }: CheckboxProps) {
     watch,
     setValue,
     formState: { errors },
-    register,
   } = useFormContext<Config>();
 
   const useValue = watch(watchName);

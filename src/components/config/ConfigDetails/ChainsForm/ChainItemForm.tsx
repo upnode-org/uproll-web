@@ -8,7 +8,6 @@ import defaultParticipant from "@/const/defaultParticipant";
 import FormCheckbox from "../Components/FormCheckbox";
 import FormSelect from "../Components/FormSelect";
 import FormInputField from "../Components/FormInput";
-import ErrorMessage from "../Components/ErrorMessage";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import DynamicFieldArray from "../Components/FormFieldArray";
@@ -211,7 +210,7 @@ function AdditionalServicesSection({ chainIndex }: { chainIndex: number }) {
 
 // --- ParticipantsSection ---
 function ParticipantsSection({ chainIndex }: { chainIndex: number }) {
-  const { control, register, formState: { errors } } = useFormContext<Config>();
+  const { control, register } = useFormContext<Config>();
   const { fields: participantFields, append: appendParticipant, remove: removeParticipant } = useFieldArray({
     control,
     name: `optimism_package.chains.${chainIndex}.participants`,
