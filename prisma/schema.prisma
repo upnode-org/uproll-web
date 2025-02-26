@@ -59,7 +59,6 @@ model Configuration {
   updatedAt DateTime  @updatedAt
 
   name String
-  description String?
 
   config Json
   
