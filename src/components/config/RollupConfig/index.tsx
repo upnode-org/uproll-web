@@ -16,55 +16,14 @@ import { SignerConfigForm } from "./SignerConfigForm";
 import { AdminConfigForm } from "./AdminConfigForm";
 import { ChainConfigForm } from "./ChainConfigForm";
 import { GasConfigForm } from "./GasConfigForm";
+import defaultRollup from "@/const/defaultRollup";
 
-const defaultValues: RollupConfig = {
-  rollup_name: "Untitled Configuration",
-  settlement_layer: {
-    selection: "ETH Mainnet",
-    chain_id: "",
-    l1_block_time: "",
-    settlement_rpc: "",
-  },
-  participants: [
-    {
-      el_type: "op-geth",
-      el_image: "op-geth:latest",
-      cl_type: "op-node",
-      cl_image: "op-node:latest",
-    },
-  ],
-  signer_config: {
-    deployer_private_key: "",
-    batcher_private_key_or_signer_endpoint: "",
-    sequencer_private_key_or_signer_endpoint: "",
-    proposer_private_key_or_signer_endpoint: "",
-  },
-  admin_config: {
-    final_system_owner: "",
-    proxy_admin_owner: "",
-  },
-  chain_config: {
-    l2_chain_id: "",
-    l2_block_time: "2s",
-    proof_maturity_delay_seconds: 0,
-    base_fee_vault_recipient: "",
-    l1_fee_vault_recipient: "",
-    sequencer_fee_vault_recipient: "",
-    base_fee_vault_withdrawal_network: "",
-    l1_fee_vault_withdrawal_network: "",
-    sequencer_fee_vault_withdrawal_network: "",
-  },
-  gas_config: {
-    l2_genesis_block_gas_limit: 0,
-    eip1559_elasticity: 0,
-    eip1559_denominator: 0,
-    eip1559_denominator_canyon: 0,
-    gas_price_oracle_base_fee_scalar: 0,
-    gas_price_oracle_blob_base_fee_scalar: 0,
-  },
-};
+interface RollupConfigFormProps {
+  initialValues?: RollupConfig;
+  id?: string;
+}
 
-export const RollupConfigForm: React.FC = () => {
+export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValues, id }) => {
   const {
     register,
     control,
@@ -72,7 +31,7 @@ export const RollupConfigForm: React.FC = () => {
     formState: { errors },
   } = useForm<RollupConfig>({
     resolver: zodResolver(RollupConfigSchema),
-    defaultValues,
+    defaultValues: initialValues || defaultRollup,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -101,21 +60,21 @@ export const RollupConfigForm: React.FC = () => {
           <div className="flex justify-between gap-2 w-full">
             <div className="flex items-center gap-2">
               <Button>
-                <Save className="w-4 h-4" /> {true ? "Save" : "Create"}
+                <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
               </Button>
               <Button>
                 <Download className="w-4 h-4" /> Download
               </Button>
               <CommandCopy
                 command={
-                  true
-                    ? `uproll deploy ${"id"}`
+                  id
+                    ? `uproll deploy ${id}`
                     : `Save to generate a deploy command`
                 }
-                disabled={!true}
+                disabled={!id}
               />
             </div>
-            {true && (
+            {id && (
               <ModalAlert
                 title="Delete Configuration?"
                 description="Are you sure you want to delete this configuration? This action cannot be undone."
