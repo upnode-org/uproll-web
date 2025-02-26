@@ -1,7 +1,7 @@
 // import prisma from "@/lib/prisma";
 // import { ConfigList } from "@/components/config/ConfigList";
-import { RollupConfigForm } from "@/components/config/OpDetails";
-import HeroWrapper from "@/components/HeroWrapper";
+import { RollupConfigForm } from "@/components/config/RollupConfig";
+// import HeroWrapper from "@/components/HeroWrapper";
 // async function getUserConfigurations() {
 //     try {
 //         const configurations = await prisma.configuration.findMany();
