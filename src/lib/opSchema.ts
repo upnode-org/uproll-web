@@ -202,7 +202,7 @@ export type RollupConfig = z.infer<typeof RollupConfigSchema>;
  * @returns An object with success status, the validated configuration,
  *          and error details if validation fails.
  */
-export function parseRollupConfig(data: unknown): {
+export function parseConfig(data: unknown): {
   success: boolean;
   data: RollupConfig;
   error: ZodError | null;

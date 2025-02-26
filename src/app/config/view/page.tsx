@@ -10,14 +10,15 @@ export default async function ViewConfigPage() {
 
     const configs = await getUserConfigurations(session!.user.id)
 
+
     return (<>
-        <HeroWrapper className="bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-4">
+        {/* <HeroWrapper className="bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-4">
             <Container className="p-10">
                 <h1 className="text-4xl font-bold">{configs.length > 0 ? "Your configs" : "Create a config to get started"}</h1>
             </Container>
         </HeroWrapper>
-        <Container>
+        <Container> */}
             <ConfigList configs={configs} />
-        </Container>
+        {/* </Container> */}
     </>);
 }
