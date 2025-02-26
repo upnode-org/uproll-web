@@ -1,4 +1,4 @@
-import { parseConfig } from "@/lib/configSchema";
+import { parseConfig } from "@/lib/opSchema";
 import prisma from "@/lib/prisma";
 import {
   deleteConfiguration,
@@ -21,22 +21,16 @@ export async function PUT(
     }
 
     const dto = (await req.json()).data;
-    const { name, description, config } = dto;
-    if (!dto || !config) {
+    if (!dto || !dto.config) {
       console.error("Configuration is required");
       return NextResponse.json(
         { error: "Configuration is required" },
         { status: 400 }
       );
     }
+    
+    const { name, config } = dto;
 
-    if (!dto.config) {
-      console.error("Configuration is required");
-      return NextResponse.json(
-        { error: "Configuration is required" },
-        { status: 400 }
-      );
-    }
 
     const parsedResult = parseConfig(config);
     if (!parsedResult.success) {
@@ -54,7 +48,6 @@ export async function PUT(
       parsedConfig,
       id,
       name,
-      description,
       session?.user.id
     );
 

@@ -5,22 +5,24 @@ import {
   createConfiguration,
   batchDeleteConfigurations,
 } from "@/services/server/configuration";
-import { parseConfig } from "@/lib/configSchema";
+import { parseConfig } from "@/lib/opSchema";
 
 // Create a new configuration
 export async function POST(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     const dto = (await req.json()).data;
-    const { name, description, config } = dto;
 
-    if (!dto || !config) {
+    if (!dto || !dto.config) {
       console.error("Configuration is required");
       return NextResponse.json(
         { error: "Configuration is required" },
         { status: 400 }
       );
     }
+    console.log("dto", dto);
+    const { name, config } = dto;
+
 
     const parsedResult = parseConfig(config);
     if (!parsedResult.success || !parsedResult.data) {
@@ -36,7 +38,6 @@ export async function POST(req: NextRequest) {
       parsedConfig,
       session?.user.id,
       name,
-      description
     );
 
     console.log("Configuration created successfully", newConfig.id);
