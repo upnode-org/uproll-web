@@ -6,6 +6,7 @@ import {
   Controller,
   UseFormRegister,
   FieldErrors,
+  Control,
 } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RollupConfigSchema, RollupConfig } from "@/lib/opSchema"; // adjust the import path as needed
@@ -59,7 +60,7 @@ const InputField: React.FC<InputFieldProps> = ({
 type SelectFieldProps = {
   label: string;
   options: { label: string; value: string }[];
-  control: any; // ideally: Control<RollupConfig>
+  control:  Control<RollupConfig>
   name: string;
   error?: string;
 };
@@ -75,12 +76,12 @@ const SelectField: React.FC<SelectFieldProps> = ({
     <Label className="text-sm font-medium text-gray-700">{label}</Label>
     <Controller
       control={control}
-      name={name}
+      name={name as keyof RollupConfig}
       render={({ field }) => (
         <Select
           onValueChange={field.onChange}
-          value={field.value}
-          defaultValue={field.value}
+          value={field.value as string}
+          defaultValue={field.value as string}
         >
           <SelectTrigger className={`bg-white ${error ? "border-red-500" : ""}`}>
             <SelectValue placeholder="Select an option" />
@@ -106,7 +107,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
 // Settlement Layer Section
 type SettlementLayerFormProps = {
   register: UseFormRegister<RollupConfig>;
-  control: any;
+  control: Control<RollupConfig>;
   errors: FieldErrors<RollupConfig>;
 };
 
@@ -152,7 +153,7 @@ const SettlementLayerForm: React.FC<SettlementLayerFormProps> = ({
 type ParticipantFormProps = {
   index: number;
   register: UseFormRegister<RollupConfig>;
-  control: any;
+  control: Control<RollupConfig>;
   errors: FieldErrors<RollupConfig>;
   remove: (index: number) => void;
 };

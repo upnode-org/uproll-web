@@ -1,5 +1,5 @@
-import prisma from "@/lib/prisma";
-import { ConfigList } from "@/components/config/ConfigList";
+// import prisma from "@/lib/prisma";
+// import { ConfigList } from "@/components/config/ConfigList";
 import { RollupConfigForm } from "@/components/config/OpDetails";
 import HeroWrapper from "@/components/HeroWrapper";
 // async function getUserConfigurations() {
