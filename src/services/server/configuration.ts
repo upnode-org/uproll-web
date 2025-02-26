@@ -1,5 +1,5 @@
 "use server";
-import { Config, parseConfig } from "@/lib/configSchema";
+import { RollupConfig, parseConfig } from "@/lib/opSchema";
 import prisma from "@/lib/prisma";
 
 /**
@@ -46,7 +46,6 @@ export async function getConfigurationDetail(userId: string, configId: string) {
     return {
       config: parsedConfig.data,
       name: configuration?.name,
-      description: configuration?.description,
     };
   } catch (error) {
     console.error("Error fetching configuration detail for user:", error);
@@ -63,20 +62,17 @@ const EXPIRATION_TIME = 24 * 60 * 60 * 1000; // 24 hours
  * @returns A promise that resolves to the new configuration details or null if error.
  */
 export async function createConfiguration(
-  config: Config,
+  config: RollupConfig,
   userId?: string,
   name?: string,
-  description?: string
 ) {
   try {
     const expiresAt = userId ? undefined : new Date(new Date().getTime() + EXPIRATION_TIME);    
 
-    console.dir(config, { depth: null, colors: true });
     const newConfig = await prisma.configuration.create({
       data: {
         config: config,
         name: name || "Untitled Configuration",
-        description: description || "",
         ...(userId
           ? { user: { connect: { id: userId } } }
           : { expiresAt }),
@@ -90,10 +86,9 @@ export async function createConfiguration(
 }
 
 export async function updateConfiguration(
-  config: Config,
+  config: RollupConfig,
   configId: string,
   name?: string,
-  description?: string,
   userId?: string
 ) {
   try {
@@ -102,7 +97,6 @@ export async function updateConfiguration(
       data: {
         config: config,
         name: name || undefined,
-        description: description || undefined,
       },
     });
     return updatedConfig;
