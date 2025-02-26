@@ -8,7 +8,7 @@ export default function CommandCopy({ command, description, disabled }: { comman
     return (
         <div className="flex flex-col">
             <div className="flex flex-row">
-                <code className="text-stone-900 text-sm border border-stone-900 p-2 overflow-hidden whitespace-nowrap">{command}</code>
+                <code className="text-stone-900 bg-white text-sm border border-stone-900 p-2 overflow-hidden whitespace-nowrap">{command}</code>
                 <button
                     className={`border border-l-0 border-stone-900 flex flex-col items-center justify-center align-middle bg-stone-900 text-white hover:bg-white hover:text-stone-900 aspect-square w-9 ${disabled ? "opacity-50 cursor-not-allowed hover:bg-stone-900 hover:text-white" : ""}`}
                     onClick={() => {

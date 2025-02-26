@@ -12,7 +12,7 @@ export default function HeroWrapper({
       {backgroundElement}
       
       {/* Content is placed on top */}
-      <div className="relative pt-24">
+      <div className="relative pt-[4.75rem] sm:pt-[5.25rem]">
         {children}
       </div>
     </section>

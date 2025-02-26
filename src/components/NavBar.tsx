@@ -15,7 +15,7 @@ export default function NavBar() {
     const { data: session, status } = useSession()
 
     return (
-        <header className="flex items-center justify-between pt-4 px-6 max-w-7xl fixed left-[50%] translate-x-[-50%] w-full z-[1000]">
+        <header className="flex items-center justify-between pt-2 px-2 sm:pt-4 sm:px-6 max-w-7xl fixed left-[50%] translate-x-[-50%] w-full z-[1000]">
             {/* Navbar */}
             <div className="flex items-center rounded-full bg-stone-900 border border-white w-full justify-between px-3 py-3 mx-auto">
                 <Link href="/">
@@ -24,10 +24,6 @@ export default function NavBar() {
                 <div className="flex items-center gap-3">
                     {status === "authenticated" ? (
                         <div className="flex items-center gap-3">
-                            {/* Probably delete this, dont think i like it */}
-                            <h2 className="text-white text-xs hidden sm:block">
-                                Welcome, {session.user.email}: {session.user.id}
-                            </h2>
                             <div className="flex items-center rounded-full bg-stone-900 border border-white">
                                 <button 
                                 className="text-white rounded-full  px-4 py-2 hover:bg-white hover:text-black transition-colors duration-150" 

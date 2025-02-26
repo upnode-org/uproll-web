@@ -17,11 +17,12 @@ export default function ConfigAllPage() {
     // const configurations = await getUserConfigurations();
 
     return (
-        <div>
-            <HeroWrapper>
-                <RollupConfigForm />
-            </HeroWrapper>
-            {/* <h1>Config All List</h1>
+        <RollupConfigForm />
+
+    );
+}
+
+{/* <h1>Config All List</h1>
             <ConfigList configs={configurations} />
             <h1>Config All List</h1>
             {configurations.map((config) => (
@@ -35,6 +36,3 @@ export default function ConfigAllPage() {
                     <code>{JSON.stringify(config.config, null, 2)}</code>
                 </div>
             ))} */}
-        </div>
-    );
-}
