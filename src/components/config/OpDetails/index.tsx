@@ -117,7 +117,7 @@ const SettlementLayerForm: React.FC<SettlementLayerFormProps> = ({
   errors,
 }) => {
   return (
-    <fieldset className="border border-gray-300 p-4 rounded-md mb-6">
+    <fieldset className="border border-gray-300 p-4  mb-6">
       <legend className="px-2 text-lg font-semibold">Settlement Layer</legend>
       <SelectField
         label="Selection"
@@ -166,7 +166,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
   remove,
 }) => {
   return (
-    <div className="border border-gray-300 rounded-md p-4 mb-4 bg-white shadow">
+    <div className="border border-gray-300  p-4 mb-4 bg-white shadow">
       <div className="flex justify-between items-center mb-2">
         <h4 className="text-lg font-semibold">Participant {index + 1}</h4>
         <Button variant="destructive" size="sm" onClick={() => remove(index)}>
@@ -218,7 +218,7 @@ const SignerConfigForm: React.FC<SignerConfigFormProps> = ({
   errors,
 }) => {
   return (
-    <fieldset className="border border-gray-300 p-4 rounded-md mb-6">
+    <fieldset className="border border-gray-300 p-4  mb-6">
       <legend className="px-2 text-lg font-semibold">Signer Configuration</legend>
       <InputField
         label="Deployer Private Key"
@@ -270,7 +270,7 @@ const AdminConfigForm: React.FC<AdminConfigFormProps> = ({
   errors,
 }) => {
   return (
-    <fieldset className="border border-gray-300 p-4 rounded-md mb-6">
+    <fieldset className="border border-gray-300 p-4  mb-6">
       <legend className="px-2 text-lg font-semibold">Admin Configuration</legend>
       <InputField
         label="Final System Owner (L1 System Admin)"
@@ -294,7 +294,7 @@ type ChainConfigFormProps = {
 
 const ChainConfigForm: React.FC<ChainConfigFormProps> = ({ register, errors }) => {
   return (
-    <fieldset className="border border-gray-300 p-4 rounded-md mb-6">
+    <fieldset className="border border-gray-300 p-4  mb-6">
       <legend className="px-2 text-lg font-semibold">Chain Configuration</legend>
       <InputField
         label="L2 Chain ID"
@@ -356,7 +356,7 @@ type GasConfigFormProps = {
 
 const GasConfigForm: React.FC<GasConfigFormProps> = ({ register, errors }) => {
   return (
-    <fieldset className="border border-gray-300 p-4 rounded-md mb-6">
+    <fieldset className="border border-gray-300 p-4  mb-6">
       <legend className="px-2 text-lg font-semibold">Gas Configuration</legend>
       <InputField
         label="L2 Genesis Block Gas Limit"
@@ -483,7 +483,7 @@ export const RollupConfigForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 shadow rounded-md">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 shadow ">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <InputField
           label="Rollup Name"
@@ -497,7 +497,7 @@ export const RollupConfigForm: React.FC = () => {
           errors={errors}
         />
 
-        <fieldset className="border border-gray-300 p-4 rounded-md mb-6">
+        <fieldset className="border border-gray-300 p-4  mb-6">
           <legend className="px-2 text-lg font-semibold">Participants</legend>
           {fields.map((field, index) => (
             <ParticipantForm
@@ -535,9 +535,9 @@ export const RollupConfigForm: React.FC = () => {
 
         <Button
           type="submit"
-          className="w-full py-3 bg-green-500 text-white font-semibold rounded-md hover:bg-green-600"
+          className="w-full py-3 bg-green-500 text-white font-semibold  hover:bg-green-600"
         >
-          <Check className="mr-2 h-4 w-4" /> Submit Configuration
+          <Check className="mr-2 h-4 w-4" /> Save Configuration
         </Button>
       </form>
     </div>
