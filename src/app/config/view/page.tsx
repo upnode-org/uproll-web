@@ -1,9 +1,6 @@
-
-import HeroWrapper from "@/components/HeroWrapper";
 import { getSession } from "@/lib/auth";
 import { getUserConfigurations } from "@/services/server/configuration";
 import { ConfigList } from "@/components/config/ConfigList";
-import Container from "@/components/Container";
 export default async function ViewConfigPage() {
 
     const session = await getSession()

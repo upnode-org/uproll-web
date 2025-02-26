@@ -12,7 +12,7 @@ const righteous = Righteous({
 });
 
 export default function NavBar() {
-    const { data: session, status } = useSession()
+    const { status } = useSession()
 
     return (
         <header className="flex items-center justify-between pt-2 px-2 sm:pt-4 sm:px-6 max-w-7xl fixed left-[50%] translate-x-[-50%] w-full z-[1000]">
