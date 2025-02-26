@@ -1,22 +1,27 @@
 import prisma from "@/lib/prisma";
 import { ConfigList } from "@/components/config/ConfigList";
-async function getUserConfigurations() {
-    try {
-        const configurations = await prisma.configuration.findMany();
-        return configurations;
-    } catch (error) {
-        console.error("Error fetching configurations for user:", error);
-        throw error;
-    }
-}
+import { RollupConfigForm } from "@/components/config/OpDetails";
+import HeroWrapper from "@/components/HeroWrapper";
+// async function getUserConfigurations() {
+//     try {
+//         const configurations = await prisma.configuration.findMany();
+//         return configurations;
+//     } catch (error) {
+//         console.error("Error fetching configurations for user:", error);
+//         throw error;
+//     }
+// }
 
-export default async function ConfigAllPage() {
+export default function ConfigAllPage() {
 
-    const configurations = await getUserConfigurations();
+    // const configurations = await getUserConfigurations();
 
     return (
         <div>
-            <h1>Config All List</h1>
+            <HeroWrapper>
+                <RollupConfigForm />
+            </HeroWrapper>
+            {/* <h1>Config All List</h1>
             <ConfigList configs={configurations} />
             <h1>Config All List</h1>
             {configurations.map((config) => (
@@ -29,7 +34,7 @@ export default async function ConfigAllPage() {
                     <p>User ID: {config.userId}</p>
                     <code>{JSON.stringify(config.config, null, 2)}</code>
                 </div>
-            ))}
+            ))} */}
         </div>
     );
 }
