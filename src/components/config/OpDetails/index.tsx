@@ -57,10 +57,62 @@ const InputField: React.FC<InputFieldProps> = ({
   </div>
 );
 
+// Updated SquareButtonSelector Component for Settlement Layer Selection
+type SquareButtonSelectorProps = {
+  label: string;
+  options: { label: string; value: string; image?: string }[];
+  control: Control<RollupConfig>;
+  name: string;
+  error?: string;
+};
+
+const SquareButtonSelector: React.FC<SquareButtonSelectorProps> = ({
+  label,
+  options,
+  control,
+  name,
+  error,
+}) => (
+  <div className="space-y-1">
+    <Label className="text-sm font-medium text-gray-700">{label}</Label>
+    <Controller
+      control={control}
+      name={name as keyof RollupConfig}
+      render={({ field }) => (
+        <div className="grid grid-cols-3 gap-4">
+          {options.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => field.onChange(option.value)}
+              className={`
+                flex flex-col items-center justify-center border rounded
+                aspect-square w-full transition-all 
+                ${field.value === option.value ? "border-blue-500 bg-blue-200" : "border-gray-300 bg-white"}
+              `}
+            >
+              {option.image ? (
+                <img src={option.image} alt={option.label} className="w-1/2 h-1/2 object-contain" />
+              ) : (
+                <div className="w-1/2 h-1/2 bg-gray-200 flex items-center justify-center">
+                  {/* Placeholder for image */}
+                  <span>Img</span>
+                </div>
+              )}
+              <span className="mt-2 text-sm">{option.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    />
+    {error && <p className="text-xs text-red-500">{error}</p>}
+  </div>
+);
+
 type SelectFieldProps = {
   label: string;
   options: { label: string; value: string }[];
-  control:  Control<RollupConfig>
+  control: Control<RollupConfig>;
   name: string;
   error?: string;
 };
@@ -117,9 +169,10 @@ const SettlementLayerForm: React.FC<SettlementLayerFormProps> = ({
   errors,
 }) => {
   return (
-    <fieldset className="border border-gray-300 p-4  mb-6">
+    <fieldset className="border border-gray-300 p-4 mb-6">
       <legend className="px-2 text-lg font-semibold">Settlement Layer</legend>
-      <SelectField
+      {/* Replaced dropdown with three responsive square buttons */}
+      <SquareButtonSelector
         label="Selection"
         options={[
           { label: "ETH Mainnet", value: "ETH Mainnet" },
@@ -166,7 +219,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
   remove,
 }) => {
   return (
-    <div className="border border-gray-300  p-4 mb-4 bg-white shadow">
+    <div className="border border-gray-300 p-4 mb-4 bg-white shadow">
       <div className="flex justify-between items-center mb-2">
         <h4 className="text-lg font-semibold">Participant {index + 1}</h4>
         <Button variant="destructive" size="sm" onClick={() => remove(index)}>
@@ -218,7 +271,7 @@ const SignerConfigForm: React.FC<SignerConfigFormProps> = ({
   errors,
 }) => {
   return (
-    <fieldset className="border border-gray-300 p-4  mb-6">
+    <fieldset className="border border-gray-300 p-4 mb-6">
       <legend className="px-2 text-lg font-semibold">Signer Configuration</legend>
       <InputField
         label="Deployer Private Key"
@@ -270,7 +323,7 @@ const AdminConfigForm: React.FC<AdminConfigFormProps> = ({
   errors,
 }) => {
   return (
-    <fieldset className="border border-gray-300 p-4  mb-6">
+    <fieldset className="border border-gray-300 p-4 mb-6">
       <legend className="px-2 text-lg font-semibold">Admin Configuration</legend>
       <InputField
         label="Final System Owner (L1 System Admin)"
@@ -294,7 +347,7 @@ type ChainConfigFormProps = {
 
 const ChainConfigForm: React.FC<ChainConfigFormProps> = ({ register, errors }) => {
   return (
-    <fieldset className="border border-gray-300 p-4  mb-6">
+    <fieldset className="border border-gray-300 p-4 mb-6">
       <legend className="px-2 text-lg font-semibold">Chain Configuration</legend>
       <InputField
         label="L2 Chain ID"
@@ -356,7 +409,7 @@ type GasConfigFormProps = {
 
 const GasConfigForm: React.FC<GasConfigFormProps> = ({ register, errors }) => {
   return (
-    <fieldset className="border border-gray-300 p-4  mb-6">
+    <fieldset className="border border-gray-300 p-4 mb-6">
       <legend className="px-2 text-lg font-semibold">Gas Configuration</legend>
       <InputField
         label="L2 Genesis Block Gas Limit"
@@ -483,7 +536,7 @@ export const RollupConfigForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-50 shadow ">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-50 shadow">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <InputField
           label="Rollup Name"
@@ -497,7 +550,7 @@ export const RollupConfigForm: React.FC = () => {
           errors={errors}
         />
 
-        <fieldset className="border border-gray-300 p-4  mb-6">
+        <fieldset className="border border-gray-300 p-4 mb-6">
           <legend className="px-2 text-lg font-semibold">Participants</legend>
           {fields.map((field, index) => (
             <ParticipantForm
@@ -535,7 +588,7 @@ export const RollupConfigForm: React.FC = () => {
 
         <Button
           type="submit"
-          className="w-full py-3 bg-green-500 text-white font-semibold  hover:bg-green-600"
+          className="w-full py-3 bg-green-500 text-white font-semibold hover:bg-green-600"
         >
           <Check className="mr-2 h-4 w-4" /> Save Configuration
         </Button>
