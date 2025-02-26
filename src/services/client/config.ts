@@ -1,12 +1,11 @@
 "use client"
-import { Config } from "@/lib/configSchema";
 import api from "./apiClient"
+import { RollupConfig } from "@/lib/opSchema";
 
-export const postConfig = async (config: Config, name?: string, description?: string) => {
+export const postConfig = async (config: RollupConfig) => {
   const response = await api.post("/configs", {
     data: {
-      name,
-      description,
+      name: config.rollup_name,
       config,
     },
   },
@@ -19,12 +18,11 @@ export const postConfig = async (config: Config, name?: string, description?: st
   return response;
 }
 
-export const updateConfig = async (id: string, config: Config, name?: string, description?: string) => {
+export const updateConfig = async (id: string, config: RollupConfig) => {
   const response = await api.put(`/configs/${id}`, {
       data: {
         config,
-        name,
-        description
+        name: config.rollup_name,
       }
     },
     {

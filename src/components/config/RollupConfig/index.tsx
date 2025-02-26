@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RollupConfigSchema, RollupConfig } from "@/lib/opSchema";
@@ -17,6 +17,10 @@ import { AdminConfigForm } from "./AdminConfigForm";
 import { ChainConfigForm } from "./ChainConfigForm";
 import { GasConfigForm } from "./GasConfigForm";
 import defaultRollup from "@/const/defaultRollup";
+import { useRouter } from "next/navigation";
+import { toast } from "@/hooks/use-toast";
+import { updateConfig, postConfig, deleteConfig, downloadConfigFile } from "@/services/client/config";
+
 
 interface RollupConfigFormProps {
   initialValues?: RollupConfig;
@@ -24,28 +28,174 @@ interface RollupConfigFormProps {
 }
 
 export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValues, id }) => {
+  const router = useRouter();
+  const methods = useForm<RollupConfig>({
+    resolver: zodResolver(RollupConfigSchema),
+    defaultValues: initialValues || defaultRollup,
+  });
+
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<RollupConfig>({
-    resolver: zodResolver(RollupConfigSchema),
-    defaultValues: initialValues || defaultRollup,
-  });
+    watch
+  } = methods;
+
+  // Dev only - log form changes
+  useEffect(() => {
+    const subscription = watch((formValues, { name }) => {
+      console.log(`Form ${name} state changed:`);
+      console.log(formValues);
+    });
+    return () => subscription.unsubscribe();
+  }, [watch]);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "participants",
   });
 
-  const onSubmit = (data: RollupConfig) => {
-    console.log("Rollup Config:", data);
-    alert(JSON.stringify(data, null, 2));
+
+  const handleSave = async () => {
+    const config = methods.getValues();
+    try {
+      const saveConfig = async () => {
+        let response = null;
+        if (id) {
+          response = await updateConfig(id, config);
+        } else {
+          response = await postConfig(config);
+          if (response.status >= 200 && response.status < 300) {
+            console.log("response.data", response.data);
+            router.push(`/config/view/${response.data.data}`);
+          }
+        }
+        if (response.status >= 200 && response.status < 300) {
+          return "Configuration saved!";
+        } else {
+          throw new Error("Failed to save configuration");
+        }
+      };
+
+      await toast.promise(saveConfig(), {
+        loading: {
+          title: id ? "Saving config..." : "Creating config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Success!",
+          description: id ? "Your configuration has been saved." : "Your configuration has been created.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to save configuration.",
+          variant: "destructive",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
+  const handleDelete = async () => {
+    try {
+      const removeConfig = async () => {
+        if (!id) {
+          throw new Error("No config id provided");
+        }
+        const response = await deleteConfig(id);
+        if (response.status >= 200 && response.status < 300) {
+          router.push("/config/view");
+          return "Configuration deleted!";
+        } else {
+          throw new Error("Failed to delete configuration");
+        }
+      };
+
+      await toast.promise(removeConfig(), {
+        loading: {
+          title: "Deleting config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Deleted!",
+          description: "Your configuration has been deleted.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to delete configuration.",
+          variant: "destructive",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      const downloadConfig = async () => {
+        if (!id) {
+          throw new Error("No config id provided");
+        }
+
+        // Fetch the configuration file as a blob.
+        const response = await downloadConfigFile(id);
+
+        // Retrieve the filename from the content-disposition header if available.
+        const contentDisposition = response.headers["content-disposition"];
+        let fileName = `configuration-${id}.yaml`;
+        if (contentDisposition) {
+          const fileNameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (fileNameMatch && fileNameMatch[1]) {
+            fileName = fileNameMatch[1];
+          }
+        }
+
+        // Create a Blob from the response data.
+        const blob = new Blob([response.data], { type: "text/yaml" });
+
+        // Create an object URL for the blob.
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a temporary anchor element to trigger the download.
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+
+        // Clean up: remove the link and revoke the object URL.
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        return "Configuration downloaded!";
+      };
+
+      await toast.promise(downloadConfig(), {
+        loading: {
+          title: "Downloading config...",
+          description: "Please wait.",
+        },
+        success: {
+          title: "Downloaded!",
+          description: "Your configuration has been downloaded.",
+        },
+        error: {
+          title: "Error",
+          description: "Failed to download configuration.",
+          variant: "destructive",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form onSubmit={handleSubmit(handleSave)} >
       <HeroWrapper
         backgroundElement={
           <AnimatedBackground className="absolute inset-0 h-full w-full" />
@@ -59,10 +209,10 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
           />
           <div className="flex justify-between gap-2 w-full">
             <div className="flex items-center gap-2">
-              <Button>
+              <Button onClick={handleSave}>
                 <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
               </Button>
-              <Button>
+              <Button onClick={handleDownload}>
                 <Download className="w-4 h-4" /> Download
               </Button>
               <CommandCopy
@@ -78,7 +228,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
               <ModalAlert
                 title="Delete Configuration?"
                 description="Are you sure you want to delete this configuration? This action cannot be undone."
-                onContinue={() => {}}
+                onContinue={handleDelete}
               />
             )}
           </div>
