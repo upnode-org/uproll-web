@@ -1,5 +1,6 @@
 'use client'
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { Copy } from "lucide-react";
 
 export default function CommandCopy({ command, description, disabled }: { command: string, description?: string, disabled?: boolean }) {
@@ -7,10 +8,10 @@ export default function CommandCopy({ command, description, disabled }: { comman
     const { toast } = useToast();
     return (
         <div className="flex flex-col">
-            <div className="flex flex-row">
-                <code className="text-stone-900 bg-white text-sm border border-stone-900 p-2 overflow-hidden whitespace-nowrap">{command}</code>
+            <div className="flex flex-row  border border-stone-900">
+                <code className="text-stone-900 bg-white text-sm border-r border-stone-900 p-2 overflow-hidden whitespace-nowrap">{command}</code>
                 <button
-                    className={`border border-l-0 border-stone-900 flex flex-col items-center justify-center align-middle bg-stone-900 text-white hover:bg-white hover:text-stone-900 aspect-square w-9 ${disabled ? "opacity-50 cursor-not-allowed hover:bg-stone-900 hover:text-white" : ""}`}
+                    className={cn(`flex flex-col items-center justify-center align-middle bg-stone-900 text-white hover:bg-white hover:text-stone-900 aspect-square w-9  ${disabled ? "cursor-not-allowed !text-stone-500 hover:bg-stone-900 " : ""}`)}
                     onClick={() => {
                         if (disabled) return;
                         navigator.clipboard.writeText(command);
