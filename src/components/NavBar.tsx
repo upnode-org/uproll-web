@@ -24,7 +24,7 @@ export default function NavBar() {
                 <div className="flex items-center gap-3 text-white">
                     {status === "authenticated" ? (
                         <div className="flex items-center gap-3">
-                            <Link href="config/view" className="text-white rounded-full  px-4 py-2 hover:bg-white hover:text-black transition-colors duration-150">
+                            <Link href="/config/view" className="text-white rounded-full  px-4 py-2 hover:bg-white hover:text-black transition-colors duration-150">
                                 View
                             </Link>
                             <div className="flex items-center rounded-full bg-stone-900 border border-white">
