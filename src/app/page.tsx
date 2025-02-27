@@ -19,7 +19,7 @@ export default function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 max-w-screen-xl mx-auto relative">
             {/* Left Grid Cell */}
             <div className="relative uppercase w-full flex items-center">
-              <div className="mx-auto p-8">
+              <div className="mx-auto sm:p-8">
                 <p className="text-white text-sm">
                   The easiest way to spin up your OP stack rollups
                 </p>
