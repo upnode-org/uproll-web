@@ -76,7 +76,7 @@ export default function FooterNav() {
   ];
 
   return (
-    <nav className="grid grid-cols-2 gap-8 gap-y-12 text-white lg:flex lg:justify-between z-10 [&>div]:mx-10 lg:[&>div]:mx-0">
+    <nav className="grid grid-cols-2 gap-8 gap-y-12 text-white lg:flex lg:justify-between z-10 sm:[&>div]:mx-10 lg:[&>div]:mx-0">
       {columns.map((col) => (
         <FooterColumn
           key={col.title}
