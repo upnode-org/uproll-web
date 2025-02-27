@@ -128,7 +128,7 @@ export default function HomePage() {
           </h2>
           <p className="mt-4 text-lg text-gray-700">
             Choose from a variety of pre-configured OP stack rollups tailored for
-            different applications. Whether it's a quick prototype, a secure
+            different applications. Whether it&apos;s a quick prototype, a secure
             production environment, or a scalable testnet, we&apos;ve got you covered.
           </p>
           <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center">
