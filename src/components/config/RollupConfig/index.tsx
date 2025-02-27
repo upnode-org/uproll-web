@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
 import { updateConfig, postConfig, deleteConfig, downloadConfigFile } from "@/services/client/config";
 
-
 interface RollupConfigFormProps {
   initialValues?: RollupConfig;
   id?: string;
@@ -38,24 +37,29 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
     register,
     control,
     handleSubmit,
-    formState: { errors },
-    watch
+    formState: { errors, isDirty },
+    watch,
   } = methods;
 
-  // Dev only - log form changes
+  // Warn user if they attempt to close or refresh the page with unsaved changes
   useEffect(() => {
-    const subscription = watch((formValues, { name }) => {
-      console.log(`Form ${name} state changed:`);
-      console.log(formValues);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch]);
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (isDirty) {
+        event.preventDefault();
+        event.returnValue = "";
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [isDirty]);
 
   const { fields, append, remove } = useFieldArray({
     control,
     name: "participants",
   });
-
 
   const handleSave = async () => {
     const config = methods.getValues();
@@ -85,7 +89,9 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
         },
         success: {
           title: "Success!",
-          description: id ? "Your configuration has been saved." : "Your configuration has been created.",
+          description: id
+            ? "Your configuration has been saved."
+            : "Your configuration has been created.",
         },
         error: {
           title: "Error",
@@ -193,9 +199,8 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
     }
   };
 
-
   return (
-    <form onSubmit={handleSubmit(handleSave)} >
+    <form onSubmit={handleSubmit(handleSave)}>
       <HeroWrapper
         backgroundElement={
           <AnimatedBackground className="absolute inset-0 h-full w-full" />
