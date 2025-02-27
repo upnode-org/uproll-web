@@ -23,7 +23,7 @@ export default function HomePage() {
                 <p className="text-white text-sm">
                   The easiest way to spin up your OP stack rollups
                 </p>
-                <h1 className="text-white text-8xl font flex-wrap">Uproll CLI</h1>
+                <h1 className="text-white text-8xl font-bold flex-wrap">Uproll CLI</h1>
                 <Link href="/config">
                   <Button className="mt-4">Get Started</Button>
                 </Link>

@@ -7,9 +7,9 @@ export default function CommandCopy({ command, description, disabled }: { comman
   const { toast } = useToast();
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="flex flex-col w-full flex-shrink">
       <div className="flex flex-row w-full border border-stone-900">
-        <code className="flex-1 min-w-0 text-stone-900 bg-white text-sm border-r border-stone-900 p-2 truncate">
+        <code className="flex-1 min-w-0 text-stone-900 bg-white text-sm border-r border-stone-900 p-2 truncate flex-shrink">
           {command}
         </code>
         <button

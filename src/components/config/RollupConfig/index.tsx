@@ -207,8 +207,8 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
             name="rollup_name"
             error={errors.rollup_name?.message as string}
           />
-          <div className="flex justify-between gap-2 w-full">
-            <div className="flex items-center gap-2">
+          <div className="flex justify-between gap-2 w-full max-w-[100%]">
+            <div className="flex items-center gap-2 flex-shrink">
               <Button onClick={handleSave}>
                 <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
               </Button>
