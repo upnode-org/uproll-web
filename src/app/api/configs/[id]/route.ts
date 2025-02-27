@@ -110,36 +110,3 @@ export async function DELETE(
     );
   }
 }
-
-
-// Not needed, handled by SSR
-// export async function GET(
-//   _: NextRequest,
-//   { params }: { params: Promise<{ id: string }> }
-// ) {
-//     const id = (await params).id
-//   try {
-//     if (!id) {
-//       return NextResponse.json({ error: "ID is required" }, { status: 400 });
-//     }
-
-//     const config = await prisma.configuration.findUnique({
-//       where: { id },
-//     });
-
-//     if (!config) {
-//       return NextResponse.json(
-//         { error: "Configuration not found" },
-//         { status: 404 }
-//       );
-//     }
-
-//     return NextResponse.json(config);
-//   } catch (error) {
-//     console.error("Error getting configuration:", error);
-//     return NextResponse.json(
-//       { error: "Internal Server Error" },
-//       { status: 500 }
-//     );
-//   }
-// }
