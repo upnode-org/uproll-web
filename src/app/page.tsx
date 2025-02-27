@@ -59,7 +59,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Grid Cell */}
-            <div className="relative bg-white rounded-ss-3xl xl:rounded-t-3xl p-5 sm:p-7">
+            <div className="relative bg-white rounded-ss-3xl xl:rounded-t-3xl p-5 sm:p-7 py-7">
               <svg width="50" height="50" className="absolute bottom-0 right-0  translate-x-[100%]">
                 <mask id="inverted-mask-right-2">
                   <rect width="50" height="50" fill="white" />
@@ -74,26 +74,26 @@ export default function HomePage() {
                   mask="url(#inverted-mask-right-2)"
                 />
               </svg>
-              <div className="size-full flex flex-col justify-evenly overflow-hidden gap-4">
-              <div className="flex flex-col gap-4 overflow-hidden">
-                <h2 className="text-stone-900 text-xl font-bold">
-                  <span className="text-white bg-black text-2xl p-1 mr-1">1.</span>
-                  Install in one click
-                </h2>
-                <CommandCopy
-                  command="CURL -sSL https://uproll.org/install.sh | sh"
-                />
-              </div>
-              <div className="flex flex-col gap-4 overflow-hidden">
-                <h2 className="text-stone-900 text-xl font-bold">
-                <span className="text-white bg-black text-2xl p-1 mr-1">2.</span>
-                Deploy in one more
-                </h2>
-                <CommandCopy
-                  command="uproll deploy --config config.json"
-                  description="For a minimal default OP stack rollup config"
-                />
-              </div>
+              <div className="size-full flex flex-col justify-evenly overflow-hidden gap-4 space-y-6 sm:space-y-0">
+                <div className="flex flex-col gap-4 overflow-hidden">
+                  <h2 className="text-stone-900 text-xl font-bold">
+                    <span className="text-white bg-black text-2xl p-1 mr-1">1.</span>
+                    Install in one click
+                  </h2>
+                  <CommandCopy
+                    command="CURL -sSL https://uproll.org/install.sh | sh"
+                  />
+                </div>
+                <div className="flex flex-col gap-4 overflow-hidden">
+                  <h2 className="text-stone-900 text-xl font-bold">
+                    <span className="text-white bg-black text-2xl p-1 mr-1">2.</span>
+                    Deploy in one more
+                  </h2>
+                  <CommandCopy
+                    command="uproll deploy --config config.json"
+                    description="For a minimal default OP stack rollup config"
+                  />
+                </div>
               </div>
             </div>
           </div>
