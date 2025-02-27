@@ -212,14 +212,16 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
               <Button onClick={handleSave}>
                 <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
               </Button>
-              <Button onClick={handleDownload}>
-                <Download className="w-4 h-4" /> Download
-              </Button>
+              {id && (
+                <Button onClick={handleDownload}>
+                  <Download className="w-4 h-4" /> Download
+                </Button>
+              )}
               <CommandCopy
                 command={
                   id
                     ? `uproll deploy ${id}`
-                    : `Save to generate a deploy command`
+                    : `Create a config before deploying`
                 }
                 disabled={!id}
               />
