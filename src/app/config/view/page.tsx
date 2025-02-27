@@ -1,12 +1,16 @@
 import { getSession } from "@/lib/auth";
 import { getUserConfigurations } from "@/services/server/configuration";
 import { ConfigList } from "@/components/config/ConfigList";
+import { redirect } from "next/navigation";
 export default async function ViewConfigPage() {
 
     const session = await getSession()
 
-    const configs = await getUserConfigurations(session!.user.id)
+    if (!session) {
+        redirect("/auth/signin")
+    }
 
+    const configs = await getUserConfigurations(session!.user.id)
 
     return (<>
         {/* <HeroWrapper className="bg-gradient-to-r from-blue-500 to-purple-500 text-white mb-4">

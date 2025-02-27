@@ -27,16 +27,24 @@ export async function getUserConfigurations(userId: string) {
  * @param configId - The ID of the configuration.
  * @returns A promise that resolves to the configuration details or null if not found.
  */
-export async function getConfigurationDetail(userId: string, configId: string) {
+export async function getConfigurationDetail(configId: string, userId: string | undefined) {
   try {
     const configuration = await prisma.configuration.findFirst({
       where: { id: configId },
     });
 
+
     const parsedConfig = parseConfig(configuration?.config);
 
     if (!parsedConfig.success) {
       throw new Error("Configuration not found");
+    }
+
+    if(configuration?.userId === undefined || configuration?.userId === null) {
+      return {
+        config: parsedConfig.data,
+        name: configuration?.name,
+      };
     }
 
     if (configuration?.userId !== userId) {
