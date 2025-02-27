@@ -41,14 +41,16 @@ const SettlementLayerSchema = z
       if (!data.chain_id) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "chain_id is required for a custom settlement layer",
+          message:
+            "A custom settlement layer requires a chain ID",
           path: ["chain_id"],
         });
       }
       if (!data.l1_block_time) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message: "l1_block_time is required for a custom settlement layer",
+          message:
+            "A custom settlement layer requires an L1 Block Time (e.g., '15s' or '30s')",
           path: ["l1_block_time"],
         });
       }
@@ -111,9 +113,9 @@ const AdminConfigSchema = z.object({
 
 /**
  * Chain configuration includes L2 chain settings and fee parameters.
- * The fee recipient fields (baseFeeVaultRecipient, l1FeeVaultRecipient, and sequencerFeeVaultRecipient)
- * as well as the fee withdrawal network fields (baseFeeVaultWithdrawalNetwork,
- * l1FeeVaultWithdrawalNetwork, and sequencerFeeVaultWithdrawalNetwork) must be identical.
+ * The fee recipient fields (base_fee_vault_recipient, l1_fee_vault_recipient, and sequencer_fee_vault_recipient)
+ * as well as the fee withdrawal network fields (base_fee_vault_withdrawal_network,
+ * l1_fee_vault_withdrawal_network, and sequencer_fee_vault_withdrawal_network) must be identical.
  */
 const ChainConfigSchema = z
   .object({
@@ -136,7 +138,8 @@ const ChainConfigSchema = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Fee recipient fields must be identical",
+        message:
+          "All fee recipient fields (Base Fee Vault Recipient, L1 Fee Vault Recipient, Sequencer Fee Vault Recipient) must match. Please ensure they are identical.",
         path: ["base_fee_vault_recipient"],
       });
     }
@@ -146,7 +149,8 @@ const ChainConfigSchema = z
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Fee withdrawal network fields must be identical",
+        message:
+          "All fee withdrawal network fields (Base Fee Vault Withdrawal Network, L1 Fee Vault Withdrawal Network, Sequencer Fee Vault Withdrawal Network) must match. Please ensure they are identical.",
         path: ["base_fee_vault_withdrawal_network"],
       });
     }
