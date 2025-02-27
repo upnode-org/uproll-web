@@ -2,7 +2,7 @@
 import React from "react";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
-import { InputField } from "./InputField";
+import { InputField } from "./Components/InputField";
 
 export type AdminConfigFormProps = {
   register: UseFormRegister<RollupConfig>;

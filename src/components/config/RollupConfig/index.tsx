@@ -9,7 +9,7 @@ import CommandCopy from "@/components/CommandCopy";
 import ModalAlert from "@/components/delete/Alert";
 import { Button } from "@/components/ui/button";
 import { Save, Download, Plus } from "lucide-react";
-import { EditableInputField } from "./EditableInputField";
+import { EditableInputField } from "./Components/EditableInputField";
 import { SettlementLayerForm } from "./SettlementLayerForm";
 import { ParticipantForm } from "./ParticipantForm";
 import { SignerConfigForm } from "./SignerConfigForm";

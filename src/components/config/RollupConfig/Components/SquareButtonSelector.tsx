@@ -47,11 +47,11 @@ export const SquareButtonSelector: React.FC<SquareButtonSelectorProps> = ({
                 type="button"
                 onClick={() => field.onChange(option.value)}
                 className={`
-                  flex flex-col items-center justify-center border rounded
+                  flex flex-col items-center justify-center border 
                   aspect-square w-full transition-all max-w-sm mx-auto overflow-visible
                   ${
                     field.value === option.value
-                      ? "border-blue-500 bg-blue-200"
+                      ? "border-gray-500 bg-stone-50"
                       : "border-gray-300 bg-white"
                   }
                 `}

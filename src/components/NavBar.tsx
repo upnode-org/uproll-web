@@ -17,7 +17,7 @@ export default function NavBar() {
     return (
         <header className="flex items-center justify-between pt-2 px-2 sm:pt-4 sm:px-6 max-w-7xl fixed left-[50%] translate-x-[-50%] w-full z-[1000]">
             {/* Navbar */}
-            <div className="flex items-center rounded-full bg-stone-900 border border-white w-full justify-between px-3 py-3 mx-auto">
+            <div className="flex items-center rounded-full bg-stone-900  w-full justify-between px-3 py-3 mx-auto">
                 <Link href="/">
                     <h1 className={righteous.className + " text-4xl text-white"}>Uproll</h1>
                 </Link>

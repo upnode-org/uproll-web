@@ -35,7 +35,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         type={type}
         placeholder={placeholder}
         {...registration}
-        className={`bg-white rounded-md ${error ? "border-red-500" : ""}`}
+        className={`bg-white ${error ? "border-red-500" : ""}`}
         aria-describedby={error ? errorId : undefined}
         aria-invalid={!!error}
       />

@@ -2,8 +2,8 @@
 import React from "react";
 import { useWatch, UseFormRegister, Control, FieldErrors } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
-import { SquareButtonSelector } from "./SquareButtonSelector";
-import { InputField } from "./InputField";
+import { SquareButtonSelector } from "./Components/SquareButtonSelector";
+import { InputField } from "./Components/InputField";
 
 export type SettlementLayerFormProps = {
   register: UseFormRegister<RollupConfig>;

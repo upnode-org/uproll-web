@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { UseFormRegister, Control, FieldErrors } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
-import { SelectField } from "./SelectField";
-import { InputField } from "./InputField";
+import { SelectField } from "./Components/SelectField";
+import { InputField } from "./Components/InputField";
 
 export type ParticipantFormProps = {
   index: number;
