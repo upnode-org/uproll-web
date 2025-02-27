@@ -104,9 +104,8 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
           </div>
         </div>
       </HeroWrapper>
-      <Container>
+      <Container className="flex-1 flex overflow-auto">
         {/* Content section fills remaining space */}
-        <div className="flex-1 flex overflow-auto bg-background">
           {configs.length > 0 ? (
             filteredConfigs.length > 0 ? (
               <div className="flex flex-col flex-grow">
@@ -160,7 +159,6 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
               </div>
             </div>
           )}
-        </div>
       </Container>
     </div>
   );
