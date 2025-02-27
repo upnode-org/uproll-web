@@ -23,7 +23,7 @@ export default function HomePage() {
                 <p className="text-white text-sm">
                   The easiest way to spin up your OP stack rollups
                 </p>
-                <h1 className="text-white text-8xl font-bold flex-wrap">Uproll CLI</h1>
+                <h1 className="text-white text-8xl font flex-wrap">Uproll CLI</h1>
                 <Link href="/config">
                   <Button className="mt-4">Get Started</Button>
                 </Link>
@@ -77,7 +77,7 @@ export default function HomePage() {
               <div className="size-full flex flex-col justify-evenly overflow-hidden gap-4 space-y-6 sm:space-y-0">
                 <div className="flex flex-col gap-4 overflow-hidden">
                   <h2 className="text-stone-900 text-xl font-bold">
-                    <span className="text-white bg-black text-2xl p-1 mr-1">1.</span>
+                    <span className="text-white bg-black text-2xl p-1 mr-2">1.</span>
                     Install in one click
                   </h2>
                   <CommandCopy
@@ -86,7 +86,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex flex-col gap-4 overflow-hidden">
                   <h2 className="text-stone-900 text-xl font-bold">
-                    <span className="text-white bg-black text-2xl p-1 mr-1">2.</span>
+                    <span className="text-white bg-black text-2xl p-1 mr-2">2.</span>
                     Deploy in one more
                   </h2>
                   <CommandCopy

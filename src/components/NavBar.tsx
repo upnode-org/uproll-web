@@ -21,15 +21,23 @@ export default function NavBar() {
                 <Link href="/">
                     <h1 className={righteous.className + " text-4xl text-white"}>Uproll</h1>
                 </Link>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 text-white">
                     {status === "authenticated" ? (
                         <div className="flex items-center gap-3">
+                            <Link href="config/view" className="text-white rounded-full  px-4 py-2 hover:bg-white hover:text-black transition-colors duration-150">
+                                View
+                            </Link>
                             <div className="flex items-center rounded-full bg-stone-900 border border-white">
-                                <button 
-                                className="text-white rounded-full  px-4 py-2 hover:bg-white hover:text-black transition-colors duration-150" 
-                                onClick={() => signOut()}>
+                                <button
+                                    className="text-white rounded-full  px-4 py-2 hover:bg-white hover:text-black transition-colors duration-150"
+                                    onClick={() => signOut()}>
                                     Sign Out
                                 </button>
+                            </div>
+                            <div className="md:hidden flex items-center text-white">
+                                <Button variant="ghost" size="icon" className="text-white rounded-full border border-white">
+                                    <Menu />
+                                </Button>
                             </div>
                         </div>
                     ) : (
@@ -42,11 +50,6 @@ export default function NavBar() {
                             </Link>
                         </div>
                     )}
-                    <div className="flex items-center text-white">
-                        <Button variant="ghost" size="icon" className="text-white rounded-full border border-white">
-                            <Menu />
-                        </Button>
-                    </div>
                 </div>
             </div>
             {/* Dropdown Menu */}

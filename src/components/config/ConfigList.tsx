@@ -87,13 +87,15 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
             <CreateConfigButton />
             <ModalAlert
               triggerComponent={
-                <Button
-                  variant="destructive"
-                  disabled={selectedConfigs.length === 0}
-                  className={"p-2" + (selectedConfigs.length === 0 ? " opacity-50 cursor-not-allowed" : "")}
-                >
-                  <Trash2 className="h-4 w-4" />
-                </Button>
+                <div className="bg-black">
+                  <Button
+                    variant="destructive"
+                    disabled={selectedConfigs.length === 0}
+                    className={"p-2 " + (selectedConfigs.length === 0 ? " cursor-not-allowed" : "")}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               }
               title="Delete Configuration?"
               description="Are you sure you want to delete this configuration? This action cannot be undone."
@@ -105,60 +107,60 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
 
       {/* Content section fills remaining space */}
       <div className="flex-1 flex overflow-auto bg-background">
-  {configs.length > 0 ? (
-    filteredConfigs.length > 0 ? (
-      <div className="flex flex-col flex-grow">
-        {filteredConfigs.map((config) => (
-          <div
-            key={config.id}
-            className="flex items-center justify-between px-4 py-3 border-b border-gray-200 flex-row"
-          >
-            <div className="flex items-center space-x-2 flex-row">
-              <Checkbox
-                id={`select-${config.id}`}
-                checked={selectedConfigs.includes(config.id)}
-                onCheckedChange={() => handleSelect(config.id)}
-              />
-              <span className="text-sm font-semibold">{config.name}</span>
+        {configs.length > 0 ? (
+          filteredConfigs.length > 0 ? (
+            <div className="flex flex-col flex-grow">
+              {filteredConfigs.map((config) => (
+                <div
+                  key={config.id}
+                  className="flex items-center justify-between px-4 py-3 border-b border-gray-200 flex-row"
+                >
+                  <div className="flex items-center space-x-2 flex-row">
+                    <Checkbox
+                      id={`select-${config.id}`}
+                      checked={selectedConfigs.includes(config.id)}
+                      onCheckedChange={() => handleSelect(config.id)}
+                    />
+                    <span className="text-sm font-semibold">{config.name}</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <CommandCopy command={`uproll deploy ${config.id}`} />
+                    <Button>
+                      <Link href={`/config/view/${config.id}`} className="flex items-center">
+                        View
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="flex items-center space-x-2">
-              <CommandCopy command={`uproll deploy ${config.id}`} />
-              <Button>
-                <Link href={`/config/view/${config.id}`} className="flex items-center">
-                  View
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Link>
-              </Button>
+          ) : (
+            <div className="flex flex-grow items-center justify-center">
+              <div className="flex flex-col items-center justify-center h-full gap-1">
+                <Folder className="h-12 w-12 mb-4 text-muted-foreground" />
+                <h1 className="text-xl font-semibold">No matching configurations</h1>
+                <p className="text-sm text-muted-foreground">
+                  We couldn’t find any configurations matching “{filterText}”. Try adjusting your search criteria.
+                </p>
+              </div>
+            </div>
+          )
+        ) : (
+          <div className="flex flex-grow items-center justify-center">
+            <div className="flex flex-col items-center justify-center h-full gap-1">
+              <Folder className="h-12 w-12 mb-4 text-muted-foreground" />
+              <h1 className="text-xl font-semibold">No configurations found</h1>
+              <p className="text-sm text-muted-foreground">
+                It looks like you don&apos;t have any configurations.
+              </p>
+              <div className="mt-4">
+                <CreateConfigButton />
+              </div>
             </div>
           </div>
-        ))}
+        )}
       </div>
-    ) : (
-      <div className="flex flex-grow items-center justify-center">
-        <div className="flex flex-col items-center justify-center h-full gap-1">
-          <Folder className="h-12 w-12 mb-4 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">No matching configurations</h1>
-          <p className="text-sm text-muted-foreground">
-            We couldn’t find any configurations matching “{filterText}”. Try adjusting your search criteria.
-          </p>
-        </div>
-      </div>
-    )
-  ) : (
-    <div className="flex flex-grow items-center justify-center">
-      <div className="flex flex-col items-center justify-center h-full gap-1">
-        <Folder className="h-12 w-12 mb-4 text-muted-foreground" />
-        <h1 className="text-xl font-semibold">No configurations found</h1>
-        <p className="text-sm text-muted-foreground">
-          It looks like you don&apos;t have any configurations.
-        </p>
-        <div className="mt-4">
-          <CreateConfigButton />
-        </div>
-      </div>
-    </div>
-  )}
-</div>
 
     </div>
   );
