@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { useForm, FormProvider, useFieldArray } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RollupConfigSchema, RollupConfig } from "@/lib/opSchema";
 import HeroWrapper from "@/components/HeroWrapper";
@@ -8,10 +8,10 @@ import AnimatedBackground from "@/components/GradientBackground";
 import CommandCopy from "@/components/CommandCopy";
 import ModalAlert from "@/components/delete/Alert";
 import { Button } from "@/components/ui/button";
-import { Save, Download, Plus } from "lucide-react";
+import { Save, Download } from "lucide-react";
 import { EditableInputField } from "./Components/EditableInputField";
 import { SettlementLayerForm } from "./SettlementLayerForm";
-import { ParticipantForm } from "./ParticipantForm";
+import ParticipantsForm from "./ParticipantForm";
 import { SignerConfigForm } from "./SignerConfigForm";
 import { AdminConfigForm } from "./AdminConfigForm";
 import { ChainConfigForm } from "./ChainConfigForm";
@@ -38,7 +38,6 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
   const {
     handleSubmit,
     formState: { isDirty },
-    control,
   } = methods;
 
   // Warn user if they attempt to close or refresh the page with unsaved changes
@@ -55,11 +54,6 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, [isDirty]);
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "participants",
-  });
 
   const handleSave = async () => {
     const config = methods.getValues();
@@ -240,34 +234,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
         </HeroWrapper>
         <div className="space-y-6 max-w-4xl mx-auto p-3 sm:p-6">
           <SettlementLayerForm />
-          <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
-            <legend className="px-2 text-lg font-semibold space-x-2 flex items-center justify-between gap-2">
-              Participants
-              <Button
-                size={null}
-                type="button"
-                onClick={() =>
-                  append({
-                    el_type: "op-geth",
-                    el_image: "op-geth:latest",
-                    cl_type: "op-node",
-                    cl_image: "op-node:latest",
-                  })
-                }
-                className="p-0.5 rounded-full"
-              >
-                <Plus />
-              </Button>
-            </legend>
-            {fields.map((field, index) => (
-              <React.Fragment key={field.id}>
-                <ParticipantForm index={index} remove={remove} />
-                {index < fields.length - 1 && (
-                  <div className="border-t border-gray-300 my-4"></div>
-                )}
-              </React.Fragment>
-            ))}
-          </fieldset>
+          <ParticipantsForm />
           <SignerConfigForm />
           <AdminConfigForm />
           <ChainConfigForm />

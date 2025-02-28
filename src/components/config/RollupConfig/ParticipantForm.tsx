@@ -2,17 +2,61 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useFieldArray } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { SelectField } from "./Components/SelectField";
 import { InputField } from "./Components/InputField";
+import { Plus } from "lucide-react";
 
-export type ParticipantFormProps = {
+export const ParticipantsForm: React.FC = () => {
+  const { control } = useFormContext<RollupConfig>();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "participants",
+  });
+
+  const handleAddParticipant = () => {
+    append({
+      el_type: "op-geth",
+      el_image: "op-geth:latest",
+      cl_type: "op-node",
+      cl_image: "op-node:latest",
+    });
+  };
+
+  return (
+    <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
+      <legend className="px-2 text-lg font-semibold space-x-2 flex items-center justify-between gap-2">
+        Participants
+        <Button
+          size={null}
+          type="button"
+          onClick={handleAddParticipant}
+          className="p-0.5 rounded-full"
+        >
+          <Plus />
+        </Button>
+      </legend>
+      {fields.map((field, index) => (
+        <React.Fragment key={field.id}>
+          <ParticipantForm index={index} remove={remove} />
+          {index < fields.length - 1 && (
+            <div className="border-t border-gray-300 my-4"></div>
+          )}
+        </React.Fragment>
+      ))}
+    </fieldset>
+  );
+};
+
+export default ParticipantsForm;
+
+type ParticipantFormProps = {
   index: number;
   remove: (index: number) => void;
 };
 
-export const ParticipantForm: React.FC<ParticipantFormProps> = ({
+const ParticipantForm: React.FC<ParticipantFormProps> = ({
   index,
   remove,
 }) => {
