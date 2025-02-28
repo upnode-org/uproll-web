@@ -1,4 +1,4 @@
- "use client";
+"use client";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
@@ -45,6 +45,12 @@ export const ParticipantsForm: React.FC = () => {
           )}
         </React.Fragment>
       ))}
+
+      {fields.length === 0 && (
+        <div className="text-center py-4 text-gray-500">
+          No participants added. Click the + button to add a participant.
+        </div>
+      )}
     </fieldset>
   );
 };

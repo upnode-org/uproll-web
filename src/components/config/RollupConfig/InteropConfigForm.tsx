@@ -39,8 +39,8 @@ export const InteropConfigForm: React.FC = () => {
       
       {enableInterop && (
         <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h4 className="text-md font-semibold">Dependency Set</h4>
+          <div className="flex items-center">
+            <h4 className="text-md font-semibold mr-2">Dependency Set</h4>
             <Button
               type="button"
               onClick={() => 
@@ -51,8 +51,8 @@ export const InteropConfigForm: React.FC = () => {
                   history_min_time: "",
                 })
               }
-              className="p-1 rounded-full"
-              size="sm"
+              className="p-0.5 rounded-full"
+              size={null}
             >
               <Plus className="h-4 w-4" />
             </Button>
