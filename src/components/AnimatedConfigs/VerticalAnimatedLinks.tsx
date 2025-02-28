@@ -6,7 +6,7 @@ import links from "./links";
 
 const AnimatedMarqueeLinks = () => {
   // Duration of one complete scroll cycle
-  const duration = 10;
+  const duration = 15;
 
   return (
     // The parent container is set as relative so that its children can be absolutely positioned.
@@ -20,8 +20,8 @@ const AnimatedMarqueeLinks = () => {
       <div className="absolute inset-0 z-10 overflow-hidden rounded-s-[50px]">
         <motion.div
           className="absolute top-0 left-0 w-full space-y-4"
-          initial={{ y: "0%" }}
-          animate={{ y: "-50%" }}
+          initial={{ y: "-50%" }}
+          animate={{ y: "50%" }}
           transition={{
             duration,
             ease: "linear",
