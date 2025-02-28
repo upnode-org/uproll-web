@@ -18,15 +18,29 @@ export default function HomePage() {
         <div className="w-full lg:mx-auto lg:max-w-content-max">
           <div className="grid grid-cols-1 md:grid-cols-2 max-w-screen-xl mx-auto relative">
             {/* Left Grid Cell */}
-            <div className="relative uppercase w-full flex items-center">
+            <div className="relative w-full flex items-center">
               <div className="mx-auto px-5 py-14 md:px-5 lg:px-10">
-                <p className="text-white text-sm">
-                  The easiest way to spin up your OP stack rollups
+                {/* <span className="inline-block px-3 py-1  bg-stone-900 rounded-full text-white text-xs font-medium mb-4">
+                  OP STACK DEPLOYMENT SIMPLIFIED
+                </span> */}
+                <h1 className="text-white text-6xl md:text-7xl font-bold leading-tight">
+                  Deploy Rollups in<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 opacity-80" style={{ WebkitTextStroke: '0.1px rgba(1,1,1,0.1)', textShadow: 'none' }}> Seconds</span>
+                </h1>
+                <p className="text-muted text-lg mt-4 max-w-md">
+                  The fastest way to configure and deploy your OP stack rollups.
                 </p>
-                <h1 className="text-white text-8xl font-bold flex-wrap">Uproll CLI</h1>
-                <Link href="/config">
-                  <Button className="mt-4">Get Started</Button>
-                </Link>
+                <div className="flex gap-4 mt-6 flex-row">
+                  <Link href="/config" className="flex-1 max-w-[200px]">
+                    <Button size="lg" className="font-medium px-6 w-full h-full min-h-[48px]">
+                      Create Your Rollup
+                    </Button>
+                  </Link>
+                  <Link href="/docs" className="flex-1 max-w-[200px]">
+                    <Button variant="outline" size="lg" className="text-black border-white hover:bg-white/10 font-medium w-full h-full min-h-[48px]">
+                      Read Guide
+                    </Button>
+                  </Link>
+                </div>
               </div>
               <svg width="50" height="50" className="absolute bottom-0 left-0 hidden md:block xl:hidden">
                 <mask id="inverted-mask-left">
