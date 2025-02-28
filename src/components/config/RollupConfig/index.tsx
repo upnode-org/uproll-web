@@ -38,7 +38,6 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
     control,
     handleSubmit,
     formState: { errors, isDirty },
-    watch,
   } = methods;
 
   // Warn user if they attempt to close or refresh the page with unsaved changes

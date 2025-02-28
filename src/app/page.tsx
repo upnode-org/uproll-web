@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import CommandCopy from "@/components/CommandCopy";
 import GradientBackground from "@/components/GradientBackground";
 import { Button } from "@/components/ui/button";
-import PreconfiguredList from "@/components/Home/PreconfiguredList";
+import PreconfiguredList from "@/components/home/PreconfiguredList";
 export default function HomePage() {
   return (
     <>
