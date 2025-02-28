@@ -1,7 +1,6 @@
 import Link from "next/link";
 import HeroWrapper from "@/components/HeroWrapper";
 import Footer from "@/components/Footer";
-import { ChevronRight } from "lucide-react";
 import CommandCopy from "@/components/CommandCopy";
 import GradientBackground from "@/components/GradientBackground";
 import { Button } from "@/components/ui/button";
