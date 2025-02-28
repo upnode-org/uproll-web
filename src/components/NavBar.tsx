@@ -118,7 +118,7 @@ export default function NavBar() {
       {/* Mobile Dropdown Menu for authenticated users */}
       <div 
         ref={menuRef}
-        className={`sm:hidden w-full bg-stone-900/95 backdrop-blur-sm text-white my-2 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
+        className={`sm:hidden w-full bg-stone-900 backdrop-blur-sm text-white my-2 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${
           isMenuOpen && status === "authenticated" 
             ? "max-h-[200px] opacity-100 translate-y-0" 
             : "max-h-0 opacity-0 -translate-y-2 pointer-events-none"

@@ -31,13 +31,13 @@ export default function HomePage() {
                 </p>
                 <div className="flex gap-4 mt-6 flex-row">
                   <Link href="/config" className="flex-1 max-w-[200px]">
-                    <Button size="lg" className="font-medium px-6 w-full h-full min-h-[48px]">
+                    <Button size="lg" className="font-semibold px-6 w-full h-full min-h-[44px]">
                       Create Your Rollup
                     </Button>
                   </Link>
                   <Link href="/docs" className="flex-1 max-w-[200px]">
-                    <Button variant="outline" size="lg" className="text-black border-white hover:bg-white/90 font-medium w-full h-full min-h-[48px]">
-                      Read Guide
+                    <Button variant="outline" size="lg" className="text-black border-white hover:bg-white/90 font-semibold w-full h-full min-h-[44px]">
+                      Read the Guide
                     </Button>
                   </Link>
                 </div>
@@ -88,7 +88,7 @@ export default function HomePage() {
                   mask="url(#inverted-mask-right-2)"
                 />
               </svg>
-              <div className="size-full flex flex-col justify-evenly overflow-hidden gap-4 space-y-6 sm:space-y-0">
+              <div className="size-full flex flex-col justify-evenly overflow-hidden gap-4 space-y-8">
                 <div className="flex flex-col gap-4 overflow-hidden">
                   <h2 className="text-stone-900 text-xl font-bold">
                     <span className="text-white bg-black text-2xl p-1 mr-2">1.</span>
@@ -114,43 +114,51 @@ export default function HomePage() {
         </div>
       </HeroWrapper>
 
-      <div className="py-16 px-4">
+      <div className="py-16 px-4 bg-gradient-to-b from-white to-blue-50">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Customize Your Rollup Configuration
+          <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">
+            POWERFUL CUSTOMIZATION
+          </span>
+          <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+            Build Your Perfect <span className="text-blue-600">Rollup Solution</span>
           </h2>
-          <p className="mt-4 text-lg text-gray-700">
-            Take full control of your deployment with our intuitive configurator.
-            Edit, save, and deploy your OP stack rollup configuration with just one
-            click. Enjoy a seamless experience from setup to launch.
+          <p className="mt-6 text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+            Our intuitive configurator puts you in control. Tailor every aspect of your OP stack
+            deployment with confidence – no deep technical expertise required.
           </p>
-          <div className="mt-8">
-            <Link
-              href="/config"
-              className="px-6 py-3 bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
-            >
-              Create Config <ChevronRight className="w-4 h-4" />
+        
+          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+            <Link href="/config" className="flex-1 max-w-[200px]">
+              <Button size="lg" className="font-semibold px-6 w-full h-full min-h-[44px] bg-blue-600 text-white hover:bg-blue-700 transition-all transform hover:shadow-xl">
+                Create Your Rollup
+              </Button>
+            </Link>
+            <Link href="/docs" className="flex-1 max-w-[200px]">
+              <Button variant="outline" size="lg" className="bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 transition-all  font-semibold w-full h-full min-h-[44px] hover:shadow-xl hover:text-blue-600">
+                Read the Guide
+              </Button>
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="bg-white py-16 px-4">
-        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+      <div className="bg-gradient-to-b from-blue-50 to-violet-100 py-16 px-4">
+        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-center lg:text-left">
-            <h2 className="text-3xl font-bold text-gray-900">
-              Deploy Premade Configs for Every Use Case
+            <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mb-4">
+              READY-TO-DEPLOY TEMPLATES
+            </span>
+            <h2 className="text-4xl font-bold text-gray-900 leading-tight">
+              Launch <span className="text-purple-600">Pre-Configured</span> Rollups Instantly
             </h2>
-            <p className="mt-4 text-lg text-gray-700">
-              Choose from a variety of pre-configured OP stack rollups tailored for
-              different applications. Whether it&apos;s a quick prototype, a secure
-              production environment, or a scalable testnet, we&apos;ve got you covered.
+            <p className="mt-6 text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
+              Skip the setup process with our expertly crafted templates. From rapid prototyping
+              to production-ready environments, our premade configs give you a head start.
             </p>
           </div>
           <AnimatedConfigs />
         </div>
       </div>
-
 
       <Footer />
     </>
