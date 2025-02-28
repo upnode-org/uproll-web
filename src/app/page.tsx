@@ -36,7 +36,7 @@ export default function HomePage() {
                     </Button>
                   </Link>
                   <Link href="/docs" className="flex-1 max-w-[200px]">
-                    <Button variant="outline" size="lg" className="text-black border-white hover:bg-white/10 font-medium w-full h-full min-h-[48px]">
+                    <Button variant="outline" size="lg" className="text-black border-white hover:bg-white/90 font-medium w-full h-full min-h-[48px]">
                       Read Guide
                     </Button>
                   </Link>
