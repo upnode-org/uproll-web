@@ -4,9 +4,10 @@ import { ChevronRight } from "lucide-react";
 import GradientBackground from "@/components/GradientBackground";
 import links from "./links";
 
+// Desktop only
 const AnimatedMarqueeLinks = () => {
   // Duration of one complete scroll cycle
-  const duration = 15;
+  const duration = 12;
 
   return (
     // The parent container is set as relative so that its children can be absolutely positioned.
@@ -21,7 +22,7 @@ const AnimatedMarqueeLinks = () => {
         <motion.div
           className="absolute top-0 left-0 w-full space-y-4"
           initial={{ y: "-50%" }}
-          animate={{ y: "50%" }}
+          animate={{ y: "0%" }}
           transition={{
             duration,
             ease: "linear",
