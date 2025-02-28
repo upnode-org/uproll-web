@@ -1,18 +1,12 @@
- "use client";
+"use client";
 import React from "react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { InputField } from "./Components/InputField";
 
-export type ChainConfigFormProps = {
-  register: UseFormRegister<RollupConfig>;
-  errors: FieldErrors<RollupConfig>;
-};
+export const ChainConfigForm: React.FC = () => {
+  const { register, formState: { errors } } = useFormContext<RollupConfig>();
 
-export const ChainConfigForm: React.FC<ChainConfigFormProps> = ({
-  register,
-  errors,
-}) => {
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
       <legend className="px-2 text-lg font-semibold">Chain Configuration</legend>
@@ -33,6 +27,14 @@ export const ChainConfigForm: React.FC<ChainConfigFormProps> = ({
           valueAsNumber: true,
         })}
         error={errors.chain_config?.proof_maturity_delay_seconds?.message as string}
+      />
+      <InputField
+        label="Dispute Game Finality Delay Seconds"
+        type="number"
+        registration={register("chain_config.disputeGameFinalityDelaySeconds", {
+          valueAsNumber: true,
+        })}
+        error={errors.chain_config?.disputeGameFinalityDelaySeconds?.message as string}
       />
       <InputField
         label="Base Fee Vault Recipient"

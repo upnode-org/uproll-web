@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, KeyboardEvent, useEffect, useRef } from "react";
-import { useController, Control } from "react-hook-form";
+import { useController, useFormContext } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import { ErrorMessage } from "./ErrorMessage";
 import { RollupConfig } from "@/lib/opSchema";
@@ -8,17 +8,16 @@ import { Edit3 } from "lucide-react";
 
 export type EditableInputFieldProps = {
   label?: string;
-  control: Control<RollupConfig>;
   name: keyof RollupConfig;
   error?: string;
 };
 
 export const EditableInputField: React.FC<EditableInputFieldProps> = ({
   label,
-  control,
   name,
   error,
 }) => {
+  const { control } = useFormContext<RollupConfig>();
   const [isEditing, setIsEditing] = useState(false);
   const {
     field: { value, onChange, onBlur, ref, name: fieldName },

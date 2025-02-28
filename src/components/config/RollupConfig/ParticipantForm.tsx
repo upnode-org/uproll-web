@@ -2,26 +2,23 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
-import { UseFormRegister, Control, FieldErrors } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { SelectField } from "./Components/SelectField";
 import { InputField } from "./Components/InputField";
 
 export type ParticipantFormProps = {
   index: number;
-  register: UseFormRegister<RollupConfig>;
-  control: Control<RollupConfig>;
-  errors: FieldErrors<RollupConfig>;
   remove: (index: number) => void;
 };
 
 export const ParticipantForm: React.FC<ParticipantFormProps> = ({
   index,
-  register,
-  control,
-  errors,
   remove,
 }) => {
+  const { register, control, formState: { errors } } = useFormContext<RollupConfig>();
+
+
   return (
     <div>
       <div className="flex justify-between items-center mb-2">

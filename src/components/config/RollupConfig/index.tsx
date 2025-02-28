@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RollupConfigSchema, RollupConfig } from "@/lib/opSchema";
 import HeroWrapper from "@/components/HeroWrapper";
@@ -16,6 +16,8 @@ import { SignerConfigForm } from "./SignerConfigForm";
 import { AdminConfigForm } from "./AdminConfigForm";
 import { ChainConfigForm } from "./ChainConfigForm";
 import { GasConfigForm } from "./GasConfigForm";
+import { DataAvailabilityConfigForm } from "./DataAvailabilityConfigForm";
+import { InteropConfigForm } from "./InteropConfigForm";
 import defaultRollup from "@/const/defaultRollup";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
@@ -34,10 +36,9 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
   });
 
   const {
-    register,
-    control,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { isDirty },
+    control,
   } = methods;
 
   // Warn user if they attempt to close or refresh the page with unsaved changes
@@ -199,93 +200,83 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSave)}>
-      <HeroWrapper
-        backgroundElement={
-          <AnimatedBackground className="absolute inset-0 h-full w-full" />
-        }
-      >
-        <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-3">
-          <EditableInputField
-            control={control}
-            name="rollup_name"
-            error={errors.rollup_name?.message as string}
-          />
-          <div className="flex justify-between gap-2 w-full max-w-[100%]">
-            <div className="flex items-center gap-2 flex-shrink">
-              <Button onClick={handleSave}>
-                <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
-              </Button>
-              {id && (
-                <Button onClick={handleDownload}>
-                  <Download className="w-4 h-4" /> Download
+    <FormProvider {...methods}>
+      <form onSubmit={handleSubmit(handleSave)}>
+        <HeroWrapper
+          backgroundElement={
+            <AnimatedBackground className="absolute inset-0 h-full w-full" />
+          }
+        >
+          <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-3">
+            <EditableInputField name="rollup_name" />
+            <div className="flex justify-between gap-2 w-full max-w-[100%]">
+              <div className="flex items-center gap-2 flex-shrink">
+                <Button onClick={handleSave}>
+                  <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
                 </Button>
+                {id && (
+                  <Button onClick={handleDownload}>
+                    <Download className="w-4 h-4" /> Download
+                  </Button>
+                )}
+                <CommandCopy
+                  command={
+                    id
+                      ? `uproll deploy ${id}`
+                      : `Create a config before deploying`
+                  }
+                  disabled={!id}
+                />
+              </div>
+              {id && (
+                <ModalAlert
+                  title="Delete Configuration?"
+                  description="Are you sure you want to delete this configuration? This action cannot be undone."
+                  onContinue={handleDelete}
+                />
               )}
-              <CommandCopy
-                command={
-                  id
-                    ? `uproll deploy ${id}`
-                    : `Create a config before deploying`
-                }
-                disabled={!id}
-              />
             </div>
-            {id && (
-              <ModalAlert
-                title="Delete Configuration?"
-                description="Are you sure you want to delete this configuration? This action cannot be undone."
-                onContinue={handleDelete}
-              />
-            )}
           </div>
+        </HeroWrapper>
+        <div className="space-y-6 max-w-4xl mx-auto p-3 sm:p-6">
+          <SettlementLayerForm />
+          <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
+            <legend className="px-2 text-lg font-semibold space-x-2 flex items-center justify-between gap-2">
+              Participants
+              <Button
+                size={null}
+                type="button"
+                onClick={() =>
+                  append({
+                    el_type: "op-geth",
+                    el_image: "op-geth:latest",
+                    cl_type: "op-node",
+                    cl_image: "op-node:latest",
+                  })
+                }
+                className="p-0.5 rounded-full"
+              >
+                <Plus />
+              </Button>
+            </legend>
+            {fields.map((field, index) => (
+              <React.Fragment key={field.id}>
+                <ParticipantForm index={index} remove={remove} />
+                {index < fields.length - 1 && (
+                  <div className="border-t border-gray-300 my-4"></div>
+                )}
+              </React.Fragment>
+            ))}
+          </fieldset>
+          <SignerConfigForm />
+          <AdminConfigForm />
+          <ChainConfigForm />
+          <GasConfigForm />
+          <DataAvailabilityConfigForm />
+          <InteropConfigForm />
         </div>
-      </HeroWrapper>
-      <div className="space-y-6 max-w-4xl mx-auto p-3 sm:p-6">
-        <SettlementLayerForm
-          register={register}
-          control={control}
-          errors={errors}
-        />
-        <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
-          <legend className="px-2 text-lg font-semibold space-x-2 flex items-center justify-between gap-2">
-            Participants
-            <Button
-              size={null}
-              type="button"
-              onClick={() =>
-                append({
-                  el_type: "op-geth",
-                  el_image: "op-geth:latest",
-                  cl_type: "op-node",
-                  cl_image: "op-node:latest",
-                })
-              }
-              className="p-0.5 rounded-full"
-            >
-              <Plus />
-            </Button>
-          </legend>
-          {fields.map((field, index) => (
-            <React.Fragment key={field.id}>
-              <ParticipantForm
-                index={index}
-                register={register}
-                control={control}
-                errors={errors}
-                remove={remove}
-              />
-              {index < fields.length - 1 && (
-                <div className="border-t border-gray-300 my-4"></div>
-              )}
-            </React.Fragment>
-          ))}
-        </fieldset>
-        <SignerConfigForm register={register} errors={errors} />
-        <AdminConfigForm register={register} errors={errors} />
-        <ChainConfigForm register={register} errors={errors} />
-        <GasConfigForm register={register} errors={errors} />
-      </div>
-    </form>
+      </form>
+    </FormProvider>
   );
 };
 

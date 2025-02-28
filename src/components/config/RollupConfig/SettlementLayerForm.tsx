@@ -1,21 +1,14 @@
 "use client";
 import React from "react";
-import { useWatch, UseFormRegister, Control, FieldErrors } from "react-hook-form";
+import { useWatch, useFormContext } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { SquareButtonSelector } from "./Components/SquareButtonSelector";
 import { InputField } from "./Components/InputField";
 
-export type SettlementLayerFormProps = {
-  register: UseFormRegister<RollupConfig>;
-  control: Control<RollupConfig>;
-  errors: FieldErrors<RollupConfig>;
-};
+export const SettlementLayerForm: React.FC = () => {
+  const { register, control, formState: { errors } } = useFormContext<RollupConfig>();
 
-export const SettlementLayerForm: React.FC<SettlementLayerFormProps> = ({
-  register,
-  control,
-  errors,
-}) => {
+
   const selectedNetwork = useWatch({
     control,
     name: "settlement_layer.selection",

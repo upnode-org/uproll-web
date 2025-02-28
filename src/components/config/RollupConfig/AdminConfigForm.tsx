@@ -1,18 +1,12 @@
 "use client";
 import React from "react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { InputField } from "./Components/InputField";
 
-export type AdminConfigFormProps = {
-  register: UseFormRegister<RollupConfig>;
-  errors: FieldErrors<RollupConfig>;
-};
+export const AdminConfigForm: React.FC = () => {
+  const { register, formState: { errors } } = useFormContext<RollupConfig>();
 
-export const AdminConfigForm: React.FC<AdminConfigFormProps> = ({
-  register,
-  errors,
-}) => {
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
       <legend className="px-2 text-lg font-semibold">Admin Configuration</legend>

@@ -17,10 +17,31 @@
  *   - L1 System Admin (finalSystemOwner) and L2 Proxy Admin (proxyAdminOwner)
  * • Chain configuration
  *   - L2 Chain ID, L2 block time (default 2s), withdrawal delay,
+ *     Extra Withdrawal Delay After Proof Finalized (disputeGameFinalityDelaySeconds),
  *     sequencer fee recipient (all three recipient fields must be identical),
  *     and fee withdrawal network (all three fields must be identical).
  * • Gas configuration
  *   - Block gas limit, EIP-1559 elasticity, denominators, and fee scalars.
+ * • Data Availability configuration
+ *   - Data availability provider (Choose one):
+ *       • ETH Blob + Calldata (OP_BATCHER_DATA_AVAILABILITY_TYPE=auto)
+ *       • ETH Blob (OP_BATCHER_DATA_AVAILABILITY_TYPE=blob)
+ *       • ETH Calldata (OP_BATCHER_DATA_AVAILABILITY_TYPE=calldata)
+ *       • Custom (altda.enabled=true; may not require OP_BATCHER_DATA_AVAILABILITY_TYPE)
+ *   - Batch submission frequency (user input in minutes, corresponding to OP_BATCHER_MAX_CHANNEL_DURATION in blocks)
+ *   - [If Custom is selected]:
+ *       • DA server endpoint
+ *       • Commitment type (Select Generic and Keccak256)
+ *         - If Generic, a DA Challenge Contract Address is required
+ *       • DA Challenge Window
+ *       • DA Resolve Window
+ * • Interop Configuration
+ *   - Enable interop (Checkbox)
+ *   - Dependency set (Array) with:
+ *       • Chain ID
+ *       • WebSocket RPC Endpoint
+ *       • Activation Time
+ *       • History Min Time
  */
 
 import { z, ZodError } from "zod";
@@ -41,8 +62,7 @@ const SettlementLayerSchema = z
       if (!data.chain_id) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
-          message:
-            "A custom settlement layer requires a chain ID",
+          message: "A custom settlement layer requires a chain ID",
           path: ["chain_id"],
         });
       }
@@ -116,12 +136,14 @@ const AdminConfigSchema = z.object({
  * The fee recipient fields (base_fee_vault_recipient, l1_fee_vault_recipient, and sequencer_fee_vault_recipient)
  * as well as the fee withdrawal network fields (base_fee_vault_withdrawal_network,
  * l1_fee_vault_withdrawal_network, and sequencer_fee_vault_withdrawal_network) must be identical.
+ * Additionally, disputeGameFinalityDelaySeconds represents the extra withdrawal delay after proof finalized.
  */
 const ChainConfigSchema = z
   .object({
     l2_chain_id: z.string(),
     l2_block_time: z.string().default("2s"),
     proof_maturity_delay_seconds: z.number(),
+    disputeGameFinalityDelaySeconds: z.number(),
     // Sequencer fee recipients
     base_fee_vault_recipient: z.string(),
     l1_fee_vault_recipient: z.string(),
@@ -170,8 +192,84 @@ const GasConfigSchema = z.object({
 });
 
 /* -------------------------------------------------------------------------
+   Data Availability Configuration Schema
+   -------------------------------------------------------------------------*/
+
+   const BaseDataAvailabilityConfigSchema = z.object({
+    batch_submission_frequency: z.number(),
+  });
+  
+  const NonCustomDataAvailabilityConfigSchema = BaseDataAvailabilityConfigSchema.extend({
+    data_availability_provider: z.enum(["ETH Blob + Calldata", "ETH Blob", "ETH Calldata"]),
+  });
+  
+  const BaseCustomDataAvailabilityConfigSchema = BaseDataAvailabilityConfigSchema.extend({
+    data_availability_provider: z.literal("Custom"),
+    da_server_endpoint: z.string(),
+    commitment_type: z.enum(["Generic", "Keccak256"]),
+    da_challenge_contract_address: z.string().optional(),
+    da_challenge_window: z.string(),
+    da_resolve_window: z.string(),
+  });
+  
+  // Create a union from plain ZodObjects.
+  const DataAvailabilityConfigSchemaRaw = z.discriminatedUnion("data_availability_provider", [
+    NonCustomDataAvailabilityConfigSchema,
+    BaseCustomDataAvailabilityConfigSchema,
+  ]);
+  
+  // Now, apply the extra validation for the Custom case on the union.
+  const DataAvailabilityConfigSchema = DataAvailabilityConfigSchemaRaw.superRefine((data, ctx) => {
+    if (
+      data.data_availability_provider === "Custom" &&
+      data.commitment_type === "Generic" &&
+      !data.da_challenge_contract_address
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Generic commitment type requires DA Challenge Contract Address",
+        path: ["da_challenge_contract_address"],
+      });
+    }
+  });
+
+/* -------------------------------------------------------------------------
+   Interop Configuration Schema
+   -------------------------------------------------------------------------*/
+
+/**
+ * Interop configuration:
+ * - enable_interop: Toggle for interop support.
+ * - dependency_set: Array of dependencies including chain ID, WebSocket RPC endpoint,
+ *   activation time, and history minimum time.
+ */
+const InteropDependencySchema = z.object({
+  chain_id: z.string(),
+  websocket_rpc_endpoint: z.string(),
+  activation_time: z.string(),
+  history_min_time: z.string(),
+});
+
+const InteropConfigurationSchema = z
+  .object({
+    enable_interop: z.boolean().default(false),
+    dependency_set: z.array(InteropDependencySchema).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.enable_interop && (!data.dependency_set || data.dependency_set.length === 0)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Interop is enabled but no dependencies provided in dependency set",
+        path: ["dependency_set"],
+      });
+    }
+  });
+
+/* -------------------------------------------------------------------------
    Overall Rollup Configuration Schema
    -------------------------------------------------------------------------*/
+
+
 
 export const RollupConfigSchema = z.object({
   rollup_name: z.string(),
@@ -181,6 +279,8 @@ export const RollupConfigSchema = z.object({
   admin_config: AdminConfigSchema,
   chain_config: ChainConfigSchema,
   gas_config: GasConfigSchema,
+  data_availability_config: DataAvailabilityConfigSchema,
+  interop_config: InteropConfigurationSchema,
 });
 
 /* -------------------------------------------------------------------------
@@ -193,6 +293,8 @@ export type SignerConfig = z.infer<typeof SignerConfigSchema>;
 export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 export type ChainConfig = z.infer<typeof ChainConfigSchema>;
 export type GasConfig = z.infer<typeof GasConfigSchema>;
+export type DataAvailabilityConfig = z.infer<typeof DataAvailabilityConfigSchema>;
+export type InteropConfig = z.infer<typeof InteropConfigurationSchema>;
 export type RollupConfig = z.infer<typeof RollupConfigSchema>;
 
 /* -------------------------------------------------------------------------
