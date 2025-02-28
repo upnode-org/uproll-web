@@ -143,7 +143,7 @@ export default function HomePage() {
 
       <div className="bg-gradient-to-b from-blue-50 to-violet-100 py-16 px-4">
         <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="text-center lg:text-left">
+          <div className="text-center">
             <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mb-4">
               READY-TO-DEPLOY TEMPLATES
             </span>
