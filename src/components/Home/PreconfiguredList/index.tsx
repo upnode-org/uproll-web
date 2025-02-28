@@ -3,7 +3,7 @@ import VerticalAnimatedLinks from "./VerticalAnimatedLinks";
 import HorizontalAnimatedLinks from "./HorizontalAnimatedLinks";
 import { useIsMobile } from '@/hooks/use-mobile';
 
-const PreconfiguredList: React.FC = () => {
+export const PreconfiguredList: React.FC = () => {
     const isMobile = useIsMobile(1024);
 
     return (
