@@ -3,7 +3,7 @@ import VerticalAnimatedLinks from "./VerticalAnimatedLinks";
 import HorizontalAnimatedLinks from "./HorizontalAnimatedLinks";
 import { useIsMobile } from '@/hooks/use-mobile';
 
-export default function PreconfiguredList() {
+const PreconfiguredList: React.FC = () => {
     const isMobile = useIsMobile(1024);
 
     return (
@@ -16,3 +16,5 @@ export default function PreconfiguredList() {
         </>
     );
 }
+
+export default PreconfiguredList;
