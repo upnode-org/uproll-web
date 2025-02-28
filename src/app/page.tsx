@@ -126,7 +126,7 @@ export default function HomePage() {
             deployment with confidence – no deep technical expertise required.
           </p>
         
-          <div className="mt-10 flex flex-col sm:flex-row justify-center gap-4">
+          <div className="mt-10 flex flex-row justify-center gap-4">
             <Link href="/config" className="flex-1 max-w-[200px]">
               <Button size="lg" className="font-semibold px-6 w-full h-full min-h-[44px] bg-blue-600 text-white hover:bg-blue-700 transition-all transform hover:shadow-xl">
                 Create Your Rollup
