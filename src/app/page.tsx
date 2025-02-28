@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import CommandCopy from "@/components/CommandCopy";
 import GradientBackground from "@/components/GradientBackground";
 import { Button } from "@/components/ui/button";
-// import { PreconfiguredList } from "@/components/home/PreconfiguredList";
+import AnimatedConfigs from "@/components/AnimatedConfigs";
 export default function HomePage() {
   return (
     <>
@@ -133,7 +133,7 @@ export default function HomePage() {
               production environment, or a scalable testnet, we&apos;ve got you covered.
             </p>
           </div>
-          {/* <PreconfiguredList /> */}
+          <AnimatedConfigs />
         </div>
       </div>
 
