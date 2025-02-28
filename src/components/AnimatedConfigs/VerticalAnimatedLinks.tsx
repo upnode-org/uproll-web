@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import GradientBackground from "../../GradientBackground";
+import GradientBackground from "@/components/GradientBackground";
 import links from "./links";
+
 const AnimatedMarqueeLinks = () => {
   // Duration of one complete scroll cycle
   const duration = 10;
