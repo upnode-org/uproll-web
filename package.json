@@ -30,6 +30,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
+    "framer-motion": "^12.4.7",
     "js-yaml": "^4.1.0",
     "lodash.get": "^4.4.2",
     "lucide-react": "^0.475.0",

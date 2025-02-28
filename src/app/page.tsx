@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 import CommandCopy from "@/components/CommandCopy";
 import GradientBackground from "@/components/GradientBackground";
 import { Button } from "@/components/ui/button";
-
+import PreconfiguredList from "@/components/Home/PreconfiguredList";
 export default function HomePage() {
   return (
     <>
@@ -122,37 +122,21 @@ export default function HomePage() {
       </div>
 
       <div className="bg-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
-            Deploy Premade Configs for Every Use Case
-          </h2>
-          <p className="mt-4 text-lg text-gray-700">
-            Choose from a variety of pre-configured OP stack rollups tailored for
-            different applications. Whether it&apos;s a quick prototype, a secure
-            production environment, or a scalable testnet, we&apos;ve got you covered.
-          </p>
-          <div className="mt-8 flex flex-col md:flex-row gap-4 justify-center">
-            <Link
-              href="/config/prototype"
-              className="px-6 py-3 bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors inline-flex items-center gap-2"
-            >
-              Prototype Rollup <ChevronRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/config/production"
-              className="px-6 py-3 bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors inline-flex items-center gap-2"
-            >
-              Production Ready <ChevronRight className="w-4 h-4" />
-            </Link>
-            <Link
-              href="/config/testnet"
-              className="px-6 py-3 bg-yellow-600 text-white font-semibold hover:bg-yellow-700 transition-colors inline-flex items-center gap-2"
-            >
-              Testnet Setup <ChevronRight className="w-4 h-4" />
-            </Link>
+        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+          <div className="text-center lg:text-left">
+            <h2 className="text-3xl font-bold text-gray-900">
+              Deploy Premade Configs for Every Use Case
+            </h2>
+            <p className="mt-4 text-lg text-gray-700">
+              Choose from a variety of pre-configured OP stack rollups tailored for
+              different applications. Whether it&apos;s a quick prototype, a secure
+              production environment, or a scalable testnet, we&apos;ve got you covered.
+            </p>
           </div>
+          <PreconfiguredList />
         </div>
       </div>
+
 
       <Footer />
     </>
