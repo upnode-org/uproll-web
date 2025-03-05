@@ -86,14 +86,22 @@ const SettlementLayerSchema = z
  * - Execution layer (default type: "op-geth")
  * - Consensus layer (default type: "op-node")
  */
+
+export const EL_TYPES = ["op-geth", "op-reth", "op-erigon", "op-nethermind", "op-besu"] as const;
+export const CL_TYPES = ["op-node", "hildr"] as const;
+
+export type EL_TYPES = typeof EL_TYPES[number];
+export type CL_TYPES = typeof CL_TYPES[number];
+
 const ParticipantSchema = z.object({
   // Execution Layer configuration
-  el_type: z.enum(["op-geth", "other"]).default("op-geth"),
-  el_image: z.string().default("op-geth:latest"),
+  el_type: z.enum(EL_TYPES).default(EL_TYPES[0]),
+  el_image: z.string().optional(),
   // Consensus Layer configuration
-  cl_type: z.enum(["op-node", "other"]).default("op-node"),
-  cl_image: z.string().default("op-node:latest"),
+  cl_type: z.enum(CL_TYPES).default(CL_TYPES[0]),
+  cl_image: z.string().optional(),
 });
+
 
 /**
  * Participants array defaults to a single participant.

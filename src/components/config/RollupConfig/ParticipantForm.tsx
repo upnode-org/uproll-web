@@ -3,10 +3,11 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { RollupConfig } from "@/lib/opSchema";
+import { CL_TYPES, EL_TYPES, RollupConfig } from "@/lib/opSchema";
 import { SelectField } from "./Components/SelectField";
 import { InputField } from "./Components/InputField";
 import { Plus } from "lucide-react";
+import defaultRollup from "@/const/defaultRollup";
 
 export const ParticipantsForm: React.FC = () => {
   const { control } = useFormContext<RollupConfig>();
@@ -16,12 +17,7 @@ export const ParticipantsForm: React.FC = () => {
   });
 
   const handleAddParticipant = () => {
-    append({
-      el_type: "op-geth",
-      el_image: "op-geth:latest",
-      cl_type: "op-node",
-      cl_image: "op-node:latest",
-    });
+    append(defaultRollup.participants[0]);
   };
 
   return (
@@ -68,7 +64,6 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
 }) => {
   const { register, control, formState: { errors } } = useFormContext<RollupConfig>();
 
-
   return (
     <div>
       <div className="flex justify-between items-center mb-2">
@@ -79,10 +74,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
       </div>
       <SelectField
         label="Execution Layer Type"
-        options={[
-          { label: "op-geth", value: "op-geth" },
-          { label: "other", value: "other" },
-        ]}
+        options={Object.values(EL_TYPES).map((type) => ({ label: type, value: type }))}
         control={control}
         name={`participants.${index}.el_type`}
         error={errors.participants?.[index]?.el_type?.message as string}
@@ -94,10 +86,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
       />
       <SelectField
         label="Consensus Layer Type"
-        options={[
-          { label: "op-node", value: "op-node" },
-          { label: "other", value: "other" },
-        ]}
+        options={Object.values(CL_TYPES).map((type) => ({ label: type, value: type }))}
         control={control}
         name={`participants.${index}.cl_type`}
         error={errors.participants?.[index]?.cl_type?.message as string}
