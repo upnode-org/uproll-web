@@ -11,9 +11,7 @@ const defaultRollup: RollupConfig = {
   participants: [
     {
       el_type: "op-geth",
-      el_image: "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-geth:latest",
       cl_type: "op-node",
-      cl_image: "us-docker.pkg.dev/oplabs-tools-artifacts/images/op-node:develop",
     },
   ],
   signer_config: {
