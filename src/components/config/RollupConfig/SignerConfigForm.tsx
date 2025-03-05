@@ -1,9 +1,11 @@
- "use client";
+"use client";
 import React from "react";
 import { useFormContext } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { InputField } from "./Components/InputField";
-
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { TabsList } from "@/components/ui/tabs";
+import { TabsTrigger } from "@/components/ui/tabs";
 export const SignerConfigForm: React.FC = () => {
   const { register, formState: { errors } } = useFormContext<RollupConfig>();
 
@@ -15,27 +17,58 @@ export const SignerConfigForm: React.FC = () => {
         registration={register("signer_config.deployer_private_key")}
         error={errors.signer_config?.deployer_private_key?.message as string}
       />
-      <InputField
-        label="Batcher Private Key or Signer Endpoint"
+      <Tabs defaultValue="Private Key" onValueChange={(value) => {
+        console.log(value);
+      }}>
+        <TabsList className="my-4 w-full">
+          <TabsTrigger className="w-full" value="Private Key">
+            Private Key
+          </TabsTrigger>
+          <TabsTrigger className="w-full" value="Signer Endpoint">
+            Signer Endpoint
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="Private Key">
+        <InputField
+        label="Batcher Private Key"
         registration={register("signer_config.batcher_private_key_or_signer_endpoint")}
         error={
           errors.signer_config?.batcher_private_key_or_signer_endpoint?.message as string
         }
       />
       <InputField
-        label="Sequencer Private Key or Signer Endpoint"
+        label="Sequencer Private Key"
         registration={register("signer_config.sequencer_private_key_or_signer_endpoint")}
         error={
           errors.signer_config?.sequencer_private_key_or_signer_endpoint?.message as string
         }
       />
       <InputField
-        label="Proposer Private Key or Signer Endpoint"
+        label="Proposer Private Key"
         registration={register("signer_config.proposer_private_key_or_signer_endpoint")}
         error={
           errors.signer_config?.proposer_private_key_or_signer_endpoint?.message as string
         }
       />
+        </TabsContent>
+        <TabsContent value="Signer Endpoint">
+          <InputField
+            label="Batcher Signer Endpoint"
+            registration={register("signer_config.batcher_private_key_or_signer_endpoint")}
+            error={errors.signer_config?.batcher_private_key_or_signer_endpoint?.message as string}
+          />
+          <InputField
+            label="Sequencer Signer Endpoint"
+            registration={register("signer_config.sequencer_private_key_or_signer_endpoint")}
+            error={errors.signer_config?.sequencer_private_key_or_signer_endpoint?.message as string}
+          />
+          <InputField
+            label="Proposer Signer Endpoint"
+            registration={register("signer_config.proposer_private_key_or_signer_endpoint")}
+            error={errors.signer_config?.proposer_private_key_or_signer_endpoint?.message as string}
+          />
+        </TabsContent>
+      </Tabs>
     </fieldset>
   );
 };
