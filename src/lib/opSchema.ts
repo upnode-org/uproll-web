@@ -106,14 +106,7 @@ const ParticipantSchema = z.object({
 /**
  * Participants array defaults to a single participant.
  */
-const ParticipantsSchema = z.array(ParticipantSchema).default([
-  {
-    el_type: "op-geth",
-    el_image: "op-geth:latest",
-    cl_type: "op-node",
-    cl_image: "op-node:latest",
-  },
-]);
+const ParticipantsSchema = z.array(ParticipantSchema).min(1);
 
 /* -------------------------------------------------------------------------
    Signer Configuration Schema
