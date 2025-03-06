@@ -87,11 +87,17 @@ const SettlementLayerSchema = z
  * - Consensus layer (default type: "op-node")
  */
 
-export const EL_TYPES = ["op-geth", "op-reth", "op-erigon", "op-nethermind", "op-besu"] as const;
+export const EL_TYPES = [
+  "op-geth",
+  "op-reth",
+  "op-erigon",
+  "op-nethermind",
+  "op-besu",
+] as const;
 export const CL_TYPES = ["op-node", "hildr"] as const;
 
-export type EL_TYPES = typeof EL_TYPES[number];
-export type CL_TYPES = typeof CL_TYPES[number];
+export type EL_TYPES = (typeof EL_TYPES)[number];
+export type CL_TYPES = (typeof CL_TYPES)[number];
 
 const ParticipantSchema = z.object({
   // Execution Layer configuration
@@ -101,7 +107,6 @@ const ParticipantSchema = z.object({
   cl_type: z.enum(CL_TYPES).default(CL_TYPES[0]),
   cl_image: z.string().optional(),
 });
-
 
 /**
  * Participants array defaults to a single participant.
@@ -114,9 +119,10 @@ const ParticipantsSchema = z.array(ParticipantSchema).min(1);
 
 const SignerConfigSchema = z.object({
   deployer_private_key: z.string(),
-  batcher_private_key_or_signer_endpoint: z.string(),
-  sequencer_private_key_or_signer_endpoint: z.string(),
-  proposer_private_key_or_signer_endpoint: z.string(),
+  type: z.enum(["private_key", "signer_endpoint"]),
+  batcher_value: z.string(),
+  sequencer_value: z.string(),
+  proposer_value: z.string(),
 });
 
 /* -------------------------------------------------------------------------
@@ -142,7 +148,7 @@ const AdminConfigSchema = z.object({
 const ChainConfigSchema = z
   .object({
     l2_chain_id: z.string(),
-    l2_block_time: z.string().default("2s"),
+    l2_block_time: z.string().default("2"),
     proof_maturity_delay_seconds: z.number(),
     disputeGameFinalityDelaySeconds: z.number(),
     // Sequencer fee recipients
@@ -167,8 +173,10 @@ const ChainConfigSchema = z
       });
     }
     if (
-      data.base_fee_vault_withdrawal_network !== data.l1_fee_vault_withdrawal_network ||
-      data.l1_fee_vault_withdrawal_network !== data.sequencer_fee_vault_withdrawal_network
+      data.base_fee_vault_withdrawal_network !==
+        data.l1_fee_vault_withdrawal_network ||
+      data.l1_fee_vault_withdrawal_network !==
+        data.sequencer_fee_vault_withdrawal_network
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -196,39 +204,83 @@ const GasConfigSchema = z.object({
    Data Availability Configuration Schema
    -------------------------------------------------------------------------*/
 
-   const BaseDataAvailabilityConfigSchema = z.object({
-    batch_submission_frequency: z.number(),
+const BaseDataAvailabilityConfigSchema = z.object({
+  batch_submission_frequency: z.number(),
+});
+
+// System values for data availability types
+export const DA_PROVIDER_SYSTEM_VALUES = {
+  AUTO: "auto",
+  BLOB: "blob",
+  CALLDATA: "calldata",
+  CUSTOM: "custom",
+} as const;
+
+// Display names for the UI
+export const DA_PROVIDER_DISPLAY_NAMES = {
+  [DA_PROVIDER_SYSTEM_VALUES.AUTO]: "ETH Blob + Calldata",
+  [DA_PROVIDER_SYSTEM_VALUES.BLOB]: "ETH Blob",
+  [DA_PROVIDER_SYSTEM_VALUES.CALLDATA]: "ETH Calldata",
+  [DA_PROVIDER_SYSTEM_VALUES.CUSTOM]: "Custom",
+} as const;
+
+// Array of display names for UI rendering
+export const DATA_AVAILABILITY_PROVIDERS = Object.values(
+  DA_PROVIDER_DISPLAY_NAMES
+);
+
+// Function to convert display name to system value
+export const getDAProviderSystemValue = (displayName: string): string => {
+  for (const [systemValue, displayNameValue] of Object.entries(
+    DA_PROVIDER_DISPLAY_NAMES
+  )) {
+    if (displayNameValue === displayName) {
+      return systemValue;
+    }
+  }
+  return DA_PROVIDER_SYSTEM_VALUES.AUTO; // Default value
+};
+
+const NonCustomDataAvailabilityConfigSchema =
+  BaseDataAvailabilityConfigSchema.extend({
+    data_availability_provider: z.enum([
+      DA_PROVIDER_SYSTEM_VALUES.AUTO,
+      DA_PROVIDER_SYSTEM_VALUES.BLOB,
+      DA_PROVIDER_SYSTEM_VALUES.CALLDATA,
+    ]),
   });
-  
-  const NonCustomDataAvailabilityConfigSchema = BaseDataAvailabilityConfigSchema.extend({
-    data_availability_provider: z.enum(["ETH Blob + Calldata", "ETH Blob", "ETH Calldata"]),
-  });
-  
-  const BaseCustomDataAvailabilityConfigSchema = BaseDataAvailabilityConfigSchema.extend({
-    data_availability_provider: z.literal("Custom"),
+
+const BaseCustomDataAvailabilityConfigSchema =
+  BaseDataAvailabilityConfigSchema.extend({
+    data_availability_provider: z.literal(DA_PROVIDER_SYSTEM_VALUES.CUSTOM),
     da_server_endpoint: z.string(),
     commitment_type: z.enum(["Generic", "Keccak256"]),
     da_challenge_contract_address: z.string().optional(),
     da_challenge_window: z.string(),
     da_resolve_window: z.string(),
   });
-  
-  // Create a union from plain ZodObjects.
-  const DataAvailabilityConfigSchemaRaw = z.discriminatedUnion("data_availability_provider", [
+
+// Create a union from plain ZodObjects.
+const DataAvailabilityConfigSchemaRaw = z.discriminatedUnion(
+  "data_availability_provider",
+  [
     NonCustomDataAvailabilityConfigSchema,
     BaseCustomDataAvailabilityConfigSchema,
-  ]);
-  
-  // Now, apply the extra validation for the Custom case on the union.
-  const DataAvailabilityConfigSchema = DataAvailabilityConfigSchemaRaw.superRefine((data, ctx) => {
+  ]
+);
+
+// Now, apply the extra validation for the Custom case on the union.
+const DataAvailabilityConfigSchema =
+  DataAvailabilityConfigSchemaRaw.superRefine((data, ctx) => {
     if (
-      data.data_availability_provider === "Custom" &&
+      data.data_availability_provider === DA_PROVIDER_SYSTEM_VALUES.CUSTOM &&
       data.commitment_type === "Generic" &&
       !data.da_challenge_contract_address
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Generic commitment type requires DA Challenge Contract Address",
+        message:
+          "Generic commitment type requires DA Challenge Contract Address",
         path: ["da_challenge_contract_address"],
       });
     }
@@ -257,10 +309,14 @@ const InteropConfigurationSchema = z
     dependency_set: z.array(InteropDependencySchema).optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.enable_interop && (!data.dependency_set || data.dependency_set.length === 0)) {
+    if (
+      data.enable_interop &&
+      (!data.dependency_set || data.dependency_set.length === 0)
+    ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Interop is enabled but no dependencies provided in dependency set",
+        message:
+          "Interop is enabled but no dependencies provided in dependency set",
         path: ["dependency_set"],
       });
     }
@@ -270,10 +326,50 @@ const InteropConfigurationSchema = z
    Overall Rollup Configuration Schema
    -------------------------------------------------------------------------*/
 
+// const NetworkParamsSchema = z.object({
+//   network: z.string(),
+//   network_id: z.string(),
+//   seconds_per_slot: z.number(),
+//   name: z.string(),
+//   fjord_time_offset: z.number().optional(),
+//   granite_time_offset: z.number().optional(),
+//   fund_dev_accounts: z.boolean(),
+// });
 
+// const ChallengerParamsSchema = z.object({
+//   enabled: z.boolean(),
+//   extra_params: z.array(z.string()).optional(),
+// });
+
+// const MevParamsSchema = z.object({
+//   builder_host: z.string(),
+//   builder_port: z.string(),
+// });
+
+// const ChainSchema = z.object({
+//   participants: ParticipantsSchema,
+//   network_params: NetworkParamsSchema,
+//   challenger_params: ChallengerParamsSchema,
+//   mev_params: MevParamsSchema,
+//   additional_services: z.array(z.string()),
+// });
+
+// const OptimismPackageSchema = z.object({
+//   chains: z.array(ChainSchema).min(1).max(1),
+// });
+
+const ExternalL1NetworkParamsSchema = z.object({
+  rpc_kind: z.string(),
+  el_rpc_url: z.string(),
+  el_ws_url: z.string(),
+  cl_rpc_url: z.string(),
+  network_id: z.string(),
+  priv_key: z.string(),
+});
 
 export const RollupConfigSchema = z.object({
   rollup_name: z.string(),
+  external_l1_network_params: ExternalL1NetworkParamsSchema,
   settlement_layer: SettlementLayerSchema,
   participants: ParticipantsSchema,
   signer_config: SignerConfigSchema,
@@ -290,13 +386,28 @@ export const RollupConfigSchema = z.object({
 
 export type SettlementLayer = z.infer<typeof SettlementLayerSchema>;
 export type Participant = z.infer<typeof ParticipantSchema>;
-export type SignerConfig = z.infer<typeof SignerConfigSchema>;
+// export type SignerConfig = z.infer<typeof SignerConfigSchema>;
 export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 export type ChainConfig = z.infer<typeof ChainConfigSchema>;
 export type GasConfig = z.infer<typeof GasConfigSchema>;
-export type DataAvailabilityConfig = z.infer<typeof DataAvailabilityConfigSchema>;
+export type DataAvailabilityConfig = z.infer<
+  typeof DataAvailabilityConfigSchema
+>;
 export type InteropConfig = z.infer<typeof InteropConfigurationSchema>;
 export type RollupConfig = z.infer<typeof RollupConfigSchema>;
+
+// export type OptimismPackage = z.infer<typeof OptimismPackageSchema>;
+export type ExternalL1NetworkParams = z.infer<
+  typeof ExternalL1NetworkParamsSchema
+>;
+// export type Chain = z.infer<typeof ChainSchema>;
+// export type NetworkParams = z.infer<typeof NetworkParamsSchema>;
+// export type BatcherParams = z.infer<typeof BatcherParamsSchema>;
+// export type ChallengerParams = z.infer<typeof ChallengerParamsSchema>;
+// export type MevParams = z.infer<typeof MevParamsSchema>;
+// export type OpContractDeployerParams = z.infer<
+//   typeof OpContractDeployerParamsSchema
+// >;
 
 /* -------------------------------------------------------------------------
    Utility Functions
@@ -316,7 +427,10 @@ export function parseConfig(data: unknown): {
 } {
   const result = RollupConfigSchema.safeParse(data);
   if (!result.success) {
-    console.error("Rollup configuration validation errors:", result.error.issues);
+    console.error(
+      "Rollup configuration validation errors:",
+      result.error.issues
+    );
     return {
       success: false,
       data: data as RollupConfig,
@@ -337,5 +451,13 @@ export function parseConfig(data: unknown): {
  * @returns A formatted JSON string representation of the configuration.
  */
 export function stringifyRollupConfig(config: RollupConfig): string {
-  return JSON.stringify(config, null, 2);
+  // Create a copy of the config object without undefined values
+  const cleanConfig = JSON.parse(JSON.stringify(config));
+
+  // If the "other" section is empty, remove it
+  if (cleanConfig.other && Object.keys(cleanConfig.other).length === 0) {
+    delete cleanConfig.other;
+  }
+
+  return JSON.stringify(cleanConfig, null, 2);
 }

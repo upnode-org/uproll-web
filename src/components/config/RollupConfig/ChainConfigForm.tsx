@@ -14,11 +14,13 @@ export const ChainConfigForm: React.FC = () => {
         label="L2 Chain ID"
         registration={register("chain_config.l2_chain_id")}
         error={errors.chain_config?.l2_chain_id?.message as string}
+        type="number"
       />
       <InputField
         label="L2 Block Time"
         registration={register("chain_config.l2_block_time")}
         error={errors.chain_config?.l2_block_time?.message as string}
+        type="number"
       />
       <InputField
         label="Proof Maturity Delay Seconds"

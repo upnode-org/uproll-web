@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
 export const InteropConfigForm: React.FC = () => {
-  const { register, setValue, control, formState: { errors } } = useFormContext<RollupConfig>();
+  const { register, setValue, control } = useFormContext<RollupConfig>();
 
   const enableInterop = useWatch({
     control,

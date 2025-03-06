@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useWatch, useFormContext } from "react-hook-form";
-import { RollupConfig } from "@/lib/opSchema";
+import { RollupConfig, DA_PROVIDER_SYSTEM_VALUES, DA_PROVIDER_DISPLAY_NAMES } from "@/lib/opSchema";
 import { InputField } from "./Components/InputField";
 import { SelectField } from "./Components/SelectField";
 
@@ -32,18 +32,21 @@ export const DataAvailabilityConfigForm: React.FC = () => {
     return (current as { message?: string })?.message;
   };
 
+  // Create options for the select field
+  const daProviderOptions = [
+    ...Object.entries(DA_PROVIDER_DISPLAY_NAMES).map(([value, label]) => ({
+      label,
+      value,
+    })),
+  ];
+
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
       <legend className="px-2 text-lg font-semibold">Data Availability Configuration</legend>
       
       <SelectField
         label="Data Availability Provider"
-        options={[
-          { label: "ETH Blob + Calldata", value: "ETH Blob + Calldata" },
-          { label: "ETH Blob", value: "ETH Blob" },
-          { label: "ETH Calldata", value: "ETH Calldata" },
-          { label: "Custom", value: "Custom" },
-        ]}
+        options={daProviderOptions}
         control={control}
         name="data_availability_config.data_availability_provider"
         error={getErrorMessage("data_availability_config.data_availability_provider")}
@@ -58,7 +61,7 @@ export const DataAvailabilityConfigForm: React.FC = () => {
         error={getErrorMessage("data_availability_config.batch_submission_frequency")}
       />
       
-      {dataAvailabilityProvider === "Custom" && (
+      {dataAvailabilityProvider === DA_PROVIDER_SYSTEM_VALUES.CUSTOM && (
         <>
           <InputField
             label="DA Server Endpoint"

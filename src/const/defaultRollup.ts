@@ -1,11 +1,17 @@
 import { RollupConfig } from "@/lib/opSchema";
 
 const defaultRollup: RollupConfig = {
-  rollup_name: "Untitled Configuration",
+  rollup_name: "Default Configuration",
+  external_l1_network_params: {
+    rpc_kind: "basic",
+    el_rpc_url: "",
+    el_ws_url: "",
+    cl_rpc_url: "",
+    network_id: "1",
+    priv_key: "3",
+  },
   settlement_layer: {
     selection: "ETH Mainnet",
-    chain_id: "",
-    l1_block_time: "",
     settlement_rpc: "",
   },
   participants: [
@@ -16,17 +22,18 @@ const defaultRollup: RollupConfig = {
   ],
   signer_config: {
     deployer_private_key: "",
-    batcher_private_key_or_signer_endpoint: "",
-    sequencer_private_key_or_signer_endpoint: "",
-    proposer_private_key_or_signer_endpoint: "",
+    type: "private_key",
+    batcher_value: "",
+    sequencer_value: "",
+    proposer_value: "",
   },
   admin_config: {
     final_system_owner: "",
     proxy_admin_owner: "",
   },
   chain_config: {
-    l2_chain_id: "",
-    l2_block_time: "2s",
+    l2_chain_id: "877655",
+    l2_block_time: "2",
     proof_maturity_delay_seconds: 0,
     base_fee_vault_recipient: "",
     l1_fee_vault_recipient: "",
@@ -34,7 +41,7 @@ const defaultRollup: RollupConfig = {
     base_fee_vault_withdrawal_network: "",
     l1_fee_vault_withdrawal_network: "",
     sequencer_fee_vault_withdrawal_network: "",
-    disputeGameFinalityDelaySeconds: 0
+    disputeGameFinalityDelaySeconds: 0,
   },
   gas_config: {
     l2_genesis_block_gas_limit: 0,
@@ -45,7 +52,7 @@ const defaultRollup: RollupConfig = {
     gas_price_oracle_blob_base_fee_scalar: 0,
   },
   data_availability_config: {
-    data_availability_provider: "ETH Blob + Calldata",
+    data_availability_provider: "auto",
     batch_submission_frequency: 0,
   },
   interop_config: {

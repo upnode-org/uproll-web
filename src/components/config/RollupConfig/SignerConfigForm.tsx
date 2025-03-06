@@ -7,7 +7,11 @@ import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { TabsList } from "@/components/ui/tabs";
 import { TabsTrigger } from "@/components/ui/tabs";
 export const SignerConfigForm: React.FC = () => {
-  const { register, formState: { errors } } = useFormContext<RollupConfig>();
+  const { register, formState: { errors }, watch, setValue } = useFormContext<RollupConfig>();
+
+  const signerType = watch("signer_config.type");
+
+  console.log(signerType);
 
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
@@ -17,55 +21,55 @@ export const SignerConfigForm: React.FC = () => {
         registration={register("signer_config.deployer_private_key")}
         error={errors.signer_config?.deployer_private_key?.message as string}
       />
-      <Tabs defaultValue="Private Key" onValueChange={(value) => {
-        console.log(value);
+      <Tabs defaultValue={signerType} onValueChange={(value) => {
+        setValue("signer_config.type", value as "private_key" | "signer_endpoint");
       }}>
         <TabsList className="my-4 w-full">
-          <TabsTrigger className="w-full" value="Private Key">
+          <TabsTrigger className="w-full" value="private_key">
             Private Key
           </TabsTrigger>
-          <TabsTrigger className="w-full" value="Signer Endpoint">
+          <TabsTrigger className="w-full" value="signer_endpoint">
             Signer Endpoint
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="Private Key">
+        <TabsContent value="private_key">
         <InputField
         label="Batcher Private Key"
-        registration={register("signer_config.batcher_private_key_or_signer_endpoint")}
+        registration={register("signer_config.batcher_value")}
         error={
-          errors.signer_config?.batcher_private_key_or_signer_endpoint?.message as string
+          errors.signer_config?.batcher_value?.message as string
         }
       />
       <InputField
         label="Sequencer Private Key"
-        registration={register("signer_config.sequencer_private_key_or_signer_endpoint")}
+        registration={register("signer_config.sequencer_value")}
         error={
-          errors.signer_config?.sequencer_private_key_or_signer_endpoint?.message as string
+          errors.signer_config?.sequencer_value?.message as string
         }
       />
       <InputField
         label="Proposer Private Key"
-        registration={register("signer_config.proposer_private_key_or_signer_endpoint")}
+        registration={register("signer_config.proposer_value")}
         error={
-          errors.signer_config?.proposer_private_key_or_signer_endpoint?.message as string
+          errors.signer_config?.proposer_value?.message as string
         }
       />
         </TabsContent>
-        <TabsContent value="Signer Endpoint">
+        <TabsContent value="signer_endpoint">
           <InputField
             label="Batcher Signer Endpoint"
-            registration={register("signer_config.batcher_private_key_or_signer_endpoint")}
-            error={errors.signer_config?.batcher_private_key_or_signer_endpoint?.message as string}
+            registration={register("signer_config.batcher_value")}
+            error={errors.signer_config?.batcher_value?.message as string}
           />
           <InputField
             label="Sequencer Signer Endpoint"
-            registration={register("signer_config.sequencer_private_key_or_signer_endpoint")}
-            error={errors.signer_config?.sequencer_private_key_or_signer_endpoint?.message as string}
+            registration={register("signer_config.sequencer_value")}
+            error={errors.signer_config?.sequencer_value?.message as string}
           />
           <InputField
             label="Proposer Signer Endpoint"
-            registration={register("signer_config.proposer_private_key_or_signer_endpoint")}
-            error={errors.signer_config?.proposer_private_key_or_signer_endpoint?.message as string}
+            registration={register("signer_config.proposer_value")}
+            error={errors.signer_config?.proposer_value?.message as string}
           />
         </TabsContent>
       </Tabs>
