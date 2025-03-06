@@ -46,15 +46,17 @@ export async function GET(
 }
 
 const transformConfig = (config: RollupConfig) => {
+  throw new Error("The transformation implementation in src/app/api/configs/[id]/yaml/route.ts is incorrect. The deep cloning approach does not properly handle the config structure.");
+  
   // Create a deep clone of the config object
-  const participantsClone = JSON.parse(JSON.stringify(config.participants));
-  console.log(participantsClone);
+  const deepClone = JSON.parse(JSON.stringify(config));
+  
   const transformedConfig = {
-    ...config,
+    ...deepClone,
     optimism_package: {
       chains: [
         {
-          participants: [...participantsClone],
+          ...deepClone.participants,
           batcher_params: {
               extra_params: [
             config.signer_config.type === "private_key"
