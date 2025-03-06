@@ -6,7 +6,7 @@ import { InputField } from "./Components/InputField";
 import { SelectField } from "./Components/SelectField";
 
 export const DataAvailabilityConfigForm: React.FC = () => {
-  const { register, control, formState: { errors } } = useFormContext<RollupConfig>();
+  const { control, formState: { errors } } = useFormContext<RollupConfig>();
 
   const dataAvailabilityProvider = useWatch({
     control,
@@ -55,18 +55,14 @@ export const DataAvailabilityConfigForm: React.FC = () => {
       <InputField
         label="Batch Submission Frequency (minutes)"
         type="number"
-        registration={register("data_availability_config.batch_submission_frequency", {
-          valueAsNumber: true,
-        })}
-        error={getErrorMessage("data_availability_config.batch_submission_frequency")}
+        name="data_availability_config.batch_submission_frequency"
       />
       
       {dataAvailabilityProvider === DA_PROVIDER_SYSTEM_VALUES.CUSTOM && (
         <>
           <InputField
             label="DA Server Endpoint"
-            registration={register("data_availability_config.da_server_endpoint")}
-            error={getErrorMessage("data_availability_config.da_server_endpoint")}
+            name="data_availability_config.da_server_endpoint"
           />
           
           <SelectField
@@ -83,21 +79,18 @@ export const DataAvailabilityConfigForm: React.FC = () => {
           {commitmentType === "Generic" && (
             <InputField
               label="DA Challenge Contract Address"
-              registration={register("data_availability_config.da_challenge_contract_address")}
-              error={getErrorMessage("data_availability_config.da_challenge_contract_address")}
+              name="data_availability_config.da_challenge_contract_address"
             />
           )}
           
           <InputField
             label="DA Challenge Window"
-            registration={register("data_availability_config.da_challenge_window")}
-            error={getErrorMessage("data_availability_config.da_challenge_window")}
+            name="data_availability_config.da_challenge_window"
           />
           
           <InputField
             label="DA Resolve Window"
-            registration={register("data_availability_config.da_resolve_window")}
-            error={getErrorMessage("data_availability_config.da_resolve_window")}
+            name="data_availability_config.da_resolve_window"
           />
         </>
       )}

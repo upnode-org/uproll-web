@@ -3,11 +3,14 @@ import { RollupConfig } from "@/lib/opSchema";
 const defaultRollup: RollupConfig = {
   rollup_name: "Default Configuration",
   external_l1_network_params: {
+
     rpc_kind: "basic",
     el_rpc_url: "",
     el_ws_url: "",
     cl_rpc_url: "",
+    // Network ID
     network_id: "1",
+    // Deployer private key
     priv_key: "3",
   },
   settlement_layer: {
@@ -35,12 +38,8 @@ const defaultRollup: RollupConfig = {
     l2_chain_id: "877655",
     l2_block_time: "2",
     proof_maturity_delay_seconds: 0,
-    base_fee_vault_recipient: "",
-    l1_fee_vault_recipient: "",
-    sequencer_fee_vault_recipient: "",
-    base_fee_vault_withdrawal_network: "",
-    l1_fee_vault_withdrawal_network: "",
-    sequencer_fee_vault_withdrawal_network: "",
+    fee_recipient: "0x...",
+    withdrawal_network: "0x...",
     disputeGameFinalityDelaySeconds: 0,
   },
   gas_config: {

@@ -76,7 +76,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
   index,
   remove,
 }) => {
-  const { register, setValue, control, watch, formState: { errors } } = useFormContext<RollupConfig>();
+  const { setValue, control, watch, formState: { errors } } = useFormContext<RollupConfig>();
   
   // Use local state for the default images toggle instead of form context
   const [useDefaultElImages, setUseDefaultElImages] = useState(true);
@@ -145,8 +145,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
       {!useDefaultElImages && (
           <InputField
             label="Execution Layer Image"
-            registration={register(`participants.${index}.el_image` as const)}
-            error={errors.participants?.[index]?.el_image?.message as string}
+            name={`participants.${index}.el_image`}
           />
       )}
       <div className="mt-4"></div>
@@ -175,8 +174,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
       {!useDefaultClImages && (
         <InputField
           label="Consensus Layer Image"
-          registration={register(`participants.${index}.cl_image` as const)}
-          error={errors.participants?.[index]?.cl_image?.message as string}
+          name={`participants.${index}.cl_image`}
         />
       )}
     </div>

@@ -88,8 +88,6 @@ const InteropConfig: React.FC<InteropConfigFormProps> = ({
   index,
   remove,
 }) => {
-  const { register, formState: { errors } } = useFormContext<RollupConfig>();
-
   return (
     <div className="">
       <div className="flex justify-between items-center mb-2">
@@ -106,26 +104,22 @@ const InteropConfig: React.FC<InteropConfigFormProps> = ({
 
       <InputField
         label="Chain ID"
-        registration={register(`interop_config.dependency_set.${index}.chain_id` as const)}
-        error={errors.interop_config?.dependency_set?.[index]?.chain_id?.message as string}
+        name={`interop_config.dependency_set.${index}.chain_id`}
       />
 
       <InputField
         label="WebSocket RPC Endpoint"
-        registration={register(`interop_config.dependency_set.${index}.websocket_rpc_endpoint` as const)}
-        error={errors.interop_config?.dependency_set?.[index]?.websocket_rpc_endpoint?.message as string}
+        name={`interop_config.dependency_set.${index}.websocket_rpc_endpoint`}
       />
 
       <InputField
         label="Activation Time"
-        registration={register(`interop_config.dependency_set.${index}.activation_time` as const)}
-        error={errors.interop_config?.dependency_set?.[index]?.activation_time?.message as string}
+        name={`interop_config.dependency_set.${index}.activation_time`}
       />
 
       <InputField
         label="History Min Time"
-        registration={register(`interop_config.dependency_set.${index}.history_min_time` as const)}
-        error={errors.interop_config?.dependency_set?.[index]?.history_min_time?.message as string}
+        name={`interop_config.dependency_set.${index}.history_min_time`}
       />
     </div>
   )

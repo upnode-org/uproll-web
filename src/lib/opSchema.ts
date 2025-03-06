@@ -152,40 +152,17 @@ const ChainConfigSchema = z
     proof_maturity_delay_seconds: z.number(),
     disputeGameFinalityDelaySeconds: z.number(),
     // Sequencer fee recipients
-    base_fee_vault_recipient: z.string(),
-    l1_fee_vault_recipient: z.string(),
-    sequencer_fee_vault_recipient: z.string(),
+    fee_recipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+      message: "Invalid address",
+    }),
     // Fee withdrawal networks
-    base_fee_vault_withdrawal_network: z.string(),
-    l1_fee_vault_withdrawal_network: z.string(),
-    sequencer_fee_vault_withdrawal_network: z.string(),
+    withdrawal_network: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+      message: "Invalid address",
+    }),
+    // base_fee_vault_withdrawal_network: z.string(),
+    // l1_fee_vault_withdrawal_network: z.string(),
+    // sequencer_fee_vault_withdrawal_network: z.string(),
   })
-  .superRefine((data, ctx) => {
-    if (
-      data.base_fee_vault_recipient !== data.l1_fee_vault_recipient ||
-      data.l1_fee_vault_recipient !== data.sequencer_fee_vault_recipient
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "All fee recipient fields (Base Fee Vault Recipient, L1 Fee Vault Recipient, Sequencer Fee Vault Recipient) must match. Please ensure they are identical.",
-        path: ["base_fee_vault_recipient"],
-      });
-    }
-    if (
-      data.base_fee_vault_withdrawal_network !==
-        data.l1_fee_vault_withdrawal_network ||
-      data.l1_fee_vault_withdrawal_network !==
-        data.sequencer_fee_vault_withdrawal_network
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "All fee withdrawal network fields (Base Fee Vault Withdrawal Network, L1 Fee Vault Withdrawal Network, Sequencer Fee Vault Withdrawal Network) must match. Please ensure they are identical.",
-        path: ["base_fee_vault_withdrawal_network"],
-      });
-    }
-  });
 
 /* -------------------------------------------------------------------------
    Gas Configuration Schema
@@ -255,7 +232,7 @@ const BaseCustomDataAvailabilityConfigSchema =
     data_availability_provider: z.literal(DA_PROVIDER_SYSTEM_VALUES.CUSTOM),
     da_server_endpoint: z.string(),
     commitment_type: z.enum(["Generic", "Keccak256"]),
-    da_challenge_contract_address: z.string().optional(),
+    da_challenge_contract_address: z.string(),
     da_challenge_window: z.string(),
     da_resolve_window: z.string(),
   });

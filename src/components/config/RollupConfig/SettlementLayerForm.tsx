@@ -6,7 +6,7 @@ import { SquareButtonSelector } from "./Components/SquareButtonSelector";
 import { InputField } from "./Components/InputField";
 
 export const SettlementLayerForm: React.FC = () => {
-  const { register, control, formState: { errors } } = useFormContext<RollupConfig>();
+  const { control, formState: { errors } } = useFormContext<RollupConfig>();
 
 
   const selectedNetwork = useWatch({
@@ -47,20 +47,17 @@ export const SettlementLayerForm: React.FC = () => {
         <>
           <InputField
             label="Chain ID"
-            registration={register("settlement_layer.chain_id")}
-            error={errors.settlement_layer?.chain_id?.message as string}
+            name="settlement_layer.chain_id"
           />
           <InputField
             label="L1 Block Time"
-            registration={register("settlement_layer.l1_block_time")}
-            error={errors.settlement_layer?.l1_block_time?.message as string}
+            name="settlement_layer.l1_block_time"
           />
         </>
       )}
       <InputField
         label="Settlement RPC"
-        registration={register("settlement_layer.settlement_rpc")}
-        error={errors.settlement_layer?.settlement_rpc?.message as string}
+        name="settlement_layer.settlement_rpc"
       />
     </fieldset>
   );
