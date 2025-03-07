@@ -65,7 +65,6 @@ export const EditableInputField: React.FC<EditableInputFieldProps> = ({
         <div className="flex items-end bg-transparent gap-3">
           <input
             id={fieldName as string}
-            type="text"
             value={value as string}
             onChange={onChange}
             onKeyDown={handleKeyDown}

@@ -8,22 +8,18 @@ export const ChainConfigForm: React.FC = () => {
       <legend className="px-2 text-lg font-semibold">Chain Configuration</legend>
       <InputField
         label="L2 Chain ID"
-        type="number"
         name="chain_config.l2_chain_id"
       />
       <InputField
         label="L2 Block Time"
-        type="number"
         name="chain_config.l2_block_time"
       />
       <InputField
         label="Proof Maturity Delay Seconds"
-        type="number"
         name="chain_config.proof_maturity_delay_seconds"
       />
       <InputField
         label="Dispute Game Finality Delay Seconds"
-        type="number"
         name="chain_config.disputeGameFinalityDelaySeconds"
       />
       <InputField

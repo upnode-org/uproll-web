@@ -43,7 +43,7 @@ export const DataAvailabilityConfigForm: React.FC = () => {
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
       <legend className="px-2 text-lg font-semibold">Data Availability Configuration</legend>
-      
+
       <SelectField
         label="Data Availability Provider"
         options={daProviderOptions}
@@ -51,20 +51,19 @@ export const DataAvailabilityConfigForm: React.FC = () => {
         name="data_availability_config.data_availability_provider"
         error={getErrorMessage("data_availability_config.data_availability_provider")}
       />
-      
+
       <InputField
         label="Batch Submission Frequency (minutes)"
-        type="number"
         name="data_availability_config.batch_submission_frequency"
       />
-      
+
       {dataAvailabilityProvider === DA_PROVIDER_SYSTEM_VALUES.CUSTOM && (
         <>
           <InputField
             label="DA Server Endpoint"
             name="data_availability_config.da_server_endpoint"
           />
-          
+
           <SelectField
             label="Commitment Type"
             options={[
@@ -75,19 +74,19 @@ export const DataAvailabilityConfigForm: React.FC = () => {
             name="data_availability_config.commitment_type"
             error={getErrorMessage("data_availability_config.commitment_type")}
           />
-          
+
           {commitmentType === "Generic" && (
             <InputField
               label="DA Challenge Contract Address"
               name="data_availability_config.da_challenge_contract_address"
             />
           )}
-          
+
           <InputField
             label="DA Challenge Window"
             name="data_availability_config.da_challenge_window"
           />
-          
+
           <InputField
             label="DA Resolve Window"
             name="data_availability_config.da_resolve_window"
