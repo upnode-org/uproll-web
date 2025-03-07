@@ -72,7 +72,7 @@ export default function HomePage() {
             </div>
 
             {/* Right Grid Cell */}
-            <div className="relative bg-white rounded-ss-[50px] xl:rounded-t-[50px] px-5 sm:px-7 py-10">
+            <div className="relative bg-white rounded-ss-[50px] xl:rounded-t-[50px] px-6 sm:px-8 md:px-14 py-10">
               <svg width="50" height="50" className="absolute bottom-0 right-0  translate-x-[100%]">
                 <mask id="inverted-mask-right-2">
                   <rect width="50" height="50" fill="white" />
