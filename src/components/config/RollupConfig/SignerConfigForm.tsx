@@ -11,8 +11,6 @@ export const SignerConfigForm: React.FC = () => {
 
   const signerType = watch("signer_config.type");
 
-  console.log(signerType);
-
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
       <legend className="px-2 text-lg font-semibold">Signer Configuration</legend>

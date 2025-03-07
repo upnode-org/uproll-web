@@ -18,20 +18,6 @@ export const DataAvailabilityConfigForm: React.FC = () => {
     name: "data_availability_config.commitment_type",
   });
 
-  // Helper function to safely access nested error messages
-  const getErrorMessage = (path: string): string | undefined => {
-    type NestedRecord = Record<string, unknown | { message?: string }>;
-    let current: NestedRecord | undefined = errors as unknown as NestedRecord;
-    for (const key of path.split('.')) {
-      if (current && typeof current === 'object' && key in current) {
-        current = current[key] as NestedRecord;
-      } else {
-        return undefined;
-      }
-    }
-    return (current as { message?: string })?.message;
-  };
-
   // Create options for the select field
   const daProviderOptions = [
     ...Object.entries(DA_PROVIDER_DISPLAY_NAMES).map(([value, label]) => ({
@@ -47,9 +33,7 @@ export const DataAvailabilityConfigForm: React.FC = () => {
       <SelectField
         label="Data Availability Provider"
         options={daProviderOptions}
-        control={control}
         name="data_availability_config.data_availability_provider"
-        error={getErrorMessage("data_availability_config.data_availability_provider")}
       />
 
       <InputField
@@ -70,9 +54,7 @@ export const DataAvailabilityConfigForm: React.FC = () => {
               { label: "Generic", value: "Generic" },
               { label: "Keccak256", value: "Keccak256" },
             ]}
-            control={control}
             name="data_availability_config.commitment_type"
-            error={getErrorMessage("data_availability_config.commitment_type")}
           />
 
           {commitmentType === "Generic" && (

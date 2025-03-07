@@ -20,7 +20,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    console.log("dto", dto);
     const { name, config } = dto;
 
 
