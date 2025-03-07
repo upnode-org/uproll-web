@@ -78,17 +78,30 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
 }) => {
   const { setValue, control, watch, formState: { errors } } = useFormContext<RollupConfig>();
   
+  const participants = watch("participants");
+  
   // Use local state for the default images toggle instead of form context
-  const [useDefaultElImages, setUseDefaultElImages] = useState(true);
-  const [useDefaultClImages, setUseDefaultClImages] = useState(true);
+  const [useDefaultElImages, setUseDefaultElImages] = useState(
+    !participants[index]?.el_image
+  );
+  const [useDefaultClImages, setUseDefaultClImages] = useState(
+    !participants[index]?.cl_image
+  );
   
   // Watch for changes in the type selections
   const elType = watch(`participants.${index}.el_type` as const);
   const clType = watch(`participants.${index}.cl_type` as const);
 
-  const participants = watch("participants");
-  
   // Update images when types change or when useDefaultImages changes
+  
+  // Initialize default image states based on current participant values
+  useEffect(() => {
+    if (participants && participants[index]) {
+      setUseDefaultElImages(!participants[index].el_image);
+      setUseDefaultClImages(!participants[index].cl_image);
+    }
+  }, [participants, index]);
+  
   useEffect(() => {
     if (useDefaultElImages) {
       // Set images to undefined when using defaults
