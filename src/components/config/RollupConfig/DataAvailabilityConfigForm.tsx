@@ -6,7 +6,7 @@ import { InputField } from "./Components/InputField";
 import { SelectField } from "./Components/SelectField";
 
 export const DataAvailabilityConfigForm: React.FC = () => {
-  const { control, formState: { errors } } = useFormContext<RollupConfig>();
+  const { control } = useFormContext<RollupConfig>();
 
   const dataAvailabilityProvider = useWatch({
     control,

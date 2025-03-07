@@ -76,7 +76,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
   index,
   remove,
 }) => {
-  const { setValue, control, watch, formState: { errors } } = useFormContext<RollupConfig>();
+  const { setValue, watch } = useFormContext<RollupConfig>();
   
   const participants = watch("participants");
   
@@ -136,9 +136,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
       <SelectField
         label="Execution Layer Type"
         options={Object.values(EL_TYPES).map((type) => ({ label: type, value: type }))}
-        control={control}
         name={`participants.${index}.el_type`}
-        error={errors.participants?.[index]?.el_type?.message as string}
       />
        <div className="flex items-center space-x-2  mt-4">
         <Checkbox
@@ -165,9 +163,7 @@ const ParticipantForm: React.FC<ParticipantFormProps> = ({
       <SelectField
         label="Consensus Layer Type"
         options={Object.values(CL_TYPES).map((type) => ({ label: type, value: type }))}
-        control={control}
         name={`participants.${index}.cl_type`}
-        error={errors.participants?.[index]?.cl_type?.message as string}
       />
       <div className="flex items-center space-x-2 mt-4">
         <Checkbox

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
-import { Controller, get, useFormContext, FieldPathByValue, useWatch } from "react-hook-form";
+import { Controller, get, useFormContext, useWatch, FieldPath } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -11,14 +11,13 @@ import {
 } from "@/components/ui/select";
 import { ErrorMessage } from "./ErrorMessage";
 import { RollupConfig } from "@/lib/opSchema";
-import { EnumLike } from "zod";
 
 export type Option = { label: string; value: string };
 
 export type SelectFieldProps = {
   label: string;
   options: Option[];
-  name: FieldPathByValue<RollupConfig, EnumLike>;
+  name: FieldPath<RollupConfig>;
 };
 
 export const SelectField: React.FC<SelectFieldProps> = ({
