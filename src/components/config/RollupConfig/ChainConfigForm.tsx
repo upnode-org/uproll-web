@@ -15,19 +15,19 @@ export const ChainConfigForm: React.FC = () => {
         name="chain_config.l2_block_time"
       />
       <InputField
-        label="Proof Maturity Delay Seconds"
+        label="Proof Maturity Delay (Seconds)"
         name="chain_config.proof_maturity_delay_seconds"
       />
       <InputField
-        label="Dispute Game Finality Delay Seconds"
+        label="Dispute Game Finality Delay (Seconds)"
         name="chain_config.disputeGameFinalityDelaySeconds"
       />
       <InputField
-        label="Fee Recipient"
+        label="Fee Recipient Address"
         name="chain_config.fee_recipient"
       />
       <InputField
-        label="Withdrawal Network"
+        label="Withdrawal Network Address"
         name="chain_config.withdrawal_network"
       />
     </fieldset>

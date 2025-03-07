@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import placeholderRollup from "@/const/placeholderRollup";
 
 export const InteropConfigForm: React.FC = () => {
   const { register, setValue, control } = useFormContext<RollupConfig>();
@@ -45,10 +46,10 @@ export const InteropConfigForm: React.FC = () => {
               type="button"
               onClick={() =>
                 append({
-                  chain_id: "",
+                  chain_id: 0,
                   websocket_rpc_endpoint: "",
-                  activation_time: "",
-                  history_min_time: "",
+                  activation_time: 0,
+                  history_min_time: 0,
                 })
               }
               className="p-0.5 rounded-full"
@@ -105,21 +106,41 @@ const InteropConfig: React.FC<InteropConfigFormProps> = ({
       <InputField
         label="Chain ID"
         name={`interop_config.dependency_set.${index}.chain_id`}
+        placeholder={
+          typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
+            ? placeholderRollup.interop_config.dependency_set[0].chain_id 
+            : undefined
+        }
       />
 
       <InputField
         label="WebSocket RPC Endpoint"
         name={`interop_config.dependency_set.${index}.websocket_rpc_endpoint`}
+        placeholder={
+          typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
+            ? placeholderRollup.interop_config.dependency_set[0].websocket_rpc_endpoint 
+            : undefined
+        }
       />
 
       <InputField
         label="Activation Time"
         name={`interop_config.dependency_set.${index}.activation_time`}
+        placeholder={
+          typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
+            ? placeholderRollup.interop_config.dependency_set[0].activation_time 
+            : undefined
+        }
       />
 
       <InputField
-        label="History Min Time"
+        label="History Minimum Time"
         name={`interop_config.dependency_set.${index}.history_min_time`}
+        placeholder={
+          typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
+            ? placeholderRollup.interop_config.dependency_set[0].history_min_time 
+            : undefined
+        }
       />
     </div>
   )

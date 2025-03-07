@@ -5,9 +5,9 @@ import { Input } from "@/components/ui/input";
 import { FieldPathByValue, useFormContext } from "react-hook-form";
 import { ErrorMessage } from "./ErrorMessage";
 import { RollupConfig } from "@/lib/opSchema";
-import defaultRollup from "@/const/defaultRollup";
 import get from "lodash.get";
 import { isNumberField } from "@/lib/utils";
+import placeholderRollup from "@/const/placeholderRollup";
 
 export type InputFieldProps = {
   label: string;
@@ -27,7 +27,7 @@ export const InputField: React.FC<InputFieldProps> = ({
 
   const fieldType = isNumberField(name) ? 'number' : 'text';
   const errorId = `${name}-error`;
-  const defaultPlaceholder = placeholder || get(defaultRollup, name);
+  const defaultPlaceholder = placeholder || get(placeholderRollup, name);
   const errorMessage = get(errors, name);
   return (
     <div className="space-y-1 mt-2">

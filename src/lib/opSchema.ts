@@ -9,6 +9,8 @@
  *   - settlement_rpc is always required.
  * • Participants
  *   - Defaults to one op-geth (execution layer) with one op-node (consensus layer)
+ *   - Supported EL types: op-geth, op-reth, op-erigon, op-nethermind, op-besu
+ *   - Supported CL types: op-node, hildr
  *   - Users can add more participants.
  * • Signer Configuration
  *   - Deployer private key, batcher key or signer endpoint,
@@ -16,22 +18,21 @@
  * • Admin configuration
  *   - L1 System Admin (finalSystemOwner) and L2 Proxy Admin (proxyAdminOwner)
  * • Chain configuration
- *   - L2 Chain ID, L2 block time (default 2s), withdrawal delay,
- *     Extra Withdrawal Delay After Proof Finalized (disputeGameFinalityDelaySeconds),
- *     sequencer fee recipient (all three recipient fields must be identical),
- *     and fee withdrawal network (all three fields must be identical).
+ *   - L2 Chain ID, L2 block time (default 2s), proof maturity delay,
+ *     dispute game finality delay seconds,
+ *     fee recipient and withdrawal network configuration.
  * • Gas configuration
  *   - Block gas limit, EIP-1559 elasticity, denominators, and fee scalars.
  * • Data Availability configuration
- *   - Data availability provider (Choose one):
- *       • ETH Blob + Calldata (OP_BATCHER_DATA_AVAILABILITY_TYPE=auto)
- *       • ETH Blob (OP_BATCHER_DATA_AVAILABILITY_TYPE=blob)
- *       • ETH Calldata (OP_BATCHER_DATA_AVAILABILITY_TYPE=calldata)
- *       • Custom (altda.enabled=true; may not require OP_BATCHER_DATA_AVAILABILITY_TYPE)
- *   - Batch submission frequency (user input in minutes, corresponding to OP_BATCHER_MAX_CHANNEL_DURATION in blocks)
+ *   - Data availability provider options:
+ *       • ETH Blob + Calldata (auto)
+ *       • ETH Blob (blob)
+ *       • ETH Calldata (calldata)
+ *       • Custom (custom)
+ *   - Batch submission frequency
  *   - [If Custom is selected]:
  *       • DA server endpoint
- *       • Commitment type (Select Generic and Keccak256)
+ *       • Commitment type (Generic or Keccak256)
  *         - If Generic, a DA Challenge Contract Address is required
  *       • DA Challenge Window
  *       • DA Resolve Window
@@ -41,10 +42,18 @@
  *       • Chain ID
  *       • WebSocket RPC Endpoint
  *       • Activation Time
- *       • History Min Time
+ *       • History minimum time
  */
 
 import { z, ZodError } from "zod";
+
+const addressSchema = z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
+  message: "Invalid address",
+});
+
+const urlSchema = z.string().url({
+  message: "Invalid URL",
+});
 
 /* -------------------------------------------------------------------------
    Settlement Layer Schema
@@ -53,9 +62,9 @@ import { z, ZodError } from "zod";
 const SettlementLayerSchema = z
   .object({
     selection: z.enum(["ETH Mainnet", "ETH Sepolia", "Custom"]),
-    chain_id: z.string().optional(),
-    l1_block_time: z.string().optional(),
-    settlement_rpc: z.string(),
+    chain_id: z.number().optional(),
+    l1_block_time: z.number().optional(),
+    settlement_rpc: urlSchema,
   })
   .superRefine((data, ctx) => {
     if (data.selection === "Custom") {
@@ -83,8 +92,8 @@ const SettlementLayerSchema = z
 
 /**
  * A simplified participant schema with two sections:
- * - Execution layer (default type: "op-geth")
- * - Consensus layer (default type: "op-node")
+ * - Execution layer (EL) with supported types: op-geth, op-reth, op-erigon, op-nethermind, op-besu
+ * - Consensus layer (CL) with supported types: op-node, hildr
  */
 
 export const EL_TYPES = [
@@ -118,11 +127,11 @@ const ParticipantsSchema = z.array(ParticipantSchema).min(1);
    -------------------------------------------------------------------------*/
 
 const SignerConfigSchema = z.object({
-  deployer_private_key: z.string(),
+  deployer_private_key: addressSchema,
   type: z.enum(["private_key", "signer_endpoint"]),
-  batcher_value: z.string(),
-  sequencer_value: z.string(),
-  proposer_value: z.string(),
+  batcher_value: addressSchema,
+  sequencer_value: addressSchema,
+  proposer_value: addressSchema,
 });
 
 /* -------------------------------------------------------------------------
@@ -130,8 +139,8 @@ const SignerConfigSchema = z.object({
    -------------------------------------------------------------------------*/
 
 const AdminConfigSchema = z.object({
-  final_system_owner: z.string(),
-  proxy_admin_owner: z.string(),
+  final_system_owner: addressSchema,
+  proxy_admin_owner: addressSchema,
 });
 
 /* -------------------------------------------------------------------------
@@ -140,41 +149,36 @@ const AdminConfigSchema = z.object({
 
 /**
  * Chain configuration includes L2 chain settings and fee parameters.
- * The fee recipient fields (base_fee_vault_recipient, l1_fee_vault_recipient, and sequencer_fee_vault_recipient)
- * as well as the fee withdrawal network fields (base_fee_vault_withdrawal_network,
- * l1_fee_vault_withdrawal_network, and sequencer_fee_vault_withdrawal_network) must be identical.
- * Additionally, disputeGameFinalityDelaySeconds represents the extra withdrawal delay after proof finalized.
+ * - l2_chain_id: The chain ID for the L2 network
+ * - l2_block_time: Time between L2 blocks in seconds (default: 2)
+ * - proof_maturity_delay_seconds: Delay for proof maturity
+ * - disputeGameFinalityDelaySeconds: Extra withdrawal delay after proof finalized
+ * - fee_recipient: Address to receive sequencer fees
+ * - withdrawal_network: Address for fee withdrawal network
  */
-const ChainConfigSchema = z
-  .object({
-    l2_chain_id: z.string(),
-    l2_block_time: z.string().default("2"),
-    proof_maturity_delay_seconds: z.number(),
-    disputeGameFinalityDelaySeconds: z.number(),
-    // Sequencer fee recipients
-    fee_recipient: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
-      message: "Invalid address",
-    }),
-    // Fee withdrawal networks
-    withdrawal_network: z.string().regex(/^0x[a-fA-F0-9]{40}$/, {
-      message: "Invalid address",
-    }),
-    // base_fee_vault_withdrawal_network: z.string(),
-    // l1_fee_vault_withdrawal_network: z.string(),
-    // sequencer_fee_vault_withdrawal_network: z.string(),
-  })
+
+const ChainConfigSchema = z.object({
+  l2_chain_id: z.number().min(1),
+  l2_block_time: z.number().min(1),
+  proof_maturity_delay_seconds: z.number().min(0),
+  disputeGameFinalityDelaySeconds: z.number().min(0),
+  // Sequencer fee recipient
+  fee_recipient: addressSchema,
+  // Fee withdrawal network
+  withdrawal_network: addressSchema,
+});
 
 /* -------------------------------------------------------------------------
    Gas Configuration Schema
    -------------------------------------------------------------------------*/
 
 const GasConfigSchema = z.object({
-  l2_genesis_block_gas_limit: z.number(),
-  eip1559_elasticity: z.number(),
-  eip1559_denominator: z.number(),
-  eip1559_denominator_canyon: z.number(),
-  gas_price_oracle_base_fee_scalar: z.number(),
-  gas_price_oracle_blob_base_fee_scalar: z.number(),
+  l2_genesis_block_gas_limit: z.number().min(1),
+  eip1559_elasticity: z.number().min(1),
+  eip1559_denominator: z.number().min(1),
+  eip1559_denominator_canyon: z.number().min(1),
+  gas_price_oracle_base_fee_scalar: z.number().min(1),
+  gas_price_oracle_blob_base_fee_scalar: z.number().min(0),
 });
 
 /* -------------------------------------------------------------------------
@@ -230,11 +234,11 @@ const NonCustomDataAvailabilityConfigSchema =
 const BaseCustomDataAvailabilityConfigSchema =
   BaseDataAvailabilityConfigSchema.extend({
     data_availability_provider: z.literal(DA_PROVIDER_SYSTEM_VALUES.CUSTOM),
-    da_server_endpoint: z.string(),
+    da_server_endpoint: urlSchema,
     commitment_type: z.enum(["Generic", "Keccak256"]),
-    da_challenge_contract_address: z.string(),
-    da_challenge_window: z.string(),
-    da_resolve_window: z.string(),
+    da_challenge_contract_address: addressSchema,
+    da_challenge_window: z.number().min(1),
+    da_resolve_window: z.number().min(1),
   });
 
 // Create a union from plain ZodObjects.
@@ -274,15 +278,15 @@ const DataAvailabilityConfigSchema =
  *   activation time, and history minimum time.
  */
 const InteropDependencySchema = z.object({
-  chain_id: z.string(),
-  websocket_rpc_endpoint: z.string(),
-  activation_time: z.string(),
-  history_min_time: z.string(),
+  chain_id: z.number().min(1),
+  websocket_rpc_endpoint: urlSchema,
+  activation_time: z.number().min(1),
+  history_min_time: z.number().min(0),
 });
 
 const InteropConfigurationSchema = z
   .object({
-    enable_interop: z.boolean().default(false),
+    enable_interop: z.boolean(),
     dependency_set: z.array(InteropDependencySchema).optional(),
   })
   .superRefine((data, ctx) => {
@@ -303,59 +307,42 @@ const InteropConfigurationSchema = z
    Overall Rollup Configuration Schema
    -------------------------------------------------------------------------*/
 
-// const NetworkParamsSchema = z.object({
-//   network: z.string(),
-//   network_id: z.string(),
-//   seconds_per_slot: z.number(),
-//   name: z.string(),
-//   fjord_time_offset: z.number().optional(),
-//   granite_time_offset: z.number().optional(),
-//   fund_dev_accounts: z.boolean(),
-// });
-
-// const ChallengerParamsSchema = z.object({
-//   enabled: z.boolean(),
-//   extra_params: z.array(z.string()).optional(),
-// });
-
-// const MevParamsSchema = z.object({
-//   builder_host: z.string(),
-//   builder_port: z.string(),
-// });
-
-// const ChainSchema = z.object({
-//   participants: ParticipantsSchema,
-//   network_params: NetworkParamsSchema,
-//   challenger_params: ChallengerParamsSchema,
-//   mev_params: MevParamsSchema,
-//   additional_services: z.array(z.string()),
-// });
-
-// const OptimismPackageSchema = z.object({
-//   chains: z.array(ChainSchema).min(1).max(1),
-// });
-
-const ExternalL1NetworkParamsSchema = z.object({
-  rpc_kind: z.string(),
-  el_rpc_url: z.string(),
-  el_ws_url: z.string(),
-  cl_rpc_url: z.string(),
-  network_id: z.string(),
-  priv_key: z.string(),
-});
-
-export const RollupConfigSchema = z.object({
-  rollup_name: z.string(),
-  external_l1_network_params: ExternalL1NetworkParamsSchema,
-  settlement_layer: SettlementLayerSchema,
-  participants: ParticipantsSchema,
-  signer_config: SignerConfigSchema,
-  admin_config: AdminConfigSchema,
-  chain_config: ChainConfigSchema,
-  gas_config: GasConfigSchema,
-  data_availability_config: DataAvailabilityConfigSchema,
-  interop_config: InteropConfigurationSchema,
-});
+export const RollupConfigSchema = z
+  .object({
+    rollup_name: z.string().min(1),
+    settlement_layer: SettlementLayerSchema,
+    participants: ParticipantsSchema,
+    signer_config: SignerConfigSchema,
+    admin_config: AdminConfigSchema,
+    chain_config: ChainConfigSchema,
+    gas_config: GasConfigSchema,
+    data_availability_config: DataAvailabilityConfigSchema,
+    interop_config: InteropConfigurationSchema,
+  })
+  .superRefine((data, ctx) => {
+    const { l1_block_time } = data.settlement_layer;
+    const { l2_block_time } = data.chain_config;
+    const { selection } = data.settlement_layer;
+    console.log("l1_block_time", l1_block_time);
+    console.log("l2_block_time", l2_block_time);
+    console.log("selection", selection);
+    // TODO: This doesnt work for any settlemnt layer, dont know why`
+    if (selection === "Custom") {
+      if (!l1_block_time || l2_block_time > l1_block_time) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `L2 block time cannot be greater than L1 block time (${l1_block_time}s)`,
+          path: ["chain_config", "l2_block_time"],
+        });
+      }
+    } else if (l2_block_time >= 12) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `L2 block time cannot be greater than 14s for ${selection}`,
+        path: ["chain_config", "l2_block_time"],
+      });
+    }
+  });
 
 /* -------------------------------------------------------------------------
    Inferred TypeScript Types
@@ -363,7 +350,6 @@ export const RollupConfigSchema = z.object({
 
 export type SettlementLayer = z.infer<typeof SettlementLayerSchema>;
 export type Participant = z.infer<typeof ParticipantSchema>;
-// export type SignerConfig = z.infer<typeof SignerConfigSchema>;
 export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 export type ChainConfig = z.infer<typeof ChainConfigSchema>;
 export type GasConfig = z.infer<typeof GasConfigSchema>;
@@ -372,19 +358,6 @@ export type DataAvailabilityConfig = z.infer<
 >;
 export type InteropConfig = z.infer<typeof InteropConfigurationSchema>;
 export type RollupConfig = z.infer<typeof RollupConfigSchema>;
-
-// export type OptimismPackage = z.infer<typeof OptimismPackageSchema>;
-export type ExternalL1NetworkParams = z.infer<
-  typeof ExternalL1NetworkParamsSchema
->;
-// export type Chain = z.infer<typeof ChainSchema>;
-// export type NetworkParams = z.infer<typeof NetworkParamsSchema>;
-// export type BatcherParams = z.infer<typeof BatcherParamsSchema>;
-// export type ChallengerParams = z.infer<typeof ChallengerParamsSchema>;
-// export type MevParams = z.infer<typeof MevParamsSchema>;
-// export type OpContractDeployerParams = z.infer<
-//   typeof OpContractDeployerParamsSchema
-// >;
 
 /* -------------------------------------------------------------------------
    Utility Functions

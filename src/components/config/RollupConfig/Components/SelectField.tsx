@@ -48,7 +48,7 @@ export const SelectField: React.FC<SelectFieldProps> = ({
           <Select
             onValueChange={field.onChange}
             value={field.value as string}
-            defaultValue={field.value as string}
+            defaultValue={field.value as string || options[0].value}
             aria-describedby={errorMessage ? errorId : undefined}
             aria-invalid={!!errorMessage}
           >
