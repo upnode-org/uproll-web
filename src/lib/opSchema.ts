@@ -142,17 +142,20 @@ const PrivateKeySignerSchema = z.object({
   batcher_private_key: addressSchema,
   sequencer_private_key: addressSchema,
   proposer_private_key: addressSchema,
+  challenger_private_key: addressSchema,
 });
 
 const EndpointSignerSchema = z.object({
   type: z.literal("signer_endpoint"),
   deployer_private_key: addressSchema,
-  batcher_endpoint: urlSchema,
+  batcher_endpoint: addressSchema,
   batcher_address: addressSchema,
   sequencer_endpoint: urlSchema,
   sequencer_address: addressSchema,
   proposer_endpoint: urlSchema,
   proposer_address: addressSchema,
+  challenger_endpoint: urlSchema,
+  challenger_address: addressSchema,
 });
 
 const SignerConfigSchema = z.discriminatedUnion("type", [

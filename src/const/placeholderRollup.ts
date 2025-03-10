@@ -29,6 +29,7 @@ const placeholderRollup: ToString<RollupConfig> = {
     batcher_private_key: "0x...",
     sequencer_private_key: "0x...",
     proposer_private_key: "0x...",
+    challenger_private_key: "0x...",
   },
   admin_config: {
     final_system_owner: "0x...",

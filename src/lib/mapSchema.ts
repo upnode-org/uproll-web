@@ -58,6 +58,14 @@ const transformConfig = (config: RollupConfig) => {
                     signer_address: config.signer_config.proposer_address,
                 }),
             },
+            challenger_params: {
+                ...(config.signer_config.type === "private_key" ? {
+                    private_key: config.signer_config.challenger_private_key,
+                } : {
+                    signer_endpoint: config.signer_config.challenger_endpoint,
+                    signer_address: config.signer_config.challenger_address,
+                }),
+            },
 
           }
         ],

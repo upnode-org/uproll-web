@@ -19,6 +19,7 @@ const defaultRollup: RollupConfig = {
     batcher_private_key: "",
     sequencer_private_key: "",
     proposer_private_key: "",
+    challenger_private_key: "",
   },
   admin_config: {
     final_system_owner: "",

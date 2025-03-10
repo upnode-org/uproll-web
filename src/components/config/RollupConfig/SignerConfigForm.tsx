@@ -43,6 +43,10 @@ export const SignerConfigForm: React.FC = () => {
             label="Proposer Private Key"
             name="signer_config.proposer_private_key"
           />
+          <InputField
+            label="Challenger Private Key"
+            name="signer_config.challenger_private_key"
+          />
         </TabsContent>
         {/* Signer Endpoint Tab */}
         <TabsContent value="signer_endpoint">
@@ -75,6 +79,14 @@ export const SignerConfigForm: React.FC = () => {
             label="Proposer Address"
             name="signer_config.proposer_address"
             placeholder="0x..."
+          />
+          <InputField
+            label="Challenger Signer Endpoint"
+            name="signer_config.challenger_endpoint"
+          />
+          <InputField
+            label="Challenger Address"
+            name="signer_config.challenger_address"
           />
         </TabsContent>
       </Tabs>
