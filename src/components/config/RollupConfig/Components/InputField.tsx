@@ -4,9 +4,9 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { FieldPathByValue, useFormContext } from "react-hook-form";
 import { ErrorMessage } from "./ErrorMessage";
-import { RollupConfig } from "@/lib/opSchema";
+import { RollupConfig, RollupConfigSchema } from "@/lib/opSchema";
 import get from "lodash.get";
-import { isNumberField } from "@/lib/utils";
+import { getInputTypeFromPath } from "@/lib/utils";
 import placeholderRollup from "@/const/placeholderRollup";
 
 export type InputFieldProps = {
@@ -25,7 +25,8 @@ export const InputField: React.FC<InputFieldProps> = ({
     throw new Error("Name is not defined");
   }
 
-  const fieldType = isNumberField(name) ? 'number' : 'text';
+  const fieldType = getInputTypeFromPath(RollupConfigSchema, name)
+  console.log(fieldType);
   const errorId = `${name}-error`;
   const defaultPlaceholder = placeholder || get(placeholderRollup, name);
   const errorMessage = get(errors, name);

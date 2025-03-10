@@ -18,37 +18,82 @@ export function isPromise<T>(value: T | Promise<T>): value is Promise<T> {
   );
 }
 
-// Utility function to determine if a field is a number based on its Zod schema definition
-export function isNumberField(path: string): boolean {
-  try {
-    // Transform the path for schema traversal (account for Zod's shape property)
-    const schemaPath = path.split('.').map(segment => `shape.${segment}`).join('.');
-    
-    // Get schema definition directly using lodash.get
-    const currentSchema = get(RollupConfigSchema, schemaPath);
-    
-    // Check if the schema at this path is a number type
-    if (currentSchema) {
-      // Check for different Zod number types
-      if (currentSchema instanceof z.ZodNumber) return true;
-      
-      // For optional fields, check the unwrapped type
-      if (currentSchema instanceof z.ZodOptional && 
-          currentSchema._def.innerType instanceof z.ZodNumber) {
-        return true;
-      }
-      
-      // Check for default values that are numbers
-      if (currentSchema._def && currentSchema._def.defaultValue !== undefined) {
-        return typeof currentSchema._def.defaultValue === 'number';
-      }
-    }
-    
-    // Check the default value in our defaultRollup as a fallback
-    const defaultValue = get(defaultRollup, path);
-    return typeof defaultValue === 'number';
-  } catch (error) {
-    console.error(`Error determining field type for ${path}:`, error);
-    return false;
+/**
+ * Recursively traverses a Zod schema based on a dot-separated path.
+ *
+ * This version unwraps:
+ * - Objects (by looking into their shape)
+ * - Arrays (by using the element schema)
+ * - Optional/nullable types
+ * - Unions (by iterating over the union options and returning the first successful match)
+ *
+ * @param schema - The current Zod schema.
+ * @param path - An array of keys representing the path.
+ * @returns The Zod schema at the given path or undefined if not found.
+ */
+function getSchemaAtPath(
+  schema: z.ZodTypeAny,
+  path: string[]
+): z.ZodTypeAny | undefined {
+  // Unwrap ZodEffects first.
+  if (schema instanceof z.ZodEffects) {
+    return getSchemaAtPath(schema._def.schema, path);
   }
-};
+
+  // Handle discriminated unions.
+  if (schema instanceof z.ZodDiscriminatedUnion) {
+    for (const option of schema.options.values()) {
+      const result = getSchemaAtPath(option, path);
+      if (result !== undefined) return result;
+    }
+    return undefined;
+  }
+
+  // Handle regular unions.
+  if (schema instanceof z.ZodUnion) {
+    for (const option of schema._def.options) {
+      const result = getSchemaAtPath(option, path);
+      if (result !== undefined) return result;
+    }
+    return undefined;
+  }
+
+  if (path.length === 0) return schema;
+  const [key, ...rest] = path;
+
+  // Handle objects: traverse into the object's shape.
+  if (schema instanceof z.ZodObject) {
+    const shape = schema.shape;
+    if (shape[key]) {
+      return getSchemaAtPath(shape[key], rest);
+    }
+  }
+
+  // Handle arrays: continue with the element schema.
+  if (schema instanceof z.ZodArray) {
+    return getSchemaAtPath(schema.element, path);
+  }
+
+  // Unwrap optional or nullable types.
+  if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
+    return getSchemaAtPath(schema._def.innerType, path);
+  }
+
+  // If no matching case was found, return undefined.
+  return undefined;
+}
+
+/**
+ * Determines the input type ("text" for strings, "number" for numbers)
+ * for a field at a given dot-separated path within a Zod schema.
+ */
+export function getInputTypeFromPath(
+  schema: z.ZodTypeAny,
+  path: string
+): 'text' | 'number' | undefined {
+  const targetSchema = getSchemaAtPath(schema, path.split('.'));
+  if (!targetSchema) return undefined;
+  if (targetSchema instanceof z.ZodString) return 'text';
+  if (targetSchema instanceof z.ZodNumber) return 'number';
+  return undefined;
+}
