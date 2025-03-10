@@ -91,14 +91,17 @@ export const SettlementLayerForm: React.FC = () => {
           <InputField
             label="Execution Layer RPC"
             name="settlement_layer.execution_rpc"
+            type="text"
           />
           <InputField
             label="Execution Layer WebSocket"
             name="settlement_layer.ws_rpc_url"
+            type="text"
           />
           <InputField
             label="Consensus Layer RPC"
             name="settlement_layer.consensus_rpc"
+            type="text"
           />
         </>
       )}
