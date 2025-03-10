@@ -59,6 +59,8 @@ const placeholderRollup: ToString<RollupConfig> = {
     da_challenge_contract_address: "0x...",
     da_challenge_window: "0",
     da_resolve_window: "0",
+    da_bond_size: "0",
+    da_bond_duration: "0",
   },
   interop_config: {
     enable_interop: "true",
