@@ -26,7 +26,6 @@ export const InputField: React.FC<InputFieldProps> = ({
   }
 
   const fieldType = getInputTypeFromPath(RollupConfigSchema, name)
-  console.log(fieldType);
   const errorId = `${name}-error`;
   const defaultPlaceholder = placeholder || get(placeholderRollup, name);
   const errorMessage = get(errors, name);

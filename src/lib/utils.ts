@@ -95,5 +95,7 @@ export function getInputTypeFromPath(
   if (!targetSchema) return undefined;
   if (targetSchema instanceof z.ZodString) return 'text';
   if (targetSchema instanceof z.ZodNumber) return 'number';
-  return undefined;
+  // Hack to return number for all fields that are not either,
+  // because returned number is better than undefined types in the form
+  return "number";
 }
