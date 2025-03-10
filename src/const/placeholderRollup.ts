@@ -47,9 +47,9 @@ const placeholderRollup: ToString<RollupConfig> = {
     l2_genesis_block_gas_limit: ">0",
     eip1559_elasticity: ">0",
     eip1559_denominator: ">0",
-    eip1559_denominator_canyon: ">0",
     gas_price_oracle_base_fee_scalar: ">0",
     gas_price_oracle_blob_base_fee_scalar: ">0",
+    extra_withdrawal_delay: ">0",
   },
   data_availability_config: {
     data_availability_provider: "custom",

@@ -52,9 +52,9 @@ const defaultRollup: RequiredByType<RollupConfig, number> = {
     l2_genesis_block_gas_limit: NaN,
     eip1559_elasticity: NaN,
     eip1559_denominator: NaN,
-    eip1559_denominator_canyon: 250,
     gas_price_oracle_base_fee_scalar: NaN,
     gas_price_oracle_blob_base_fee_scalar: NaN,
+    extra_withdrawal_delay: NaN,
   },
   data_availability_config: {
     data_availability_provider: "auto",

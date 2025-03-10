@@ -27,9 +27,10 @@ const transformConfig = (config: RollupConfig) => {
             // Gas configuration section
             gas_config: {
               gas_limit: config.gas_config.l2_genesis_block_gas_limit,
+              eip1559Elasticity: config.gas_config.eip1559_elasticity,
+              denominator: config.gas_config.eip1559_denominator,
               gas_price_oracle_base_fee_scalar: config.gas_config.gas_price_oracle_base_fee_scalar,
               gas_price_oracle_blob_base_fee_scalar: config.gas_config.gas_price_oracle_blob_base_fee_scalar,
-              denominator: config.gas_config.eip1559_denominator,
               dispute_game_finality_delay_seconds: config.chain_config.disputeGameFinalityDelaySeconds,
             },
 

@@ -205,9 +205,9 @@ const GasConfigSchema = z.object({
   l2_genesis_block_gas_limit: z.number().min(1),
   eip1559_elasticity: z.number().min(1),
   eip1559_denominator: z.number().min(1),
-  eip1559_denominator_canyon: z.number().min(1),
   gas_price_oracle_base_fee_scalar: z.number().min(1),
   gas_price_oracle_blob_base_fee_scalar: z.number().min(0),
+  extra_withdrawal_delay: z.number().min(0),
 });
 
 /* -------------------------------------------------------------------------
