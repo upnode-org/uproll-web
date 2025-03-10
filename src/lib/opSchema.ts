@@ -148,7 +148,7 @@ const PrivateKeySignerSchema = z.object({
 const EndpointSignerSchema = z.object({
   type: z.literal("signer_endpoint"),
   deployer_private_key: addressSchema,
-  batcher_endpoint: addressSchema,
+  batcher_endpoint: urlSchema,
   batcher_address: addressSchema,
   sequencer_endpoint: urlSchema,
   sequencer_address: addressSchema,
