@@ -21,7 +21,7 @@ export const SignerConfigForm: React.FC = () => {
       <Tabs defaultValue={signerType} onValueChange={(value) => {
         setValue("signer_config.type", value as "private_key" | "signer_endpoint");
       }}>
-        <TabsList className="my-4 w-full">
+        <TabsList className="mt-4 w-full">
           <TabsTrigger className="w-full" value="private_key">
             Private Key
           </TabsTrigger>
@@ -30,19 +30,20 @@ export const SignerConfigForm: React.FC = () => {
           </TabsTrigger>
         </TabsList>
         <TabsContent value="private_key">
-        <InputField
-        label="Batcher Private Key"
-        name="signer_config.batcher_value"
-      />
-      <InputField
-        label="Sequencer Private Key"
-        name="signer_config.sequencer_value"
-      />
-      <InputField
-        label="Proposer Private Key"
-        name="signer_config.proposer_value"
-      />
+          <InputField
+            label="Batcher Private Key"
+            name="signer_config.batcher_value"
+          />
+          <InputField
+            label="Sequencer Private Key"
+            name="signer_config.sequencer_value"
+          />
+          <InputField
+            label="Proposer Private Key"
+            name="signer_config.proposer_value"
+          />
         </TabsContent>
+        {/* TODO: Add address for each signer endpoint */}
         <TabsContent value="signer_endpoint">
           <InputField
             label="Batcher Signer Endpoint"

@@ -1,17 +1,24 @@
 "use client";
 import React from "react";
-import { useWatch, useFormContext } from "react-hook-form";
+import { useWatch, useFormContext, Controller } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { SquareButtonSelector } from "./Components/SquareButtonSelector";
 import { InputField } from "./Components/InputField";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export const SettlementLayerForm: React.FC = () => {
   const { control, formState: { errors } } = useFormContext<RollupConfig>();
 
-
   const selectedNetwork = useWatch({
     control,
     name: "settlement_layer.selection",
+  });
+
+  const useSameRpc = useWatch({
+    control,
+    name: "settlement_layer.use_same_rpc",
+    defaultValue: true,
   });
 
   return (
@@ -55,10 +62,45 @@ export const SettlementLayerForm: React.FC = () => {
           />
         </>
       )}
-      <InputField
-        label="Settlement RPC"
-        name="settlement_layer.settlement_rpc"
-      />
+      
+      <div className="flex items-center space-x-2 mt-6 mb-4">
+        <Controller
+          control={control}
+          name="settlement_layer.use_same_rpc"
+          defaultValue={true}
+          render={({ field }) => (
+            <Checkbox
+              id="use-same-rpc"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
+          )}
+        />
+        <Label htmlFor="use-same-rpc" className="text-sm font-medium">
+          Use same RPC for both execution and consensus layers
+        </Label>
+      </div>
+
+      {useSameRpc ? (
+        <InputField
+          label="Settlement RPC"
+          name="settlement_layer.execution_rpc"
+          placeholder="https://eth-mainnet.g.alchemy.com/v2/your-api-key"
+        />
+      ) : (
+        <>
+          <InputField
+            label="Execution Layer RPC"
+            name="settlement_layer.execution_rpc"
+            placeholder="https://eth-mainnet.g.alchemy.com/v2/your-api-key"
+          />
+          <InputField
+            label="Consensus Layer RPC"
+            name="settlement_layer.consensus_rpc"
+            placeholder="https://eth-mainnet.beaconcha.in"
+          />
+        </>
+      )}
     </fieldset>
   );
 };

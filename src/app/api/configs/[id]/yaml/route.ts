@@ -124,10 +124,10 @@ const transformConfig = (config: RollupConfig) => {
     
     // External L1 Network parameters
     external_l1_network_params: {
-      kind: getRPCKind(config.settlement_layer.settlement_rpc),
-      el_rpc_url: config.settlement_layer.settlement_rpc,
-      ws_rpc_url: config.settlement_layer.settlement_rpc,
-      cl_rpc_url: config.settlement_layer.settlement_rpc,
+      kind: getRPCKind(config.settlement_layer.execution_rpc),
+      el_rpc_url: config.settlement_layer.execution_rpc,
+      ws_rpc_url: config.settlement_layer.execution_rpc.includes("ws") ? config.settlement_layer.execution_rpc : undefined,
+      cl_rpc_url: config.settlement_layer.use_same_rpc ? config.settlement_layer.execution_rpc : config.settlement_layer.consensus_rpc,
       network_id: getL1ChainId(config),
       seconds_per_slot: getL1BlockTime(config),
     },

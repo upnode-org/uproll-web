@@ -64,7 +64,9 @@ const SettlementLayerSchema = z
     selection: z.enum(["ETH Mainnet", "ETH Sepolia", "Custom"]),
     chain_id: z.number().optional(),
     l1_block_time: z.number().optional(),
-    settlement_rpc: urlSchema,
+    execution_rpc: urlSchema,
+    use_same_rpc: z.boolean().default(true),
+    consensus_rpc: urlSchema.optional(),
   })
   .superRefine((data, ctx) => {
     if (data.selection === "Custom") {
@@ -83,6 +85,13 @@ const SettlementLayerSchema = z
           path: ["l1_block_time"],
         });
       }
+    }
+    if (!data.use_same_rpc && !data.consensus_rpc) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Consensus Layer RPC is required when using different RPCs",
+        path: ["consensus_rpc"],
+      });
     }
   });
 
