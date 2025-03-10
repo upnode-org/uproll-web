@@ -14,7 +14,13 @@ const transformConfig = (config: RollupConfig) => {
               sequencer_fee_withdrawal: config.chain_config.withdrawal_network,
               withdrawal_delay: config.chain_config.proof_maturity_delay_seconds,
             },
-            
+
+            // Admin parameters
+            admin: {
+                l1_proxy_admin: config.admin_config.proxy_admin_owner,
+                l2_proxy_admin: config.admin_config.proxy_admin_owner,
+            },
+
             // Participants section
             participants: config.participants,
             
