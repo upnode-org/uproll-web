@@ -17,7 +17,7 @@ export const InteropConfigForm: React.FC = () => {
     name: "interop_config.enable_interop",
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove } = useFieldArray<RollupConfig, "interop_config.dependency_set">({
     control,
     name: "interop_config.dependency_set",
   });
@@ -46,10 +46,10 @@ export const InteropConfigForm: React.FC = () => {
               type="button"
               onClick={() =>
                 append({
-                  chain_id: 0,
+                  chain_id: NaN,
                   websocket_rpc_endpoint: "",
-                  activation_time: 0,
-                  history_min_time: 0,
+                  activation_time: NaN,
+                  history_min_time: NaN,
                 })
               }
               className="p-0.5 rounded-full"
@@ -106,6 +106,7 @@ const InteropConfig: React.FC<InteropConfigFormProps> = ({
       <InputField
         label="Chain ID"
         name={`interop_config.dependency_set.${index}.chain_id`}
+        type="number"
         placeholder={
           typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
             ? placeholderRollup.interop_config.dependency_set[0].chain_id 
@@ -126,6 +127,7 @@ const InteropConfig: React.FC<InteropConfigFormProps> = ({
       <InputField
         label="Activation Time"
         name={`interop_config.dependency_set.${index}.activation_time`}
+        type="number"
         placeholder={
           typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
             ? placeholderRollup.interop_config.dependency_set[0].activation_time 
@@ -136,6 +138,7 @@ const InteropConfig: React.FC<InteropConfigFormProps> = ({
       <InputField
         label="History Minimum Time"
         name={`interop_config.dependency_set.${index}.history_min_time`}
+        type="number"
         placeholder={
           typeof placeholderRollup.interop_config.dependency_set?.[0] === 'object' 
             ? placeholderRollup.interop_config.dependency_set[0].history_min_time 

@@ -13,12 +13,14 @@ export type InputFieldProps = {
   label: string;
   name: FieldPathByValue<RollupConfig, string | number | undefined>;
   placeholder?: string;
+  type?: "number" | "text";
 };
 
 export const InputField: React.FC<InputFieldProps> = ({
   label,
   placeholder,
-  name
+  name,
+  type
 }) => {
   const { register, formState: { errors } } = useFormContext<RollupConfig>();
   if(name === undefined) {
@@ -39,10 +41,10 @@ export const InputField: React.FC<InputFieldProps> = ({
       </Label>
       <Input
         id={name as string}
-        type={fieldType}
+        type={type || fieldType}
         placeholder={defaultPlaceholder as string}
         {...register(name, {
-          valueAsNumber: fieldType === "number",
+          valueAsNumber: type === "number" ? true : fieldType === "number",
         })}
         className={`bg-white ${errorMessage ? "border-red-500" : ""}`}
         aria-describedby={errorMessage ? errorId : undefined}
