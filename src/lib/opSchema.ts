@@ -268,6 +268,8 @@ const BaseCustomDataAvailabilityConfigSchema =
     da_challenge_contract_address: addressSchema,
     da_challenge_window: z.number().min(1),
     da_resolve_window: z.number().min(1),
+    da_bond_size: z.number().min(0),
+    da_bond_duration: z.number().min(0),
   });
 
 // Create a union from plain ZodObjects.

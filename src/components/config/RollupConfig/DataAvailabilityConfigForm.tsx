@@ -73,6 +73,16 @@ export const DataAvailabilityConfigForm: React.FC = () => {
             label="DA Resolve Window"
             name="data_availability_config.da_resolve_window"
           />
+
+          <InputField
+            label="DA Bond Size"
+            name="data_availability_config.da_bond_size"
+          />
+
+          <InputField
+            label="DA Bond Duration"
+            name="data_availability_config.da_bond_duration"
+          />
         </>
       )}
     </fieldset>
