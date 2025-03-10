@@ -67,6 +67,7 @@ const SettlementLayerSchema = z
     execution_rpc: urlSchema,
     use_same_rpc: z.boolean().default(true),
     consensus_rpc: urlSchema.optional(),
+    ws_rpc_url: urlSchema.optional(),
   })
   .superRefine((data, ctx) => {
     if (data.selection === "Custom") {
@@ -135,13 +136,29 @@ const ParticipantsSchema = z.array(ParticipantSchema).min(1);
    Signer Configuration Schema
    -------------------------------------------------------------------------*/
 
-const SignerConfigSchema = z.object({
+const PrivateKeySignerSchema = z.object({
+  type: z.literal("private_key"),
   deployer_private_key: addressSchema,
-  type: z.enum(["private_key", "signer_endpoint"]),
-  batcher_value: addressSchema,
-  sequencer_value: addressSchema,
-  proposer_value: addressSchema,
+  batcher_private_key: addressSchema,
+  sequencer_private_key: addressSchema,
+  proposer_private_key: addressSchema,
 });
+
+const EndpointSignerSchema = z.object({
+  type: z.literal("signer_endpoint"),
+  deployer_private_key: addressSchema,
+  batcher_endpoint: urlSchema,
+  batcher_address: addressSchema,
+  sequencer_endpoint: urlSchema,
+  sequencer_address: addressSchema,
+  proposer_endpoint: urlSchema,
+  proposer_address: addressSchema,
+});
+
+const SignerConfigSchema = z.discriminatedUnion("type", [
+  PrivateKeySignerSchema,
+  EndpointSignerSchema,
+]);
 
 /* -------------------------------------------------------------------------
    Admin Configuration Schema

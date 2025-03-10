@@ -4,7 +4,8 @@ const defaultRollup: RollupConfig = {
   rollup_name: "Default Configuration",
   settlement_layer: {
     selection: "ETH Mainnet",
-    settlement_rpc: "",
+    execution_rpc: "",
+    use_same_rpc: true,
   },
   participants: [
     {
@@ -15,9 +16,9 @@ const defaultRollup: RollupConfig = {
   signer_config: {
     deployer_private_key: "",
     type: "private_key",
-    batcher_value: "",
-    sequencer_value: "",
-    proposer_value: "",
+    batcher_private_key: "",
+    sequencer_private_key: "",
+    proposer_private_key: "",
   },
   admin_config: {
     final_system_owner: "",

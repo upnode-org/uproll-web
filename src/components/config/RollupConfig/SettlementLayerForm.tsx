@@ -62,7 +62,7 @@ export const SettlementLayerForm: React.FC = () => {
           />
         </>
       )}
-      
+
       <div className="flex items-center space-x-2 mt-6 mb-4">
         <Controller
           control={control}
@@ -85,19 +85,20 @@ export const SettlementLayerForm: React.FC = () => {
         <InputField
           label="Settlement RPC"
           name="settlement_layer.execution_rpc"
-          placeholder="https://eth-mainnet.g.alchemy.com/v2/your-api-key"
         />
       ) : (
         <>
           <InputField
             label="Execution Layer RPC"
             name="settlement_layer.execution_rpc"
-            placeholder="https://eth-mainnet.g.alchemy.com/v2/your-api-key"
+          />
+          <InputField
+            label="Execution Layer WebSocket"
+            name="settlement_layer.ws_rpc_url"
           />
           <InputField
             label="Consensus Layer RPC"
             name="settlement_layer.consensus_rpc"
-            placeholder="https://eth-mainnet.beaconcha.in"
           />
         </>
       )}

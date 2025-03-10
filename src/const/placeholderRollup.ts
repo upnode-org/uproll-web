@@ -10,9 +10,12 @@ const placeholderRollup: ToString<RollupConfig> = {
   rollup_name: "Configuration Name",
   settlement_layer: {
     selection: "Custom",
-    settlement_rpc: "https://eth-mainnet.rpc.com/your-api-key",
+    use_same_rpc: "true",
     chain_id: "1",
     l1_block_time: "12",
+    ws_rpc_url: "wss://eth-mainnet.rpc.com/your-api-key",
+    execution_rpc: "https://eth-mainnet.rpc.com/your-api-key",
+    consensus_rpc: "https://eth-mainnet.rpc.com/your-api-key",
   },
   participants: [
     {
@@ -23,9 +26,9 @@ const placeholderRollup: ToString<RollupConfig> = {
   signer_config: {
     deployer_private_key: "0x...",
     type: "private_key",
-    batcher_value: "0x...",
-    sequencer_value: "0x...",
-    proposer_value: "0x...",
+    batcher_private_key: "0x...",
+    sequencer_private_key: "0x...",
+    proposer_private_key: "0x...",
   },
   admin_config: {
     final_system_owner: "0x...",
