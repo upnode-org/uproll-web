@@ -83,10 +83,12 @@ export const SignerConfigForm: React.FC = () => {
           <InputField
             label="Challenger Signer Endpoint"
             name="signer_config.challenger_endpoint"
+            placeholder="http://127.0.0.1:4000/key/..."
           />
           <InputField
             label="Challenger Address"
             name="signer_config.challenger_address"
+            placeholder="0x..."
           />
         </TabsContent>
       </Tabs>
