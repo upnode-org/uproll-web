@@ -2,7 +2,7 @@ import { RollupConfig } from "@/lib/opSchema";
 
 // Numbers need to be atleast NaN to work with input fields
 const defaultRollup: RollupConfig = {
-  rollup_name: "Default Configuration",
+  rollup_name: "Unnamed Rollup",
   settlement_layer: {
     selection: "ETH Mainnet",
     execution_rpc: "",
