@@ -1,11 +1,26 @@
 import { RollupConfig } from "@/lib/opSchema";
 
-const defaultRollup: RollupConfig = {
+/**
+ * Utility type that makes all properties of type T required when they match the specified type U.
+ * For numeric fields, this ensures they have at least a value of NaN to make sure input fields work with empty numbers.
+ */
+type RequiredByType<T, U> = {
+  [K in keyof T]: T[K] extends U
+    ? T[K]
+    : T[K] extends object
+    ? RequiredByType<T[K], U>
+    : T[K];
+};
+
+// Numbers need to be atleast NaN to work with input fields
+const defaultRollup: RequiredByType<RollupConfig, number> = {
   rollup_name: "Default Configuration",
   settlement_layer: {
     selection: "ETH Mainnet",
     execution_rpc: "",
     use_same_rpc: true,
+    chain_id: NaN,
+    l1_block_time: NaN,
   },
   participants: [
     {
