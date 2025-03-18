@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useWatch, useFieldArray, useFormContext } from "react-hook-form";
+import { useWatch, useFieldArray, useFormContext, get } from "react-hook-form";
 import { RollupConfig } from "@/lib/opSchema";
 import { InputField } from "./Components/InputField";
 import { Button } from "@/components/ui/button";
@@ -8,19 +8,25 @@ import { Plus, Trash2 } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import placeholderRollup from "@/const/placeholderRollup";
+import { ErrorMessage } from "./Components/ErrorMessage";
 
 export const InteropConfigForm: React.FC = () => {
-  const { register, setValue, control } = useFormContext<RollupConfig>();
+  const { register, setValue, control, formState: { errors } } = useFormContext<RollupConfig>();
 
   const enableInterop = useWatch({
     control,
     name: "interop_config.enable_interop",
   });
 
+
+
   const { fields, append, remove } = useFieldArray<RollupConfig, "interop_config.dependency_set">({
     control,
     name: "interop_config.dependency_set",
   });
+
+  const errorMessage = get(errors, "interop_config.dependency_set");
+
 
   return (
     <fieldset className="border border-gray-300 p-4 mb-6 rounded-md">
@@ -58,10 +64,13 @@ export const InteropConfigForm: React.FC = () => {
               <Plus className="h-4 w-4" />
             </Button>
           </div>
+          {errorMessage && (
+            <ErrorMessage id="dependency-set-error" error={errorMessage.message} />
+          )}
 
           {fields.map((field, index) => (
             <React.Fragment key={field.id}>
-              <InteropConfig index={index} remove={remove} />
+              <DependencySet index={index} remove={remove} />
               {index < fields.length - 1 && (
                 <div className="border-t border-gray-300 my-4"></div>
               )}
@@ -79,13 +88,13 @@ export const InteropConfigForm: React.FC = () => {
   );
 };
 
-type InteropConfigFormProps = {
+type DependencySetFormProps = {
   index: number;
   remove: (index: number) => void;
 };
 
 
-const InteropConfig: React.FC<InteropConfigFormProps> = ({
+const DependencySet: React.FC<DependencySetFormProps> = ({
   index,
   remove,
 }) => {
