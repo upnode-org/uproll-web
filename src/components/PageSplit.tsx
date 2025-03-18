@@ -11,7 +11,7 @@ export default function PageSplit({
 
 }) {
   return (
-    <section className={`flex flex-row size-full h-screen`}>
+    <section className={`flex flex-row size-full h-screen max-h-screen overflow-hidden`}>
       {backgroundElement}
       <div className="flex flex-row size-full h-screen">
         <aside className="pt-24 w-full hidden md:block h-full">
