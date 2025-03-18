@@ -1,5 +1,5 @@
 
-import { AuthForm } from "@/components/auth/auth-form";
+import { AuthForm } from "@/components/Auth";
 
 
 export default function SignInPage() {
