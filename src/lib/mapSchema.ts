@@ -187,7 +187,7 @@ function getL1BlockTime(config: RollupConfig): number | undefined {
 
 // Define an interface for dependency values
 interface DependencyValue {
-  chainIndex: number;
+  chainId: string;
   activationTime: number;
   historyMinTime: number;
 }
@@ -196,12 +196,12 @@ interface DependencyValue {
 //  Id's are in quotes whereas times are numbers. Also, values are camelcase instead of separated by _
 function formatDependencySet(
   config: RollupConfig
-): Record<string, { chainId: string; activationTime: number; historyMinTime: number }> {
+): Record<string, DependencyValue> {
   if (!config.interop_config.dependency_set) {
     return {};
   }
 
-  const dependencies: Record<string, { chainId: string; activationTime: number; historyMinTime: number }> = {};
+  const dependencies: Record<string, DependencyValue> = {};
 
   config.interop_config.dependency_set.forEach((dep) => {
     const chainId = dep.chain_id.toString();

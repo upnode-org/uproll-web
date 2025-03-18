@@ -44,7 +44,7 @@ export const DataAvailabilityConfigForm: React.FC = () => {
       {dataAvailabilityProvider === DA_PROVIDER_SYSTEM_VALUES.CUSTOM && (
         <>
           <InputField
-            label="DA Server Endpoint"
+            label="Server Endpoint"
             name="data_availability_config.da_server_endpoint"
           />
 
@@ -59,29 +59,35 @@ export const DataAvailabilityConfigForm: React.FC = () => {
 
           {commitmentType === "Generic" && (
             <InputField
-              label="DA Challenge Contract Address"
+              label="Challenge Contract Address"
               name="data_availability_config.da_challenge_contract_address"
+              type="text"
             />
           )}
 
           <InputField
-            label="DA Challenge Window"
+            label="Challenge Window"
             name="data_availability_config.da_challenge_window"
           />
 
           <InputField
-            label="DA Resolve Window"
+            label="Resolve Window"
             name="data_availability_config.da_resolve_window"
           />
 
           <InputField
-            label="DA Bond Size"
+            label="Bond Size"
             name="data_availability_config.da_bond_size"
           />
 
           <InputField
-            label="DA Bond Duration"
+            label="Bond Duration"
             name="data_availability_config.da_bond_duration"
+          />
+
+          <InputField
+            label="Resolver Refund Percentage (%) "
+            name="data_availability_config.da_resolver_refund_percentage"
           />
         </>
       )}

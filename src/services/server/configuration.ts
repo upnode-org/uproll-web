@@ -1,5 +1,5 @@
 "use server";
-import { RollupConfig, parseConfig } from "@/lib/opSchema";
+import { RollupConfig } from "@/lib/opSchema";
 import prisma from "@/lib/prisma";
 
 /**
@@ -33,7 +33,7 @@ export async function getConfigurationDetail(configId: string, userId: string | 
       where: { id: configId },
     });
 
-
+    // Parsing config causes issues with the schema.
     // const parsedConfig = parseConfig(configuration?.config);
 
     // if (!parsedConfig.success) {
@@ -42,7 +42,7 @@ export async function getConfigurationDetail(configId: string, userId: string | 
 
     if(configuration?.userId === undefined || configuration?.userId === null) {
       return {
-        config: configuration?.config,
+        config: configuration?.config as RollupConfig,
         name: configuration?.name,
       };
     }
@@ -52,7 +52,7 @@ export async function getConfigurationDetail(configId: string, userId: string | 
     }
 
     return {
-      config: configuration?.config,
+      config: configuration?.config as RollupConfig,
       name: configuration?.name,
     };
   } catch (error) {

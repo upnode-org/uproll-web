@@ -266,7 +266,7 @@ const BaseCustomDataAvailabilityConfigSchema =
     data_availability_provider: z.literal(DA_PROVIDER_SYSTEM_VALUES.CUSTOM),
     da_server_endpoint: urlSchema,
     commitment_type: z.enum(["Generic", "KeccakCommitment"]),
-    da_challenge_contract_address: addressSchema,
+    da_challenge_contract_address: z.string().optional(),
     da_challenge_window: z.number().min(1),
     da_resolve_window: z.number().min(1),
     da_bond_size: z.number().min(0),
@@ -294,7 +294,17 @@ const DataAvailabilityConfigSchema =
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message:
-          "Generic commitment type requires DA Challenge Contract Address",
+          "Generic commitment type requires a Challenge Contract Address",
+        path: ["da_challenge_contract_address"],
+      });
+    } else if (
+      data.data_availability_provider === DA_PROVIDER_SYSTEM_VALUES.CUSTOM &&
+      data.commitment_type === "Generic" &&
+      !addressSchema.safeParse(data.da_challenge_contract_address).success
+    ) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Invalid Challenge Contract Address",
         path: ["da_challenge_contract_address"],
       });
     }

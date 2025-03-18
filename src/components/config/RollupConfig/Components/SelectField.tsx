@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
-import { Controller, get, useFormContext, useWatch, FieldPath } from "react-hook-form";
+import React from "react";
+import { Controller, get, useFormContext, FieldPath } from "react-hook-form";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -30,11 +30,6 @@ export const SelectField: React.FC<SelectFieldProps> = ({
   }
 
   const { control, formState: { errors } } = useFormContext<RollupConfig>();
-  const value = useWatch({ control, name });
-
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
 
   const errorId = `${name}-error`;
   const errorMessage = get(errors, name);
@@ -65,7 +60,14 @@ export const SelectField: React.FC<SelectFieldProps> = ({
           </Select>
         )}
       />
-      {errorMessage && <ErrorMessage id={errorId} error={errorMessage} />}
+      {errorMessage && typeof errorMessage === 'object' && 'message' in errorMessage ? (
+        <ErrorMessage id={errorId} error={errorMessage.message as string} />
+      ) : null}
+      {
+        errorMessage && typeof errorMessage === 'string' ? (
+          <ErrorMessage id={errorId} error={errorMessage} />
+        ) : null
+      }
     </div>
   );
 };

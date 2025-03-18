@@ -55,6 +55,10 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
     };
   }, [isDirty]);
 
+  useEffect(() => {
+    console.log("Errors",methods.formState.errors);
+  }, [methods.formState.errors]);
+
   const handleSave = async () => {
     const config = methods.getValues();
     try {
@@ -205,7 +209,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
             <EditableInputField name="rollup_name" />
             <div className="flex justify-between gap-2 w-full max-w-[100%]">
               <div className="flex items-center gap-2 flex-shrink">
-                <Button onClick={handleSave}>
+                <Button type="submit">
                   <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
                 </Button>
                 {id && (

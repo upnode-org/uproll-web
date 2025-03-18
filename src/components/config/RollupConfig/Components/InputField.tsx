@@ -23,11 +23,11 @@ export const InputField: React.FC<InputFieldProps> = ({
   type
 }) => {
   const { register, formState: { errors } } = useFormContext<RollupConfig>();
-  if(name === undefined) {
+  if (name === undefined) {
     throw new Error("Name is not defined");
   }
 
-  const fieldType = getInputTypeFromPath(RollupConfigSchema, name)
+  const fieldType = type ??getInputTypeFromPath(RollupConfigSchema, name)
   const errorId = `${name}-error`;
   const defaultPlaceholder = placeholder || get(placeholderRollup, name);
   const errorMessage = get(errors, name);
@@ -41,17 +41,17 @@ export const InputField: React.FC<InputFieldProps> = ({
       </Label>
       <Input
         id={name as string}
-        type={type || fieldType}
+        type={fieldType}
         placeholder={defaultPlaceholder as string}
         {...register(name, {
-          valueAsNumber: type === "number" ? true : fieldType === "number",
+          valueAsNumber: fieldType === "number",
         })}
         className={`bg-white ${errorMessage ? "border-red-500" : ""}`}
         aria-describedby={errorMessage ? errorId : undefined}
         aria-invalid={!!errorMessage}
       />
       {errorMessage && typeof errorMessage === 'object' && 'message' in errorMessage && (
-        <ErrorMessage id={errorId} error={errorMessage.message as string} />
+        <ErrorMessage id={errorId} error={errorMessage.message} />
       )}
     </div>
   );
