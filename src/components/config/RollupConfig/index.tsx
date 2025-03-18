@@ -56,7 +56,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
   }, [isDirty]);
 
   useEffect(() => {
-    console.log("Errors",methods.formState.errors);
+    console.log("Form Errors",methods.formState.errors);
   }, [methods.formState.errors]);
 
   const handleSave = async () => {
@@ -69,7 +69,6 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
         } else {
           response = await postConfig(config);
           if (response.status >= 200 && response.status < 300) {
-            console.log("response.data", response.data);
             router.push(`/config/view/${response.data.data}`);
           }
         }

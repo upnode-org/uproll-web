@@ -39,7 +39,6 @@ export async function POST(req: NextRequest) {
       name,
     );
 
-    console.log("Configuration created successfully", newConfig.id);
     return NextResponse.json({
       message: "Configuration created successfully",
       status: 201,
@@ -74,7 +73,6 @@ export async function DELETE(req: NextRequest) {
         { status: 400 }
       );
     }
-    console.log("Deleting configurations:", ids);
     const deletedConfig = await batchDeleteConfigurations(
       session?.user.id,
       ids as string[]

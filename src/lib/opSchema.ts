@@ -366,9 +366,6 @@ export const RollupConfigSchema = z
     const { l1_block_time } = data.settlement_layer;
     const { l2_block_time } = data.chain_config;
     const { selection } = data.settlement_layer;
-    console.log("l1_block_time", l1_block_time);
-    console.log("l2_block_time", l2_block_time);
-    console.log("selection", selection);
     // TODO: This doesnt work for any settlemnt layer, dont know why`
     if (selection === "Custom") {
       if (!l1_block_time || l2_block_time > l1_block_time) {
