@@ -31,17 +31,17 @@ const placeholderRollup: ToString<RollupConfig> = {
     proposer_private_key: "0x...",
     challenger_private_key: "0x...",
   },
-  admin_config: {
-    final_system_owner: "0x...",
-    proxy_admin_owner: "0x...",
-  },
+  // admin_config: {
+  //   final_system_owner: "0x...",
+  //   proxy_admin_owner: "0x...",
+  // },
   chain_config: {
     l2_chain_id: ">0",
     l2_block_time: ">0 and <L1 block time",
     proof_maturity_delay_seconds: "0",
-    fee_recipient: "0x...",
-    withdrawal_network: "0x...",
-    disputeGameFinalityDelaySeconds: "3600",
+    // fee_recipient: "0x...",
+    fee_withdrawal_network: "0x...",
+    dispute_game_finality_delay: "3600",
   },
   gas_config: {
     l2_genesis_block_gas_limit: ">0",
@@ -61,6 +61,7 @@ const placeholderRollup: ToString<RollupConfig> = {
     da_resolve_window: "0",
     da_bond_size: "0",
     da_bond_duration: "0",
+    da_resolver_refund_percentage: "5",
   },
   interop_config: {
     enable_interop: "true",

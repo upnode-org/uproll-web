@@ -22,17 +22,17 @@ const defaultRollup: RollupConfig = {
     proposer_private_key: "",
     challenger_private_key: "",
   },
-  admin_config: {
-    final_system_owner: "",
-    proxy_admin_owner: "",
-  },
+  // admin_config: {
+  //   final_system_owner: "",
+  //   proxy_admin_owner: "",
+  // },
   chain_config: {
     l2_chain_id: 877655,
     l2_block_time: 2,
     proof_maturity_delay_seconds: NaN,
-    fee_recipient: "",
-    withdrawal_network: "",
-    disputeGameFinalityDelaySeconds: 3600,
+    // fee_recipient: "",
+    fee_withdrawal_network: "",
+    dispute_game_finality_delay: 3600,
   },
   gas_config: {
     eip1559_elasticity: NaN,

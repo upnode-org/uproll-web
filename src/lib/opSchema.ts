@@ -32,7 +32,7 @@
  *   - Batch submission frequency
  *   - [If Custom is selected]:
  *       • DA server endpoint
- *       • Commitment type (Generic or Keccak256)
+ *       • Commitment type (Generic or KeccakCommitment)
  *         - If Generic, a DA Challenge Contract Address is required
  *       • DA Challenge Window
  *       • DA Resolve Window
@@ -167,10 +167,10 @@ const SignerConfigSchema = z.discriminatedUnion("type", [
    Admin Configuration Schema
    -------------------------------------------------------------------------*/
 
-const AdminConfigSchema = z.object({
-  final_system_owner: addressSchema,
-  proxy_admin_owner: addressSchema,
-});
+// const AdminConfigSchema = z.object({
+//   final_system_owner: addressSchema,
+//   proxy_admin_owner: addressSchema,
+// });
 
 /* -------------------------------------------------------------------------
    Chain Configuration Schema
@@ -190,11 +190,12 @@ const ChainConfigSchema = z.object({
   l2_chain_id: z.number().min(1),
   l2_block_time: z.number().min(1),
   proof_maturity_delay_seconds: z.number().min(0),
-  disputeGameFinalityDelaySeconds: z.number().min(0),
+  dispute_game_finality_delay: z.number().min(0),
   // Sequencer fee recipient
-  fee_recipient: addressSchema,
+  // currently this is being set equal to the address of the deployer
+  // fee_recipient: addressSchema,
   // Fee withdrawal network
-  withdrawal_network: addressSchema,
+  fee_withdrawal_network: addressSchema,
 });
 
 /* -------------------------------------------------------------------------
@@ -221,7 +222,7 @@ const BaseDataAvailabilityConfigSchema = z.object({
 // System values for data availability types
 export const DA_PROVIDER_SYSTEM_VALUES = {
   AUTO: "auto",
-  BLOB: "blob",
+  BLOB: "blobs",
   CALLDATA: "calldata",
   CUSTOM: "custom",
 } as const;
@@ -264,12 +265,13 @@ const BaseCustomDataAvailabilityConfigSchema =
   BaseDataAvailabilityConfigSchema.extend({
     data_availability_provider: z.literal(DA_PROVIDER_SYSTEM_VALUES.CUSTOM),
     da_server_endpoint: urlSchema,
-    commitment_type: z.enum(["Generic", "Keccak256"]),
+    commitment_type: z.enum(["Generic", "KeccakCommitment"]),
     da_challenge_contract_address: addressSchema,
     da_challenge_window: z.number().min(1),
     da_resolve_window: z.number().min(1),
     da_bond_size: z.number().min(0),
     da_bond_duration: z.number().min(0),
+    da_resolver_refund_percentage: z.number().min(0).max(100),
   });
 
 // Create a union from plain ZodObjects.
@@ -344,7 +346,7 @@ export const RollupConfigSchema = z
     settlement_layer: SettlementLayerSchema,
     participants: ParticipantsSchema,
     signer_config: SignerConfigSchema,
-    admin_config: AdminConfigSchema,
+    // admin_config: AdminConfigSchema,
     chain_config: ChainConfigSchema,
     gas_config: GasConfigSchema,
     data_availability_config: DataAvailabilityConfigSchema,
@@ -381,7 +383,7 @@ export const RollupConfigSchema = z
 
 export type SettlementLayer = z.infer<typeof SettlementLayerSchema>;
 export type Participant = z.infer<typeof ParticipantSchema>;
-export type AdminConfig = z.infer<typeof AdminConfigSchema>;
+// export type AdminConfig = z.infer<typeof AdminConfigSchema>;
 export type ChainConfig = z.infer<typeof ChainConfigSchema>;
 export type GasConfig = z.infer<typeof GasConfigSchema>;
 export type DataAvailabilityConfig = z.infer<

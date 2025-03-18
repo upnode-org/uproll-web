@@ -103,7 +103,7 @@ export default function HomePage() {
                     Deploy in one more
                   </h2>
                   <CommandCopy
-                    command="uproll deploy --config config.json"
+                    command="uproll deploy -i <config-id>"
                     description="For a minimal default OP stack rollup config"
                   />
                 </div>

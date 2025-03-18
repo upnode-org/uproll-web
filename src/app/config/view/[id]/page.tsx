@@ -19,9 +19,8 @@ export default async function ViewConfigDetailsPage({ params }: { params: Promis
         redirect("/auth/signin")
       }
     }
-
     return (
-      <RollupConfigForm initialValues={config} id={id} />
+      <RollupConfigForm initialValues={config as any} id={id} />
       //   <>
       //   <HeroWrapper className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
       //     <Container className="p-10">

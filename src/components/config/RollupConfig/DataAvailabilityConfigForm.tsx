@@ -52,7 +52,7 @@ export const DataAvailabilityConfigForm: React.FC = () => {
             label="Commitment Type"
             options={[
               { label: "Generic", value: "Generic" },
-              { label: "Keccak256", value: "Keccak256" },
+              { label: "KeccakCommitment", value: "KeccakCommitment" },
             ]}
             name="data_availability_config.commitment_type"
           />

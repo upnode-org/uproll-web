@@ -13,7 +13,7 @@ import { EditableInputField } from "./Components/EditableInputField";
 import { SettlementLayerForm } from "./SettlementLayerForm";
 import ParticipantsForm from "./ParticipantForm";
 import { SignerConfigForm } from "./SignerConfigForm";
-import { AdminConfigForm } from "./AdminConfigForm";
+// import { AdminConfigForm } from "./AdminConfigForm";
 import { ChainConfigForm } from "./ChainConfigForm";
 import { GasConfigForm } from "./GasConfigForm";
 import { DataAvailabilityConfigForm } from "./DataAvailabilityConfigForm";
@@ -216,7 +216,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
                 <CommandCopy
                   command={
                     id
-                      ? `uproll deploy ${id}`
+                      ? `uproll deploy -i ${id}`
                       : `Create a config before deploying`
                   }
                   disabled={!id}
@@ -236,7 +236,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
           <SettlementLayerForm />
           <ParticipantsForm />
           <SignerConfigForm />
-          <AdminConfigForm />
+          {/* <AdminConfigForm /> */}
           <ChainConfigForm />
           <GasConfigForm />
           <DataAvailabilityConfigForm />

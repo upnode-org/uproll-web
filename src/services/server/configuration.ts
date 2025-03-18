@@ -34,15 +34,15 @@ export async function getConfigurationDetail(configId: string, userId: string | 
     });
 
 
-    const parsedConfig = parseConfig(configuration?.config);
+    // const parsedConfig = parseConfig(configuration?.config);
 
-    if (!parsedConfig.success) {
-      throw new Error("Configuration not found");
-    }
+    // if (!parsedConfig.success) {
+    //   throw new Error("Configuration not found");
+    // }
 
     if(configuration?.userId === undefined || configuration?.userId === null) {
       return {
-        config: parsedConfig.data,
+        config: configuration?.config,
         name: configuration?.name,
       };
     }
@@ -52,7 +52,7 @@ export async function getConfigurationDetail(configId: string, userId: string | 
     }
 
     return {
-      config: parsedConfig.data,
+      config: configuration?.config,
       name: configuration?.name,
     };
   } catch (error) {

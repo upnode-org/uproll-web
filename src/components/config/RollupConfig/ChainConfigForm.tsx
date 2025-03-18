@@ -20,15 +20,15 @@ export const ChainConfigForm: React.FC = () => {
       />
       <InputField
         label="Dispute Game Finality Delay (Seconds)"
-        name="chain_config.disputeGameFinalityDelaySeconds"
+        name="chain_config.dispute_game_finality_delay"
       />
-      <InputField
+      {/* <InputField
         label="Fee Recipient Address"
         name="chain_config.fee_recipient"
-      />
+      /> */}
       <InputField
-        label="Withdrawal Network Address"
-        name="chain_config.withdrawal_network"
+        label="Fee Withdrawal Network Address"
+        name="chain_config.fee_withdrawal_network"
       />
     </fieldset>
   );

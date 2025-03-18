@@ -122,7 +122,7 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
                       <span className="text-sm font-semibold">{config.name}</span>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <CommandCopy command={`uproll deploy ${config.id}`} />
+                      <CommandCopy command={`uproll deploy -i ${config.id}`} />
                       <Button>
                         <Link href={`/config/view/${config.id}`} className="flex items-center">
                           View
