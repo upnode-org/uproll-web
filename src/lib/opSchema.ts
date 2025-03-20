@@ -63,11 +63,11 @@ const SettlementLayerSchema = z
   .object({
     selection: z.enum(["ETH Mainnet", "ETH Sepolia", "Custom"]),
     chain_id: z.number().optional(),
-    l1_block_time: z.number().optional(),
+    // l1_block_time: z.number().optional(),
     execution_rpc: urlSchema,
     use_same_rpc: z.boolean().default(true),
     consensus_rpc: urlSchema.optional(),
-    ws_rpc_url: urlSchema.optional(),
+    el_ws_url: urlSchema.optional(),
   })
   .superRefine((data, ctx) => {
     if (data.selection === "Custom") {
@@ -78,14 +78,14 @@ const SettlementLayerSchema = z
           path: ["chain_id"],
         });
       }
-      if (!data.l1_block_time) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message:
-            "A custom settlement layer requires an L1 Block Time (e.g., '15s' or '30s')",
-          path: ["l1_block_time"],
-        });
-      }
+      // if (!data.l1_block_time) {
+      //   ctx.addIssue({
+      //     code: z.ZodIssueCode.custom,
+      //     message:
+      //       "A custom settlement layer requires an L1 Block Time (e.g., '15s' or '30s')",
+      //     path: ["l1_block_time"],
+      //   });
+      // }
     }
     if (!data.use_same_rpc && !data.consensus_rpc) {
       ctx.addIssue({
@@ -362,27 +362,27 @@ export const RollupConfigSchema = z
     data_availability_config: DataAvailabilityConfigSchema,
     interop_config: InteropConfigurationSchema,
   })
-  .superRefine((data, ctx) => {
-    const { l1_block_time } = data.settlement_layer;
-    const { l2_block_time } = data.chain_config;
-    const { selection } = data.settlement_layer;
-    // TODO: This doesnt work for any settlemnt layer, dont know why`
-    if (selection === "Custom") {
-      if (!l1_block_time || l2_block_time > l1_block_time) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: `L2 block time cannot be greater than L1 block time (${l1_block_time}s)`,
-          path: ["chain_config", "l2_block_time"],
-        });
-      }
-    } else if (l2_block_time >= 12) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: `L2 block time cannot be greater than 14s for ${selection}`,
-        path: ["chain_config", "l2_block_time"],
-      });
-    }
-  });
+  // .superRefine((data, ctx) => {
+  //   const { l1_block_time } = data.settlement_layer;
+  //   const { l2_block_time } = data.chain_config;
+  //   const { selection } = data.settlement_layer;
+  //   // TODO: This doesnt work for any settlemnt layer, dont know why`
+  //   if (selection === "Custom") {
+  //     if (!l1_block_time || l2_block_time > l1_block_time) {
+  //       ctx.addIssue({
+  //         code: z.ZodIssueCode.custom,
+  //         message: `L2 block time cannot be greater than L1 block time (${l1_block_time}s)`,
+  //         path: ["chain_config", "l2_block_time"],
+  //       });
+  //     }
+  //   } else if (l2_block_time >= 12) {
+  //     ctx.addIssue({
+  //       code: z.ZodIssueCode.custom,
+  //       message: `L2 block time cannot be greater than 14s for ${selection}`,
+  //       path: ["chain_config", "l2_block_time"],
+  //     });
+  //   }
+  // });
 
 /* -------------------------------------------------------------------------
    Inferred TypeScript Types

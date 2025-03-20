@@ -134,24 +134,26 @@ const transformConfig = (config: RollupConfig) => {
 
     // External L1 Network parameters
     external_l1_network_params: {
-      kind: getRPCKind(config.settlement_layer.execution_rpc),
+      rpc_kind: getRPCKind(config.settlement_layer.execution_rpc),
       network_id: getL1ChainId(config),
-      seconds_per_slot: getL1BlockTime(config),
+      // seconds_per_slot: getL1BlockTime(config),
 
       el_rpc_url: config.settlement_layer.execution_rpc,
 
-      ws_rpc_url: config.settlement_layer.use_same_rpc
+      el_ws_url: config.settlement_layer.use_same_rpc
         ? // If use same rpc, replace http with ws or if https replace with wss
           config.settlement_layer.execution_rpc
             .replace("https", "wss")
             .replace("http", "ws")
-        : // If use different rpc, use the ws_rpc_url
-          config.settlement_layer.ws_rpc_url,
+        : // If use different rpc, use the el_ws_url
+          config.settlement_layer.el_ws_url,
 
       cl_rpc_url: config.settlement_layer.use_same_rpc
         ? config.settlement_layer.execution_rpc
         : // If use different rpc, use the consensus_rpc
           config.settlement_layer.consensus_rpc,
+
+      priv_key: config.signer_config.deployer_private_key,
     },
 
     // Unmodified config for development and debugging
@@ -174,16 +176,16 @@ function getL1ChainId(config: RollupConfig): number {
 }
 
 // Helper function to get L1 block time based on settlement layer
-function getL1BlockTime(config: RollupConfig): number | undefined {
-  if (
-    config.settlement_layer.selection === "ETH Mainnet" ||
-    config.settlement_layer.selection === "ETH Sepolia"
-  ) {
-    return undefined;
-  } else {
-    return config.settlement_layer.l1_block_time || undefined;
-  }
-}
+// function getL1BlockTime(config: RollupConfig): number | undefined {
+//   if (
+//     config.settlement_layer.selection === "ETH Mainnet" ||
+//     config.settlement_layer.selection === "ETH Sepolia"
+//   ) {
+//     return undefined;
+//   } else {
+//     return config.settlement_layer.l1_block_time || undefined;
+//   }
+// }
 
 // Define an interface for dependency values
 interface DependencyValue {
@@ -196,9 +198,9 @@ interface DependencyValue {
 //  Id's are in quotes whereas times are numbers. Also, values are camelcase instead of separated by _
 function formatDependencySet(
   config: RollupConfig
-): Record<string, DependencyValue> {
+): string {
   if (!config.interop_config.dependency_set) {
-    return {};
+    return "{}";
   }
 
   const dependencies: Record<string, DependencyValue> = {};
@@ -212,7 +214,7 @@ function formatDependencySet(
     };
   });
 
-  return dependencies;
+  return dependencies.toString();
 }
 
 function getRPCKind(rpcUrl: string): "alchemy" | "quicknode" | "basic" {

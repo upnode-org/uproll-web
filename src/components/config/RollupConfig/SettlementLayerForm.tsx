@@ -56,10 +56,10 @@ export const SettlementLayerForm: React.FC = () => {
             label="Chain ID"
             name="settlement_layer.chain_id"
           />
-          <InputField
+          {/* <InputField
             label="L1 Block Time"
             name="settlement_layer.l1_block_time"
-          />
+          /> */}
         </>
       )}
 
@@ -94,8 +94,8 @@ export const SettlementLayerForm: React.FC = () => {
             type="text"
           />
           <InputField
-            label="Execution Layer WebSocket"
-            name="settlement_layer.ws_rpc_url"
+            label="Execution Layer WebSocket URL"
+            name="settlement_layer.el_ws_url"
             type="text"
           />
           <InputField
