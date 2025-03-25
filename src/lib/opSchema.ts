@@ -358,7 +358,10 @@ export const RollupConfigSchema = z
   .object({
     // rollup name must be 1-61 characters, lowercase, and hyphenated and not use any other special characters
     // this is mapped to the proper regex in the mapSchema.ts file
-    rollup_name: z.string().min(1).max(61).regex(/^[A-Za-z0-9-]+$/),
+    // Add a custom error message
+    rollup_name: z.string().min(1).max(61).regex(/^[A-Za-z0-9- ]+$/, {
+      message: "Rollup name must not contain any special characters, except for whitespace and hyphens",
+    }),
     settlement_layer: SettlementLayerSchema,
     participants: ParticipantsSchema,
     signer_config: SignerConfigSchema,

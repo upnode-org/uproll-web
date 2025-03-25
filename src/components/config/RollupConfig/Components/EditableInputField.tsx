@@ -17,7 +17,7 @@ export const EditableInputField: React.FC<EditableInputFieldProps> = ({
   name,
   error,
 }) => {
-  const { control } = useFormContext<RollupConfig>();
+  const { control, formState: { errors } } = useFormContext<RollupConfig>();
   const [isEditing, setIsEditing] = useState(false);
   const {
     field: { value, onChange, onBlur, ref, name: fieldName },
@@ -50,6 +50,7 @@ export const EditableInputField: React.FC<EditableInputFieldProps> = ({
   };
 
   const errorId = `${fieldName}-error`;
+  const errorMessage = errors[name]?.message as string;
 
   return (
     <div className="space-y-1 font-light text-4xl">
@@ -93,7 +94,11 @@ export const EditableInputField: React.FC<EditableInputFieldProps> = ({
           </div>
         </div>
       )}
-      <ErrorMessage id={errorId} error={error} />
+      {errorMessage && (
+        <div className="py-1 px-2 bg-white w-fit">
+          <ErrorMessage id={errorId} error={errorMessage} />
+        </div>
+      )}
     </div>
   );
 };
