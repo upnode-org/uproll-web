@@ -11,7 +11,7 @@ const transformConfig = (config: RollupConfig) => {
             network_id: config.chain_config.l2_chain_id,
             seconds_per_slot: config.chain_config.l2_block_time,
             withdrawal_delay: config.chain_config.proof_maturity_delay_seconds,
-            fee_withdrawal_network: config.chain_config.fee_withdrawal_network,
+            fee_withdrawal_network: config.chain_config.fee_withdrawal_network === "L1" ? 0 : 1,
             // sequencer_fee_recipient: config.chain_config.fee_recipient,
             dispute_game_finality_delay:
               config.chain_config.dispute_game_finality_delay,

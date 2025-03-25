@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { InputField } from "./Components/InputField";
+import { SelectField } from "./Components/SelectField";
 
 export const ChainConfigForm: React.FC = () => {
   return (
@@ -26,9 +27,17 @@ export const ChainConfigForm: React.FC = () => {
         label="Fee Recipient Address"
         name="chain_config.fee_recipient"
       /> */}
-      <InputField
+      {/* <InputField
         label="Fee Withdrawal Network Address"
         name="chain_config.fee_withdrawal_network"
+      /> */}
+      <SelectField
+        label="Fee Withdrawal Network"
+        name="chain_config.fee_withdrawal_network"
+        options={[
+          { label: "L1", value: "L1" },
+          { label: "L2", value: "L2" },
+        ]}
       />
     </fieldset>
   );

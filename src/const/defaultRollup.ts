@@ -31,7 +31,7 @@ const defaultRollup: RollupConfig = {
     l2_block_time: 2,
     proof_maturity_delay_seconds: NaN,
     // fee_recipient: "",
-    fee_withdrawal_network: "",
+    fee_withdrawal_network: "L1",
     dispute_game_finality_delay: 3600,
   },
   gas_config: {

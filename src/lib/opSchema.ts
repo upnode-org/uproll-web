@@ -199,7 +199,7 @@ const ChainConfigSchema = z.object({
   // currently this is being set equal to the address of the deployer
   // fee_recipient: addressSchema,
   // Fee withdrawal network
-  fee_withdrawal_network: addressSchema,
+  fee_withdrawal_network: z.enum(["L1", "L2"]),
 });
 
 /* -------------------------------------------------------------------------

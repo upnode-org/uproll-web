@@ -39,8 +39,7 @@ const placeholderRollup: ToString<RollupConfig> = {
     l2_chain_id: ">0",
     l2_block_time: ">0 and <L1 block time",
     proof_maturity_delay_seconds: "0",
-    // fee_recipient: "0x...",
-    fee_withdrawal_network: "0x...",
+    fee_withdrawal_network: "",
     dispute_game_finality_delay: "3600",
   },
   gas_config: {
