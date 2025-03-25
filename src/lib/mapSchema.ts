@@ -157,7 +157,9 @@ const transformConfig = (config: RollupConfig) => {
     },
 
     // Unmodified config for development and debugging
-    unmodified_config: config,
+    ...(process.env.NODE_ENV === "development" && {
+      unmodified_config: config,
+    }),
   };
 
   // Remove undefined properties
