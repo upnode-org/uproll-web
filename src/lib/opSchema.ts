@@ -356,7 +356,9 @@ const InteropConfigurationSchema = z
 
 export const RollupConfigSchema = z
   .object({
-    rollup_name: z.string().min(1),
+    // rollup name must be 1-61 characters, lowercase, and hyphenated
+    // this can be mapped to proper regex in the mapSchema.ts file
+    rollup_name: z.string().min(1).max(61),
     settlement_layer: SettlementLayerSchema,
     participants: ParticipantsSchema,
     signer_config: SignerConfigSchema,

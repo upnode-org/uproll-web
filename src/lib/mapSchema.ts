@@ -7,7 +7,7 @@ const transformConfig = (config: RollupConfig) => {
         {
           // Chain configuration section
           network_params: {
-            name: config.rollup_name,
+            name: getRollupName(config),
             network_id: config.chain_config.l2_chain_id.toString(),
             seconds_per_slot: config.chain_config.l2_block_time,
             withdrawal_delay: config.chain_config.proof_maturity_delay_seconds,
@@ -92,7 +92,6 @@ const transformConfig = (config: RollupConfig) => {
       altda_deploy_config: {
         use_altda: config.data_availability_config.data_availability_provider === "custom",
         da_type: config.data_availability_config.data_availability_provider,
-        // should be batch submission frequency 
         da_batch_submission_frequency:
           config.data_availability_config.batch_submission_frequency,
         ...(config.data_availability_config.data_availability_provider ===
@@ -229,6 +228,31 @@ function getRPCKind(rpcUrl: string): "alchemy" | "quicknode" | "basic" {
   } else {
     return "basic";
   }
+}
+
+function getRollupName(config: RollupConfig): string {
+  // Input validation for the name of the roll up (lower case start, number, dash or lower case middle for 0 to 61 character, then finishes with number or lower case letter) - regex: regex = /^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$/;
+
+  let rollupName = config.rollup_name
+
+  // 1. make sure it's lowercase
+  rollupName = rollupName.toLowerCase();
+
+  // 2. make sure it's 1-61 characters
+  rollupName = rollupName.slice(0, 61);
+
+  // 3. replace whitespace with a dash
+  rollupName = rollupName.replace(/\s+/g, '-');
+
+  // 4. make sure it doesn't have any special characters
+  rollupName = rollupName.replace(/[^a-z0-9-]/g, '');
+
+  // 5. make sure it passes the regex /^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$/
+  if (!rollupName.match(/^[a-z]([-a-z0-9]{0,61}[a-z0-9])?$/)) {
+    throw new Error("Invalid rollup name");
+  }
+
+  return rollupName;
 }
 
 export default transformConfig;
