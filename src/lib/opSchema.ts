@@ -55,6 +55,10 @@ const urlSchema = z.string().url({
   message: "Invalid URL",
 });
 
+const privateKeySchema = z.string().regex(/^(0x)?[0-9a-fA-F]{64}$/, {
+  message: "Invalid private key, must be 64 character long hex string",
+});
+
 /* -------------------------------------------------------------------------
    Settlement Layer Schema
    -------------------------------------------------------------------------*/
@@ -138,16 +142,14 @@ const ParticipantsSchema = z.array(ParticipantSchema).min(1);
 
 const PrivateKeySignerSchema = z.object({
   type: z.literal("private_key"),
-  deployer_private_key: addressSchema,
-  batcher_private_key: addressSchema,
-  sequencer_private_key: addressSchema,
-  proposer_private_key: addressSchema,
-  challenger_private_key: addressSchema,
+  batcher_private_key: privateKeySchema,
+  sequencer_private_key: privateKeySchema,
+  proposer_private_key: privateKeySchema,
+  challenger_private_key: privateKeySchema,
 });
 
 const EndpointSignerSchema = z.object({
   type: z.literal("signer_endpoint"),
-  deployer_private_key: addressSchema,
   batcher_endpoint: urlSchema,
   batcher_address: addressSchema,
   sequencer_endpoint: urlSchema,
@@ -161,7 +163,9 @@ const EndpointSignerSchema = z.object({
 const SignerConfigSchema = z.discriminatedUnion("type", [
   PrivateKeySignerSchema,
   EndpointSignerSchema,
-]);
+]).and(z.object({
+  deployer_private_key: privateKeySchema,
+}));
 
 /* -------------------------------------------------------------------------
    Admin Configuration Schema

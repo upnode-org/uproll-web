@@ -24,17 +24,17 @@ const placeholderRollup: ToString<RollupConfig> = {
     },
   ],
   signer_config: {
-    deployer_private_key: "0x...",
+    deployer_private_key: "",
     type: "private_key",
-    batcher_private_key: "0x...",
-    sequencer_private_key: "0x...",
-    proposer_private_key: "0x...",
-    challenger_private_key: "0x...",
+    batcher_private_key: "",
+    sequencer_private_key: "",
+    proposer_private_key: "",
+    challenger_private_key: "",
   },
   // admin_config: {
   //   final_system_owner: "0x...",
   //   proxy_admin_owner: "0x...",
-  // },
+  // }, 
   chain_config: {
     l2_chain_id: ">0",
     l2_block_time: ">0 and <L1 block time",
