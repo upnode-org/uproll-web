@@ -8,7 +8,7 @@ const transformConfig = (config: RollupConfig) => {
           // Chain configuration section
           network_params: {
             name: config.rollup_name,
-            network_id: config.chain_config.l2_chain_id,
+            network_id: config.chain_config.l2_chain_id.toString(),
             seconds_per_slot: config.chain_config.l2_block_time,
             withdrawal_delay: config.chain_config.proof_maturity_delay_seconds,
             fee_withdrawal_network: config.chain_config.fee_withdrawal_network === "L1" ? 0 : 1,
@@ -137,7 +137,7 @@ const transformConfig = (config: RollupConfig) => {
     // External L1 Network parameters
     external_l1_network_params: {
       rpc_kind: getRPCKind(config.settlement_layer.execution_rpc),
-      network_id: getL1ChainId(config),
+      network_id: getL1ChainId(config).toString(),
       // seconds_per_slot: getL1BlockTime(config),
 
       el_rpc_url: config.settlement_layer.execution_rpc,
