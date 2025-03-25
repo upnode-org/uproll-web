@@ -92,7 +92,8 @@ const transformConfig = (config: RollupConfig) => {
       altda_deploy_config: {
         use_altda: config.data_availability_config.data_availability_provider === "custom",
         da_type: config.data_availability_config.data_availability_provider,
-        da_max_channel_duration:
+        // should be batch submission frequency 
+        da_batch_submission_frequency:
           config.data_availability_config.batch_submission_frequency,
         ...(config.data_availability_config.data_availability_provider ===
           "custom" && {
