@@ -27,7 +27,10 @@ export async function GET(
     const transformedConfig = transformConfig(config.config as RollupConfig);
 
     // Convert the transformed configuration object to a YAML string.
-    const yamlString = yaml.dump(transformedConfig);
+    const yamlString = yaml.dump(transformedConfig, {
+      quotingType: "'",
+      forceQuotes: true,
+    });
 
     // Return the YAML string as a file download.
     return new NextResponse(yamlString, {
