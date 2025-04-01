@@ -62,15 +62,15 @@ const placeholderRollup: ToString<RollupConfig> = {
     da_bond_duration: ">0",
     da_resolver_refund_percentage: "5",
   },
-  interop_config: {
-    enable_interop: "true",
-    dependency_set: [{
-      chain_id: "1",
-      websocket_rpc_endpoint: "https://eth-mainnet.rpc.com/your-api-key",
-      activation_time: "1",
-      history_min_time: "1",
-    }],
-  },
+  // interop_config: {
+  //   enable_interop: "true",
+  //   dependency_set: [{
+  //     chain_id: "1",
+  //     websocket_rpc_endpoint: "https://eth-mainnet.rpc.com/your-api-key",
+  //     activation_time: "1",
+  //     history_min_time: "1",
+  //   }],
+  // },
 } as const;
 
 export default placeholderRollup;

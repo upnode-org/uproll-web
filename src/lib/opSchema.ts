@@ -324,31 +324,31 @@ const DataAvailabilityConfigSchema =
  * - dependency_set: Array of dependencies including chain ID, WebSocket RPC endpoint,
  *   activation time, and history minimum time.
  */
-const InteropDependencySchema = z.object({
-  chain_id: z.number().min(1),
-  websocket_rpc_endpoint: urlSchema,
-  activation_time: z.number().min(1),
-  history_min_time: z.number().min(0),
-});
+// const InteropDependencySchema = z.object({
+//   chain_id: z.number().min(1),
+//   websocket_rpc_endpoint: urlSchema,
+//   activation_time: z.number().min(1),
+//   history_min_time: z.number().min(0),
+// });
 
-const InteropConfigurationSchema = z
-  .object({
-    enable_interop: z.boolean(),
-    dependency_set: z.array(InteropDependencySchema).optional(),
-  })
-  .superRefine((data, ctx) => {
-    if (
-      data.enable_interop &&
-      (!data.dependency_set || data.dependency_set.length === 0)
-    ) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "Interop is enabled but no dependencies provided in dependency set",
-        path: ["dependency_set"],
-      });
-    }
-  });
+// const InteropConfigurationSchema = z
+//   .object({
+//     enable_interop: z.boolean(),
+//     dependency_set: z.array(InteropDependencySchema).optional(),
+//   })
+//   .superRefine((data, ctx) => {
+//     if (
+//       data.enable_interop &&
+//       (!data.dependency_set || data.dependency_set.length === 0)
+//     ) {
+//       ctx.addIssue({
+//         code: z.ZodIssueCode.custom,
+//         message:
+//           "Interop is enabled but no dependencies provided in dependency set",
+//         path: ["dependency_set"],
+//       });
+//     }
+//   });
 
 /* -------------------------------------------------------------------------
    Overall Rollup Configuration Schema
@@ -369,7 +369,7 @@ export const RollupConfigSchema = z
     chain_config: ChainConfigSchema,
     gas_config: GasConfigSchema,
     data_availability_config: DataAvailabilityConfigSchema,
-    interop_config: InteropConfigurationSchema,
+    // interop_config: InteropConfigurationSchema,
   })
   // .superRefine((data, ctx) => {
   //   const { l1_block_time } = data.settlement_layer;
@@ -405,7 +405,7 @@ export type GasConfig = z.infer<typeof GasConfigSchema>;
 export type DataAvailabilityConfig = z.infer<
   typeof DataAvailabilityConfigSchema
 >;
-export type InteropConfig = z.infer<typeof InteropConfigurationSchema>;
+// export type InteropConfig = z.infer<typeof InteropConfigurationSchema>;
 export type RollupConfig = z.infer<typeof RollupConfigSchema>;
 
 /* -------------------------------------------------------------------------

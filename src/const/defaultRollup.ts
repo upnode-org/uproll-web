@@ -46,9 +46,9 @@ const defaultRollup: RollupConfig = {
     data_availability_provider: "auto",
     batch_submission_frequency: 1,
   },
-  interop_config: {
-    enable_interop: false,
-  },
+  // interop_config: {
+  //   enable_interop: false,
+  // },
 };
 
 export default defaultRollup;

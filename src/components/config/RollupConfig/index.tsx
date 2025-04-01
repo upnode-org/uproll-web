@@ -17,7 +17,7 @@ import { SignerConfigForm } from "./SignerConfigForm";
 import { ChainConfigForm } from "./ChainConfigForm";
 import { GasConfigForm } from "./GasConfigForm";
 import { DataAvailabilityConfigForm } from "./DataAvailabilityConfigForm";
-import { InteropConfigForm } from "./InteropConfigForm";
+// import { InteropConfigForm } from "./InteropConfigForm";
 import defaultRollup from "@/const/defaultRollup";
 import { useRouter } from "next/navigation";
 import { toast } from "@/hooks/use-toast";
@@ -243,7 +243,7 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
           <ChainConfigForm />
           <GasConfigForm />
           <DataAvailabilityConfigForm />
-          <InteropConfigForm />
+          {/* <InteropConfigForm /> */}
         </div>
       </form>
     </FormProvider>

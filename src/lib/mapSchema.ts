@@ -123,14 +123,14 @@ const transformConfig = (config: RollupConfig) => {
       },
 
       // Interop configuration
-      interop: {
-        enabled: config.interop_config.enable_interop,
-        ...(config.interop_config.enable_interop && {
-          supervisor_params: {
-            dependency_set: formatDependencySet(config),
-          },
-        }),
-      },
+      // interop: {
+      //   enabled: config.interop_config.enable_interop,
+      //   ...(config.interop_config.enable_interop && {
+      //     supervisor_params: {
+      //       dependency_set: formatDependencySet(config),
+      //     },
+      //   }),
+      // },
     },
 
     // External L1 Network parameters
@@ -199,26 +199,26 @@ interface DependencyValue {
 
 // Helper function to format dependency set for interop
 //  Id's are in quotes whereas times are numbers. Also, values are camelcase instead of separated by _
-function formatDependencySet(
-  config: RollupConfig
-): string {
-  if (!config.interop_config.dependency_set) {
-    return "{}";
-  }
+// function formatDependencySet(
+//   config: RollupConfig
+// ): string {
+//   if (!config.interop_config.dependency_set) {
+//     return "{}";
+//   }
 
-  const dependencies: Record<string, DependencyValue> = {};
+//   const dependencies: Record<string, DependencyValue> = {};
 
-  config.interop_config.dependency_set.forEach((dep) => {
-    const chainId = dep.chain_id.toString();
-    dependencies[chainId] = {
-      chainId: chainId,
-      activationTime: dep.activation_time || 0,
-      historyMinTime: dep.history_min_time || 0,
-    };
-  });
+//   config.interop_config.dependency_set.forEach((dep) => {
+//     const chainId = dep.chain_id.toString();
+//     dependencies[chainId] = {
+//       chainId: chainId,
+//       activationTime: dep.activation_time || 0,
+//       historyMinTime: dep.history_min_time || 0,
+//     };
+//   });
 
-  return dependencies.toString();
-}
+//   return dependencies.toString();
+// }
 
 function getRPCKind(rpcUrl: string): "alchemy" | "quicknode" | "basic" {
   if (rpcUrl.includes(".alchemy")) {
