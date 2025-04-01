@@ -191,11 +191,11 @@ function getL1ChainId(config: RollupConfig): number {
 // }
 
 // Define an interface for dependency values
-interface DependencyValue {
-  chainId: string;
-  activationTime: number;
-  historyMinTime: number;
-}
+// interface DependencyValue {
+//   chainId: string;
+//   activationTime: number;
+//   historyMinTime: number;
+// }
 
 // Helper function to format dependency set for interop
 //  Id's are in quotes whereas times are numbers. Also, values are camelcase instead of separated by _
