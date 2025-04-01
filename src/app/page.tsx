@@ -94,7 +94,7 @@ export default function HomePage() {
                     Install in one click
                   </h2>
                   <CommandCopy
-                    command="npm install -g @upnode/uproll-cli"
+                    command="npm install -g upnode/uproll-cli"
                   />
                 </div>
                 <div className="flex flex-col gap-4 overflow-hidden">
