@@ -12,17 +12,17 @@ Uproll Web UI is a comprehensive configuration tool designed to simplify the dep
 - **Comprehensive Rollup Settings**: Configure settlement layers, execution clients, consensus clients, signers, and more
 - **Configuration Management**: Save, load, and modify rollup configurations
 - **Configuration Export**: Download your configurations as YAML files ready for deployment
-- **Real-time Validation**: Immediate feedback on configuration validity
+- **Real-time Validation**: Immediate feedback on configuration validity using Zod schema validation
 - **Command Integration**: Seamless integration with the Uproll CLI for deployment
 
 ## Key Configuration Options
 
-- **Settlement Layer Configuration**: Support for Ethereum Mainnet, Sepolia, or custom L1 chains
-- **Participant Configuration**: Configure execution layers (op-geth, op-reth, op-erigon, etc.) and consensus layers (op-node, hildr)
-- **Signer Configuration**: Support for private key or endpoint-based signers
-- **Chain Settings**: Customize L2 chain ID, block time, and other network parameters
-- **Gas Configuration**: Fine-tune gas parameters for your rollup
-- **Data Availability Options**: Choose from ETH Blob + Calldata, ETH Blob, ETH Calldata, or custom DA solutions
+- **Settlement Layer Configuration**: Support for Ethereum Mainnet, Sepolia, or custom L1 chains with configurable RPC endpoints
+- **Participant Configuration**: Configure execution layers (op-geth, op-reth, op-erigon, op-nethermind, op-besu) and consensus layers (op-node, hildr)
+- **Signer Configuration**: Support for private key or endpoint-based signers for batcher, sequencer, proposer, and challenger roles
+- **Chain Settings**: Customize L2 chain ID, block time, proof maturity delay, and dispute game finality delay
+- **Gas Configuration**: Fine-tune gas parameters including block gas limit, EIP-1559 settings, and fee scalars
+- **Data Availability Options**: Choose from ETH Blob + Calldata, ETH Blob, ETH Calldata, or custom DA solutions with configurable batch submission frequency
 
 ## Getting Started
 
@@ -62,10 +62,15 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - **Database**: PostgreSQL with Prisma ORM
 - **API**: Next.js API routes for backend functionality
 
-## Workflow
+## Configuration Workflow
 
 1. Create a new rollup configuration through the web interface
-2. Configure all necessary parameters for your rollup
+2. Configure all necessary parameters for your rollup:
+   - Set the settlement layer (Ethereum Mainnet, Sepolia, or custom)
+   - Configure execution and consensus layer participants
+   - Set up signer keys or endpoints
+   - Configure chain parameters and gas settings
+   - Choose data availability options
 3. Save your configuration to the database
 4. Download the configuration as a YAML file or use the generated command with Uproll CLI to deploy your rollup
 
