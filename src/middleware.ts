@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
+    if(process.env.NODE_ENV === "development") {
+        return NextResponse.next()
+    }
   const url = request.nextUrl
   const hostname = request.headers.get('host') || ''
   const targetDomain = 'uproll.upnode.org'
