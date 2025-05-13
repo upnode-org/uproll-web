@@ -3,7 +3,7 @@ import { useEffect, useRef, useCallback } from 'react';
 
 const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => {
   const interBubbleRef = useRef<HTMLDivElement>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
   const throttleDelay = 16; // ~60fps
 
