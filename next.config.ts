@@ -1,4 +1,10 @@
 import type { NextConfig } from "next";
+import nextra from "nextra";
+
+const withNextra = nextra({
+  contentDirBasePath: "/docs",
+  readingTime: true,
+});
 
 const nextConfig: NextConfig = {
   async rewrites() {
@@ -12,4 +18,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextra(nextConfig);
