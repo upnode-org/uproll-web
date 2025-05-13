@@ -1,37 +1,62 @@
 "use client"
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 
 const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => {
   const interBubbleRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number>();
+  const lastTimeRef = useRef<number>(0);
+  const throttleDelay = 16; // ~60fps
+
+  const move = useCallback(() => {
+    const interBubble = interBubbleRef.current;
+    if (!interBubble) return;
+
+    const now = performance.now();
+    if (now - lastTimeRef.current < throttleDelay) {
+      animationFrameRef.current = requestAnimationFrame(move);
+      return;
+    }
+    lastTimeRef.current = now;
+
+    const { curX, curY, tgX, tgY } = interBubble.dataset;
+    const newCurX = parseFloat(curX || '0') + (parseFloat(tgX || '0') - parseFloat(curX || '0')) / 20;
+    const newCurY = parseFloat(curY || '0') + (parseFloat(tgY || '0') - parseFloat(curY || '0')) / 20;
+
+    interBubble.dataset.curX = newCurX.toString();
+    interBubble.dataset.curY = newCurY.toString();
+    interBubble.style.transform = `translate3d(${Math.round(newCurX)}px, ${Math.round(newCurY)}px, 0)`;
+    
+    animationFrameRef.current = requestAnimationFrame(move);
+  }, []);
+
+  const handleMouseMove = useCallback((event: MouseEvent) => {
+    const interBubble = interBubbleRef.current;
+    if (!interBubble) return;
+
+    interBubble.dataset.tgX = event.clientX.toString();
+    interBubble.dataset.tgY = event.clientY.toString();
+  }, []);
 
   useEffect(() => {
     const interBubble = interBubbleRef.current;
     if (!interBubble) return;
 
-    let curX = 0;
-    let curY = 0;
-    let tgX = 0;
-    let tgY = 0;
+    // Initialize position data
+    interBubble.dataset.curX = '0';
+    interBubble.dataset.curY = '0';
+    interBubble.dataset.tgX = '0';
+    interBubble.dataset.tgY = '0';
 
-    const move = () => {
-      curX += (tgX - curX) / 20;
-      curY += (tgY - curY) / 20;
-      interBubble.style.transform = `translate(${Math.round(curX)}px, ${Math.round(curY)}px)`;
-      requestAnimationFrame(move);
-    };
-
-    const handleMouseMove = (event: MouseEvent) => {
-      tgX = event.clientX;
-      tgY = event.clientY;
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    move();
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    animationFrameRef.current = requestAnimationFrame(move);
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
     };
-  }, []);
+  }, [handleMouseMove, move]);
 
   return (
     <div className={`gradient-bg -z-10 ${className}`}>
@@ -82,35 +107,35 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         /* Keyframes */
         @keyframes moveInCircle {
           0% {
-            transform: rotate(0deg);
+            transform: rotate(0deg) translateZ(0);
           }
           50% {
-            transform: rotate(180deg);
+            transform: rotate(180deg) translateZ(0);
           }
           100% {
-            transform: rotate(360deg);
+            transform: rotate(360deg) translateZ(0);
           }
         }
         @keyframes moveVertical {
           0% {
-            transform: translateY(-50%);
+            transform: translateY(-50%) translateZ(0);
           }
           50% {
-            transform: translateY(50%);
+            transform: translateY(50%) translateZ(0);
           }
           100% {
-            transform: translateY(-50%);
+            transform: translateY(-50%) translateZ(0);
           }
         }
         @keyframes moveHorizontal {
           0% {
-            transform: translateX(-50%) translateY(-10%);
+            transform: translateX(-50%) translateY(-10%) translateZ(0);
           }
           50% {
-            transform: translateX(50%) translateY(10%);
+            transform: translateX(50%) translateY(10%) translateZ(0);
           }
           100% {
-            transform: translateX(-50%) translateY(-10%);
+            transform: translateX(-50%) translateY(-10%) translateZ(0);
           }
         }
 
@@ -118,6 +143,8 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         .gradient-bg {
           overflow: hidden;
           background: linear-gradient(40deg, var(--color-bg1), var(--color-bg2));
+          will-change: transform;
+          transform: translateZ(0);
         }
 
         .gradient-bg svg {
@@ -133,11 +160,19 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
           filter: url(#goo) blur(40px);
           width: 100%;
           height: 100%;
+          will-change: transform;
+          transform: translateZ(0);
         }
 
         /* Individual animated bubbles */
-        .g1 {
+        .g1, .g2, .g3, .g4, .g5, .interactive {
           position: absolute;
+          will-change: transform;
+          transform: translateZ(0);
+          backface-visibility: hidden;
+        }
+
+        .g1 {
           background: radial-gradient(
             circle at center,
             rgba(var(--color1), 0.8) 0,
@@ -154,7 +189,6 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         }
 
         .g2 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color2), 0.8) 0,
@@ -171,7 +205,6 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         }
 
         .g3 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color3), 0.8) 0,
@@ -188,7 +221,6 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         }
 
         .g4 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color4), 0.8) 0,
@@ -205,7 +237,6 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
         }
 
         .g5 {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color5), 0.8) 0,
@@ -223,7 +254,6 @@ const AnimatedBackground: React.FC<{ className?: string }> = ({ className }) => 
 
         /* Interactive bubble that follows the mouse */
         .interactive {
-          position: absolute;
           background: radial-gradient(
             circle at center,
             rgba(var(--color-interactive), 0.8) 0,
