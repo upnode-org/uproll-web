@@ -74,7 +74,7 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
       <HeroWrapper backgroundElement={<AnimatedBackground className="absolute inset-0 h-full w-full" />}>
         <div className="max-w-4xl mx-auto p-6 flex flex-col gap-4">
           <div className="flex justify-between items-center gap-2">
-            <div className="relative flex-grow">
+            <div className="relative grow">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Filter configs..."
@@ -107,7 +107,7 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
         {/* Content section fills remaining space */}
           {configs.length > 0 ? (
             filteredConfigs.length > 0 ? (
-              <div className="flex flex-col flex-grow">
+              <div className="flex flex-col grow">
                 {filteredConfigs.map((config) => (
                   <div
                     key={config.id}
@@ -134,7 +134,7 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
                 ))}
               </div>
             ) : (
-              <div className="flex flex-grow items-center justify-center">
+              <div className="flex grow items-center justify-center">
                 <div className="flex flex-col items-center justify-center h-full gap-1">
                   <Folder className="h-12 w-12 mb-4 text-muted-foreground" />
                   <h1 className="text-xl font-semibold">No matching configurations</h1>
@@ -145,7 +145,7 @@ export function ConfigList({ configs: initialConfigs }: { configs: Awaited<Retur
               </div>
             )
           ) : (
-            <div className="flex flex-grow items-center justify-center">
+            <div className="flex grow items-center justify-center">
               <div className="flex flex-col items-center justify-center h-full gap-1">
                 <Folder className="h-12 w-12 mb-4 text-muted-foreground" />
                 <h1 className="text-xl font-semibold">No configurations found</h1>

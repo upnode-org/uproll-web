@@ -206,8 +206,8 @@ export const RollupConfigForm: React.FC<RollupConfigFormProps> = ({ initialValue
         >
           <div className="max-w-4xl mx-auto p-3 sm:p-6 space-y-3">
             <EditableInputField name="rollup_name" />
-            <div className="flex justify-between gap-2 w-full max-w-[100%]">
-              <div className="flex items-center gap-2 flex-shrink">
+            <div className="flex justify-between gap-2 w-full max-w-full">
+              <div className="flex items-center gap-2 shrink">
                 <Button type="submit">
                   <Save className="w-4 h-4" /> {id ? "Save" : "Create"}
                 </Button>

@@ -13,7 +13,7 @@ const AnimatedMarqueeLinks = () => {
     // The parent container is set as relative so that its children can be absolutely positioned.
     <div className="relative h-[300px] rounded-[50px]">
       {/* Gradient Background placed as an absolute element with a lower z-index */}
-      <div className="absolute inset-0 z-0 w-[100vw] rounded-s-[50px] overflow-hidden">
+      <div className="absolute inset-0 z-0 w-screen rounded-s-[50px] overflow-hidden">
         <GradientBackground className="w-full h-full" />
       </div>
 

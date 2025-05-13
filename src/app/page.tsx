@@ -15,7 +15,7 @@ export default function HomePage() {
         }
       >
         <div className="w-full lg:mx-auto lg:max-w-content-max">
-          <div className="grid grid-cols-1 md:grid-cols-2 max-w-screen-xl mx-auto relative">
+          <div className="grid grid-cols-1 md:grid-cols-2 max-w-(--breakpoint-xl) mx-auto relative">
             {/* Left Grid Cell */}
             <div className="relative w-full flex items-center">
               <div className="mx-auto px-5 py-14 md:px-5 lg:px-10">
@@ -23,7 +23,7 @@ export default function HomePage() {
                   OP STACK DEPLOYMENT SIMPLIFIED
                 </span> */}
                 <h1 className="text-white text-6xl md:text-7xl font-bold leading-tight">
-                  Deploy Rollups in<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500 opacity-80" style={{ WebkitTextStroke: '0.1px rgba(1,1,1,0.1)', textShadow: 'none' }}> Seconds</span>
+                  Deploy Rollups in<span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500 opacity-80" style={{ WebkitTextStroke: '0.1px rgba(1,1,1,0.1)', textShadow: 'none' }}> Seconds</span>
                 </h1>
                 <p className="text-muted text-lg mt-4 max-w-md">
                   The fastest way to configure and deploy your OP stack rollups.
@@ -73,7 +73,7 @@ export default function HomePage() {
 
             {/* Right Grid Cell */}
             <div className="relative bg-white rounded-ss-[50px] xl:rounded-t-[50px] px-6 sm:px-8 md:px-14 py-10">
-              <svg width="50" height="50" className="absolute bottom-0 right-0  translate-x-[100%]">
+              <svg width="50" height="50" className="absolute bottom-0 right-0  translate-x-full">
                 <mask id="inverted-mask-right-2">
                   <rect width="50" height="50" fill="white" />
                   <circle cx="50" cy="0" r="50" fill="black" />
@@ -113,7 +113,7 @@ export default function HomePage() {
         </div>
       </HeroWrapper>
 
-      <div className="py-16 px-4 bg-gradient-to-b from-white to-blue-50">
+      <div className="py-16 px-4 bg-linear-to-b from-white to-blue-50">
         <div className="max-w-4xl mx-auto text-center">
           <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium mb-4">
             POWERFUL CUSTOMIZATION
@@ -141,7 +141,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="bg-gradient-to-b from-blue-50 to-violet-100 py-16 px-4">
+      <div className="bg-linear-to-b from-blue-50 to-violet-100 py-16 px-4">
         <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="text-center">
             <span className="inline-block px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm font-medium mb-4">

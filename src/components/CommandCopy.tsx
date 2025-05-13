@@ -7,15 +7,15 @@ export default function CommandCopy({ command, description, disabled }: { comman
   const { toast } = useToast();
 
   return (
-    <div className="flex flex-col w-full flex-shrink">
+    <div className="flex flex-col w-full shrink">
       <div className="flex flex-row w-full border border-stone-900">
-        <code className="flex-1 min-w-0 text-stone-900 bg-white text-sm border-r border-stone-900 p-2 truncate flex-shrink">
+        <code className="flex-1 min-w-0 text-stone-900 bg-white text-sm border-r border-stone-900 p-2 truncate shrink">
           {command}
         </code>
         <button
           className={cn(
             `flex flex-col items-center justify-center align-middle bg-stone-900 text-white hover:bg-white hover:text-stone-900 aspect-square w-9 ${
-              disabled ? "cursor-not-allowed !text-stone-500 hover:bg-stone-900" : ""
+              disabled ? "cursor-not-allowed text-stone-500! hover:bg-stone-900" : ""
             }`
           )}
           onClick={() => {

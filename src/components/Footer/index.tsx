@@ -5,11 +5,11 @@ import FooterNav from './FooterNav';
 
 export default function Footer() {
   return (
-    <footer className="relative bg-stone-900 overflow-hidden py-12 lg:px-6 mx-auto sm:mx-0 [&>*]:px-4 sm:[&>*]:px-0">
+    <footer className="relative bg-stone-900 overflow-hidden py-12 lg:px-6 mx-auto sm:mx-0 *:px-4 sm:*:px-0">
           <Container>
 
       {/* Outer container for the columns */}
-      <div className="container lg:!px-20 lg:py-12 lg:border !overflow-visible lg:border-white lg:relative mx-auto">
+      <div className="container lg:px-20! lg:py-12 lg:border overflow-visible! lg:border-white lg:relative mx-auto">
         
         {/* Navigation columns */}
         <FooterNav />

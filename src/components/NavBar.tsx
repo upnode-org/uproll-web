@@ -41,7 +41,7 @@ export default function NavBar() {
   }, [isMenuOpen]);
 
   return (
-    <header className="flex flex-col items-center justify-between pt-2 px-2 sm:pt-4 sm:px-6 max-w-7xl fixed left-[50%] translate-x-[-50%] w-full z-[1000]">
+    <header className="flex flex-col items-center justify-between pt-2 px-2 sm:pt-4 sm:px-6 max-w-7xl fixed left-[50%] translate-x-[-50%] w-full z-1000">
       {/* Main Navbar */}
       <div className="flex items-center rounded-full bg-stone-900 w-full justify-between px-3 py-3 mx-auto">
         <Link href="/">
@@ -118,7 +118,7 @@ export default function NavBar() {
       {/* Mobile Dropdown Menu for authenticated users */}
       <div
         ref={menuRef}
-        className={`sm:hidden w-full bg-stone-900 backdrop-blur-sm text-white my-2 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${isMenuOpen && status === "authenticated"
+        className={`sm:hidden w-full bg-stone-900 backdrop-blur-xs text-white my-2 rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${isMenuOpen && status === "authenticated"
             ? "max-h-[200px] opacity-100 translate-y-0"
             : "max-h-0 opacity-0 -translate-y-2 pointer-events-none"
           }`}
@@ -151,7 +151,7 @@ export default function NavBar() {
       {/* Overlay backdrop when menu is open */}
       {isMenuOpen && status === "authenticated" && (
         <div
-          className="fixed inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/0  z-[-1] sm:hidden transition-all duration-300"
+          className="fixed inset-0 bg-linear-to-b from-black/50 via-black/20 to-black/0  z-[-1] sm:hidden transition-all duration-300"
           onClick={() => setIsMenuOpen(false)}
         />
       )}

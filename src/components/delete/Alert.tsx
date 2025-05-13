@@ -96,7 +96,7 @@ const ModalAlert: React.FC<ModalAlertProps> = ({
                         className={buttonVariants({
                             variant: "ghost",
                             size: "icon",
-                            className: "!h-7 !w-7",
+                            className: "h-7! w-7!",
                         })}
                     >
                         <X />
