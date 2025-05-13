@@ -1,8 +1,7 @@
-import { Footer, Layout, Navbar } from 'nextra-theme-docs'
+import { Layout, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import GradientBackground from '@/components/GradientBackground'
-import { PageMapItem } from 'nextra'
 
 export default async function DocLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -20,6 +19,7 @@ export default async function DocLayout({ children }: { children: React.ReactNod
                 <GradientBackground className='h-full w-full' />
             </div>
             <div className='container mx-auto'>
+                <Navbar align='left' logo={<span />} />
                 {children}
             </div>
         </Layout>
