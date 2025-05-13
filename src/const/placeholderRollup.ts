@@ -48,7 +48,7 @@ const placeholderRollup: ToString<RollupConfig> = {
     eip1559_denominator: ">0",
     gas_price_oracle_base_fee_scalar: ">0",
     gas_price_oracle_blob_base_fee_scalar: ">0",
-    extra_withdrawal_delay: ">0",
+    // extra_withdrawal_delay: ">0",
   },
   data_availability_config: {
     data_availability_provider: "custom",

@@ -27,10 +27,10 @@ export const GasConfigForm: React.FC = () => {
         label="Blob Base Fee Scalar"
         name="gas_config.gas_price_oracle_blob_base_fee_scalar"
       />
-      <InputField
+      {/* <InputField
         label="Extra withdrawal delay"
         name="gas_config.extra_withdrawal_delay"
-      />
+      /> */}
     </fieldset>
   );
 };

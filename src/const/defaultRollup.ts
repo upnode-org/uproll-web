@@ -39,7 +39,7 @@ const defaultRollup: RollupConfig = {
     eip1559_denominator: NaN,
     gas_price_oracle_base_fee_scalar: NaN,
     gas_price_oracle_blob_base_fee_scalar: NaN,
-    extra_withdrawal_delay: NaN,
+    // extra_withdrawal_delay: NaN,
     l2_genesis_block_gas_limit: NaN,
   },
   data_availability_config: {
