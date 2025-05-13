@@ -48,7 +48,6 @@ const authOptions: AuthOptions = {
         if (!isValidPassword) {
           throw new Error("No user found with this email or password is incorrect");
         }
-
         return user;
       },
     }),
@@ -70,7 +69,7 @@ const authOptions: AuthOptions = {
       if (url.startsWith(baseUrl)) {
         return url;
       }
-      // Otherwise, redirect to a default path (e.g., /dashboard)
+      // Otherwise, redirect to a default path
       return `${baseUrl}/config/view`;
     },
   

@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-// import { GithubIcon } from "lucide-react"
 import { signIn } from "next-auth/react"
 import { toast } from "@/hooks/use-toast"
 
@@ -56,6 +55,11 @@ export function AuthForm({ initialMode }: AuthFormProps) {
       });
 
       const data = await res.json();
+      signIn("credentials", {
+        redirect: true,
+        email,
+        password,
+      });
       if (!res.ok) {
         toast({
           title: "Error",
@@ -67,7 +71,7 @@ export function AuthForm({ initialMode }: AuthFormProps) {
           title: "Success",
           description: "Account created successfully",
         });
-        router.push("/auth/signin");
+        // router.push("/config/view");
       }
     }
   }
@@ -87,11 +91,11 @@ export function AuthForm({ initialMode }: AuthFormProps) {
       <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md min-w-64">
         <div>
           <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
         </div>
         <Button type="submit" className="w-full">
           {mode === "signin" ? "Sign In" : "Sign Up"}

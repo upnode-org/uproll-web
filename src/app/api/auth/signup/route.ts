@@ -33,7 +33,6 @@ export async function POST(req: NextRequest) {
         password: hashedPassword,
       },
     });
-
     return NextResponse.json(
       { message: "User created", user: newUser },
       { status: 201 }
