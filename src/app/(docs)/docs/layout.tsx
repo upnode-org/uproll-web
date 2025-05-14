@@ -1,4 +1,4 @@
-import { Layout, Navbar } from 'nextra-theme-docs'
+import { Layout, Link, Navbar } from 'nextra-theme-docs'
 import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import GradientBackground from '@/components/GradientBackground'
@@ -28,7 +28,8 @@ export default async function DocLayout({ children }: { children: React.ReactNod
             }}
             pageMap={docs}
             // pageMap={[{}] as PageMapItem[]}
-            docsRepositoryBase="https://github.com/upnode-org/uproll-web/tree/main/content"
+            docsRepositoryBase="https://github.com/upnode-org/uproll-web/tree/main/src/content"
+            editLink={<Link href="https://github.com/upnode-org/uproll-web/tree/main/src/content">Edit this page on GitHub</Link>}
         >
             <div className='h-26 w-full'>
                 <GradientBackground className='h-full w-full' />
