@@ -1,5 +1,3 @@
-/* eslint sort-keys: error */
-
 export default {
   // ——————————————————————————————————————————
   // Landing page (always first)
