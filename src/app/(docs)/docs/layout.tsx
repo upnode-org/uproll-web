@@ -18,7 +18,6 @@ interface PageItem {
 export default async function DocLayout({ children }: { children: React.ReactNode }) {
 
     const pageMap = await getPageMap() as PageItem[]
-    console.log(pageMap)
     const docs = pageMap.find(page => page.name === 'docs')?.children || []
 
     return (
