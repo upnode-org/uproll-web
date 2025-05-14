@@ -13,13 +13,7 @@ export default function FooterNav() {
       title: 'Learn',
       links: [
         {
-          href: 'https://blog.uproll.org/',
-          label: 'Blog',
-          target: '_blank',
-          rel: 'noopener noreferrer',
-        },
-        {
-          href: 'https://uproll-docs.pages.dev/',
+          href: '/docs',
           label: 'Docs',
           target: '_blank',
           rel: 'noopener noreferrer',
@@ -30,34 +24,36 @@ export default function FooterNav() {
       title: 'Github',
       links: [
         {
-          href: 'https://github.com/upnodedev/opstack-cli',
+          href: 'https://github.com/upnodedev/uproll-cli',
           label: 'CLI',
           target: '_blank',
           rel: 'noopener noreferrer',
         },
         {
-          href: 'https://github.com/uproll-org',
+          href: 'https://github.com/upnode-org/uproll-web',
+          label: 'Web',
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        },
+        {
+          href: 'https://github.com/upnode-org',
           label: 'Organization',
           target: '_blank',
           rel: 'noopener noreferrer',
         },
       ],
     },
-    {
-      title: 'Research',
-      links: [
-        {
-          href: '/research',
-          label: 'Blog',
-        },
-        {
-          href: 'https://forum.uproll.org/',
-          label: 'Forum',
-          target: '_blank',
-          rel: 'nofollow noreferrer',
-        },
-      ],
-    },
+    // {
+    //   title: 'Research',
+    //   links: [
+    //     {
+    //       href: 'https://forum.uproll.org/',
+    //       label: 'Forum',
+    //       target: '_blank',
+    //       rel: 'nofollow noreferrer',
+    //     },
+    //   ],
+    // },
     {
       title: 'Community',
       links: [
@@ -66,10 +62,6 @@ export default function FooterNav() {
           label: 'Twitter',
           target: '_blank',
           rel: 'nofollow noreferrer',
-        },
-        {
-          href: '/newsletter',
-          label: 'Newsletter',
         },
       ],
     },
