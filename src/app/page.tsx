@@ -36,7 +36,7 @@ export default function HomePage() {
                   </Link>
                   <Link href="/docs" className="flex-1 max-w-[200px]">
                     <Button variant="outline" size="lg" className="text-black border-white hover:bg-white/90 font-semibold w-full h-full min-h-[44px]">
-                      Read the Guide
+                      Read the Docs
                     </Button>
                   </Link>
                 </div>
@@ -122,7 +122,7 @@ export default function HomePage() {
             Build Your Perfect <span className="text-blue-600">Rollup Solution</span>
           </h2>
           <p className="mt-6 text-xl text-gray-700 max-w-2xl mx-auto leading-relaxed">
-            Our intuitive configurator puts you in control. Tailor every aspect of your OP stack
+            Our intuitive web based configurator puts you in control. Tailor every aspect of your OP stack
             deployment with confidence – no deep technical expertise required.
           </p>
         
@@ -132,7 +132,7 @@ export default function HomePage() {
                 Create Your Rollup
               </Button>
             </Link>
-            <Link href="/docs" className="flex-1 max-w-[200px]">
+            <Link href="/docs/deployment/website-plus-cli" className="flex-1 max-w-[200px]">
               <Button variant="outline" size="lg" className="bg-white text-blue-600 border border-blue-200 hover:bg-blue-50 transition-all  font-semibold w-full h-full min-h-[44px] hover:shadow-xl hover:text-blue-600">
                 Read the Guide
               </Button>

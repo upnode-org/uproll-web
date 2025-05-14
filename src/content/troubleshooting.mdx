@@ -1,0 +1,15 @@
+import { Callout } from 'nextra/components'
+
+# Troubleshooting & FAQ
+
+<Callout type="warning">**Docker out‑of‑memory?** Stop unused chains with `uproll stop-rollup` or reclaim everything with `uproll clean`.</Callout>
+
+### Common errors
+
+| Symptom | Fix |
+| ------- | --- |
+| **"port already in use"** | A previous rollup is still running → `uproll stop-rollup` |
+| **Kurtosis fails to start** | Upgrade Kurtosis to the latest version |
+| **Chain stuck at block 0** | Check L1 RPC URLs & funds on deployer account |
+
+Need more help? Open an issue on [GitHub](https://github.com/upnodedev/uproll-cli). 

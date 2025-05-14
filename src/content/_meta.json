@@ -1,0 +1,29 @@
+{
+  "Installation": "/installation.mdx",
+  "Requirements": "requirements.mdx",
+  "Quick Start": "quick-start.mdx",
+  "Deployment": {
+    "": "deployment/index.mdx",
+    "Website + CLI": "deployment/website-plus-cli.mdx",
+    "CLI Only": "deployment/cli-only.mdx"
+  },
+  "CLI Commands": {
+    "": "cli/index.mdx",
+    "Stop Rollup": "cli/stop-rollup.mdx",
+    "Chain Info": "cli/chain-info.mdx",
+    "Status": "cli/status.mdx",
+    "View Logs": "cli/view-logs.mdx",
+    "Clean": "cli/clean.mdx"
+  },
+  "Configuration Reference": {
+    "": "configuration/index.mdx",
+    "Wallet": "configuration/wallet.mdx",
+    "Layer 1": "configuration/layer-1.mdx",
+    "Signer": "configuration/signer.mdx",
+    "Rollup": "configuration/rollup.mdx",
+    "Gas": "configuration/gas.mdx",
+    "Data Availability": "configuration/data-availability.mdx"
+  },
+  "Troubleshooting / FAQ": "troubleshooting.mdx",
+  "Changelog": "changelog.mdx"
+} 

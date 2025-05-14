@@ -1,2 +1,36 @@
+import { Callout } from 'nextra/components'
 
-# Welcome
+# UpRoll Deployment
+
+<Callout type="tip">
+  **Free, open‑source & self‑hosted.** UpRoll lets you spin up OP Stack chains without handing the keys to third‑party infrastructure.
+</Callout>
+
+The **UpRoll CLI Tool** by Upnode enables chain operators and developers to efficiently **configure, deploy, and manage OP Stack chains**. Choose a fully guided experience via our [website](https://uproll.upnode.org/) or work entirely from the terminal with the CLI. Deployment happens locally using Docker and [Kurtosis](https://docs.kurtosis.com/).
+
+
+
+## Why UpRoll?
+
+* **Own your infra** – zero vendor lock‑in
+* **100% open‑source** – audit everything, fork anything
+* **Battle‑tested stack** – based on Optimism's OP Stack and Kurtosis labs
+* **Dev‑friendly** – same flow in CI/CD as on your laptop
+
+## Quick Start
+
+1. **Install the CLI**
+   ```bash
+   npm install -g @upnode/uproll
+   ```
+
+2. **Choose your path**
+   - **Web + CLI**: Visit [uproll.upnode.org](https://uproll.upnode.org) to configure your chain
+   - **CLI Only**: Run `uproll run` for an interactive setup
+
+3. **Deploy**
+   ```bash
+   uproll deploy -i <config_id>
+   ```
+
+

@@ -1,0 +1,16 @@
+import { Callout } from 'nextra/components'
+
+# Deploy via Website + CLI 🖥️➡️🖥️
+
+1. **Sign up** at [https://uproll.upnode.org/](uproll.upnode.org) and open **Create Your Rollup**.
+2. Fill in the configuration wizard and click **Save**.
+3. Copy the displayed **Configuration ID**.
+4. On your workstation, run:
+
+   ```bash
+   uproll deploy -i <config_id>
+   ```
+
+5. When prompted, enter a **project name** (directory to store artifacts).
+
+<Callout type="info">The CLI will pull your saved config from the UpRoll API, generate Docker compose & Kurtosis files, then launch the stack.</Callout> 

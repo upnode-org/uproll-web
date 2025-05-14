@@ -18,10 +18,11 @@ interface PageItem {
 export default async function DocLayout({ children }: { children: React.ReactNode }) {
 
     const pageMap = await getPageMap() as PageItem[]
+    console.log(pageMap)
     const docs = pageMap.find(page => page.name === 'docs')?.children || []
 
     return (
-        <div className='max-h-[100dvh] overflow-hidden'>
+        <div className='max-h-[100dvh]'>
             <Layout
                 nextThemes={{
                     defaultTheme: "light",
@@ -34,7 +35,7 @@ export default async function DocLayout({ children }: { children: React.ReactNod
                 <div className='h-26 w-full'>
                     <GradientBackground className='h-full w-full' />
                 </div>
-                <div className='container mx-auto'>
+                <div className='max-w-screen-xl mx-auto h-full'>
                     <Navbar align='left' logo={<span />} />
                     {children}
                 </div>
