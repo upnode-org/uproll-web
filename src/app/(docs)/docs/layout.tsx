@@ -22,24 +22,22 @@ export default async function DocLayout({ children }: { children: React.ReactNod
     const docs = pageMap.find(page => page.name === 'docs')?.children || []
 
     return (
-        <div className='max-h-[100dvh]'>
-            <Layout
-                nextThemes={{
-                    defaultTheme: "light",
-                    // forcedTheme: "light",
-                }}
-                pageMap={docs}
-                // pageMap={[{}] as PageMapItem[]}
-                docsRepositoryBase="https://github.com/upnode-org/uproll-web/tree/main/content"
-            >
-                <div className='h-26 w-full'>
-                    <GradientBackground className='h-full w-full' />
-                </div>
-                <div className='max-w-screen-xl mx-auto h-full'>
-                    <Navbar align='left' logo={<span />} />
-                    {children}
-                </div>
-            </Layout>
-        </div>
+        <Layout
+            nextThemes={{
+                defaultTheme: "light",
+                // forcedTheme: "light",
+            }}
+            pageMap={docs}
+            // pageMap={[{}] as PageMapItem[]}
+            docsRepositoryBase="https://github.com/upnode-org/uproll-web/tree/main/content"
+        >
+            <div className='h-26 w-full'>
+                <GradientBackground className='h-full w-full' />
+            </div>
+            <div className='max-w-screen-xl mx-auto'>
+                <Navbar align='left' logo={<span />} />
+                {children}
+            </div>
+        </Layout>
     )
 }

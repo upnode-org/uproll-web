@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout, Steps} from 'nextra/components'
 
 # UpRoll Deployment
 
@@ -6,9 +6,9 @@ import { Callout } from 'nextra/components'
   **Free, open‑source & self‑hosted.** UpRoll lets you spin up OP Stack chains without handing the keys to third‑party infrastructure.
 </Callout>
 
-The **UpRoll CLI Tool** by Upnode enables chain operators and developers to efficiently **configure, deploy, and manage OP Stack chains**. Choose a fully guided experience via our [website](https://uproll.upnode.org/) or work entirely from the terminal with the CLI. Deployment happens locally using Docker and [Kurtosis](https://docs.kurtosis.com/).
+The **UpRoll CLI Tool** by Upnode enables chain operators and developers to efficiently **configure, deploy, and manage OP Stack chains**. Choose a fully guided experience via our [Web UI](https://uproll.upnode.org/) or work entirely from the terminal with the [CLI](https://github.com/upnodedev/uproll-cli). Deployment happens locally using Docker and [Kurtosis](https://docs.kurtosis.com/).
 
-
+For deployment, UpRoll uses a fork of the [optimism package](https://github.com/upnodedev/optimism-package) which provides greater levels of customisation. Unlike Conduit, which is a paid, closed-source solution that relies on third-party managed servers, UpRoll CLI Tool is free, open-source, and allows developers to deploy OP Stack chains on their own infrastructure with full transparency.
 
 ## Why UpRoll?
 
@@ -18,19 +18,22 @@ The **UpRoll CLI Tool** by Upnode enables chain operators and developers to effi
 * **Dev‑friendly** – same flow in CI/CD as on your laptop
 
 ## Quick Start
-
-1. **Install the CLI**
+<Steps>
+### Install the CLI
    ```bash
    npm install -g @upnode/uproll
    ```
 
-2. **Choose your path**
-   - **Web + CLI**: Visit [uproll.upnode.org](https://uproll.upnode.org) to configure your chain
-   - **CLI Only**: Run `uproll run` for an interactive setup
+### Install Requirements
 
-3. **Deploy**
-   ```bash
-   uproll deploy -i <config_id>
-   ```
+    [Found here](docs/requirements)
 
+### Choose your path
+   - **Web + CLI**: Visit [uproll.upnode.org](https://uproll.upnode.org) to configure your chain and run the given command for one click setup.
+   - **CLI Only**: Run `uproll run` for an interactive setup using only the CLI
 
+### Opstack Rollup Deployed
+You can now query the L2 RPC at `http://localhost:8545`.
+
+[Further commands](docs/cli) can interact with the deployment
+</Steps>
