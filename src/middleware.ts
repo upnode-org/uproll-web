@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
     }
   const url = request.nextUrl
   const hostname = request.headers.get('host') || ''
-  const targetDomain = 'www.uproll.org'
+  const targetDomain = 'uproll.org'
 
   // If the hostname is not the target domain, redirect to the target domain
   if (hostname !== targetDomain) {
