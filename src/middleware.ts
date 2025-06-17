@@ -10,7 +10,7 @@ export function middleware(request: NextRequest) {
   const targetDomain = 'uproll.org'
 
   // If the hostname is not the target domain, redirect to the target domain
-  if (hostname !== targetDomain) {
+  if (!hostname.includes(targetDomain)) {
     // Create the new URL with the target domain
     const newUrl = new URL(url.pathname + url.search, `https://${targetDomain}`)
     return NextResponse.redirect(newUrl)
